@@ -41,3 +41,4 @@ DEPLOY SONRASI KONTROL:
   coreReady=true ise web + Durable Objects + R2 hazırdır.
   zoomReady=true ise Zoom secretları da tamamdır.
 - Uygulama > Ayarlar > Sistem kontrolü > “Sistemi kontrol et” aynı kontrolü görsel olarak yapar.
+İlk Cloudflare build

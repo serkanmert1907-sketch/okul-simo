@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Zoom Toplantısı</title>
+<style>
+html,body{margin:0;width:100%;height:100%;background:#0f172a;font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif}
+#meetingSDKElement{width:100%;height:100%;min-height:100vh;background:#0f172a}
+#status{position:fixed;inset:0;display:grid;place-items:center;text-align:center;padding:30px;color:#e2e8f0;background:linear-gradient(145deg,#0f172a,#1e293b);z-index:20}
+#status.hidden{display:none}.logo{width:68px;height:68px;border-radius:22px;background:#2d8cff;display:grid;place-items:center;margin:0 auto 14px;font-size:34px}.muted{color:#94a3b8;font-size:13px;max-width:390px;margin:7px auto 0}
+</style>
+</head>
+<body>
+<div id="meetingSDKElement"></div>
+<div id="status"><div><div class="logo">🎥</div><b id="statusTitle">Zoom hazırlanıyor</b><div class="muted" id="statusText">Ana uygulamadan toplantı bilgisi bekleniyor.</div></div></div>
+<script>
+const status=document.getElementById('status'),title=document.getElementById('statusTitle'),info=document.getElementById('statusText');
+let client=null,loadedVersion=null,joining=false;
+function tell(type,extra={}){try{parent.postMessage({type,...extra},'*')}catch{}}
+function setStatus(t,d,hide=false){title.textContent=t;info.textContent=d||'';status.classList.toggle('hidden',hide)}
+function loadScript(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=()=>rej(new Error('Zoom SDK dosyası yüklenemedi: '+src));document.head.appendChild(s)})}
+async function ensureSDK(version){
+  if(window.ZoomMtgEmbedded&&loadedVersion===version)return;
+  setStatus('Zoom SDK yükleniyor','İlk açılışta birkaç saniye sürebilir.');
+  const base='https://source.zoom.us/'+version;
+  await loadScript(base+'/lib/vendor/react.min.js');
+  await loadScript(base+'/lib/vendor/react-dom.min.js');
+  await loadScript(base+'/lib/vendor/redux.min.js');
+  await loadScript(base+'/lib/vendor/redux-thunk.min.js');
+  await loadScript(base+'/lib/vendor/lodash.min.js');
+  await loadScript('https://source.zoom.us/zoom-meeting-embedded-'+version+'.min.js');
+  if(!window.ZoomMtgEmbedded)throw new Error('Zoom Meeting SDK yüklenemedi.');
+  loadedVersion=version;
+}
+async function joinZoom(s){
+  if(joining)return;joining=true;
+  try{
+    const version=s.sdkVersion||'6.2.0';
+    await ensureSDK(version);
+    if(!client)client=window.ZoomMtgEmbedded.createClient();
+    const root=document.getElementById('meetingSDKElement');
+    setStatus('Zoom başlatılıyor','Kamera ve mikrofon izni istenebilir.');
+    await client.init({zoomAppRoot:root,language:'tr-TR',patchJsMedia:true});
+    const opts={signature:s.signature,meetingNumber:String(s.meetingNumber),password:s.password||'',userName:s.userName||'Öğretmen'};
+    if(s.zak)opts.zak=s.zak;
+    if(s.obfToken)opts.obfToken=s.obfToken;
+    await client.join(opts);
+    setStatus('Zoom açıldı','',true);
+    tell('zoom:joined');
+  }catch(e){
+    console.error(e);setStatus('Zoom açılamadı',e?.message||String(e));tell('zoom:error',{message:e?.message||String(e)});
+  }finally{joining=false}
+}
+window.addEventListener('message',e=>{const d=e.data||{};if(d.type==='zoom:join'&&d.session)joinZoom(d.session)});
+tell('zoom:ready');
+</script>
+</body>
+</html>

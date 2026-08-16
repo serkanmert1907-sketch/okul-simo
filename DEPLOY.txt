@@ -1,0 +1,43 @@
+OKUL SIMO — TEK CLOUDFLARE WORKER
+
+Bu klasör artık TEK deploy projesidir:
+- Web uygulaması / static assets
+- Canlı oda / WebSocket / Durable Object
+- PDF + görsel / R2
+- Zoom OAuth + Meeting SDK connector
+
+Cloudflare kaynakları:
+1) R2 bucket adı: okul-simo-live-media
+2) Durable Objects deploy sırasında v1 migration ile oluşturulur:
+   - LiveRoom
+   - ZoomSessionDO
+
+Standart deploy sırası:
+1. npm install
+2. npx wrangler whoami
+3. npx wrangler r2 bucket create okul-simo-live-media
+   (bucket zaten varsa bu adımı tekrar yapma)
+4. npx wrangler deploy
+
+Zoom olmadan da Okul Simo ve canlı ders çalışır.
+Zoom'u aktif etmek için deploy URL oluştuktan sonra Zoom uygulamasında OAuth redirect URI:
+https://<OKUL-SIMO-ADRESI>/zoom/oauth/callback
+
+Worker secretları (Zoom için):
+- ZOOM_CLIENT_ID
+- ZOOM_CLIENT_SECRET
+- ZOOM_SDK_CLIENT_ID
+- ZOOM_SDK_CLIENT_SECRET
+- TOKEN_ENCRYPTION_KEY (uzun rastgele bir değer)
+
+Her secret için:
+npx wrangler secret put SECRET_ADI
+
+Not:
+Okul Simo Cloudflare üzerinde açıldığında canlı bağlantı ve Zoom connector adresini otomatik olarak kendi origin adresine ayarlar. Öğretmenin URL kopyalaması gerekmez.
+
+DEPLOY SONRASI KONTROL:
+- https://<OKUL-SIMO-ADRESI>/system/health
+  coreReady=true ise web + Durable Objects + R2 hazırdır.
+  zoomReady=true ise Zoom secretları da tamamdır.
+- Uygulama > Ayarlar > Sistem kontrolü > “Sistemi kontrol et” aynı kontrolü görsel olarak yapar.

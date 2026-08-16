@@ -1,0 +1,42 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "okul-simo",
+  "main": "./src/index.js",
+  "compatibility_date": "2026-08-16",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true
+  },
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "LIVE_ROOMS",
+        "class_name": "LiveRoom"
+      },
+      {
+        "name": "ZOOM_SESSIONS",
+        "class_name": "ZoomSessionDO"
+      }
+    ]
+  },
+  "exports": {
+    "LiveRoom": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    },
+    "ZoomSessionDO": {
+      "type": "durable-object",
+      "storage": "sqlite"
+    }
+  },
+  "r2_buckets": [
+    {
+      "binding": "LIVE_MEDIA",
+      "bucket_name": "okul-simo-live-media"
+    }
+  ],
+  "vars": {
+    "ZOOM_SDK_VERSION": "6.2.0"
+  }
+}

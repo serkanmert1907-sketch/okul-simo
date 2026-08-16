@@ -1,0 +1,13 @@
+{
+  "name": "okul-simo",
+  "private": true,
+  "scripts": {
+    "cf:whoami": "wrangler whoami",
+    "cf:check": "wrangler check",
+    "cf:dev": "wrangler dev",
+    "cf:deploy": "wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "latest"
+  }
+}

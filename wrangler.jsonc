@@ -10,31 +10,15 @@
   },
   "durable_objects": {
     "bindings": [
-      {
-        "name": "LIVE_ROOMS",
-        "class_name": "LiveRoom"
-      },
-      {
-        "name": "ZOOM_SESSIONS",
-        "class_name": "ZoomSessionDO"
-      }
+      { "name": "LIVE_ROOMS", "class_name": "LiveRoom" },
+      { "name": "ZOOM_SESSIONS", "class_name": "ZoomSessionDO" }
     ]
   },
-  "exports": {
-    "LiveRoom": {
-      "type": "durable-object",
-      "storage": "sqlite"
-    },
-    "ZoomSessionDO": {
-      "type": "durable-object",
-      "storage": "sqlite"
-    }
-  },
   "r2_buckets": [
-    {
-      "binding": "LIVE_MEDIA",
-      "bucket_name": "okul-simo-live-media"
-    }
+    { "binding": "LIVE_MEDIA", "bucket_name": "okul-simo-live-media" }
+  ],
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["LiveRoom", "ZoomSessionDO"] }
   ],
   "vars": {
     "ZOOM_SDK_VERSION": "6.2.0"

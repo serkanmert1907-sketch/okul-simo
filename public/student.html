@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0b1220">
+  <title>Simo Classroom • Öğrenci</title>
+  <link rel="stylesheet" href="/app.css">
+</head>
+<body class="student-page">
+<div id="joinScreen" class="join-screen hidden">
+  <div class="join-box">
+    <div class="join-logo">S+</div>
+    <h1>Derse katıl</h1>
+    <p>Öğretmenin verdiği oda kodunu ve adını yaz.</p>
+    <div class="join-grid">
+      <div class="field"><label>Oda kodu</label><input id="joinRoom" inputmode="numeric" maxlength="8" placeholder="583214"></div>
+      <div class="field"><label>Adın</label><input id="joinName" maxlength="60" placeholder="Ad Soyad"></div>
+      <button class="btn primary" id="joinBtn">Derse Katıl</button>
+    </div>
+  </div>
+</div>
+
+<div id="studentShell" class="student-shell hidden">
+  <section class="lesson-placeholder">
+    <div class="lesson-placeholder-inner">
+      <div class="screen-icon">▣</div>
+      <h2>Zoom / Ders alanın burada kalır</h2>
+      <p>Simo video veya ses taşımaz. Bilgisayarda Zoom’u solda açık tut, Simo paneli sağda soruları ve etkinlikleri göstersin.</p>
+      <div class="lesson-hint">Bu alanı tarayıcıda küçültüp Zoom’un yanına yerleştirebilirsin.</div>
+    </div>
+  </section>
+
+  <aside class="student-panel">
+    <header class="student-panel-head">
+      <div class="student-brand"><div class="mark">S+</div><div><b id="studentTitle">Simo Classroom</b><small id="studentRoomText">Oda —</small></div></div>
+      <span class="badge good"><span class="dot live" id="studentDot"></span><span id="studentConn">Canlı</span></span>
+    </header>
+    <div class="student-panel-body">
+      <section class="student-card">
+        <h3>Sınıf tepkisi</h3>
+        <div class="small muted" style="margin-bottom:9px">Öğretmene tek dokunuşla sinyal ver.</div>
+        <div class="reaction-bar">
+          <button class="reaction-btn" data-reaction="understood"><i>👍</i>Anladım</button>
+          <button class="reaction-btn" data-reaction="repeat"><i>↻</i>Tekrar</button>
+          <button class="reaction-btn" data-reaction="slower"><i>🐢</i>Yavaş</button>
+          <button class="reaction-btn" data-reaction="example"><i>💡</i>Örnek</button>
+        </div>
+      </section>
+
+      <section class="student-card student-question" id="questionCard">
+        <span class="badge">CANLI SORU</span>
+        <h2 id="studentQuestion">Öğretmenin sorusu burada görünecek.</h2>
+        <div id="studentAnswerArea"><div class="muted small">Soru bekleniyor.</div></div>
+        <div id="studentResult" class="student-result hidden"></div>
+      </section>
+
+      <section class="student-workspace hidden" id="studentWorkspace">
+        <div class="student-workspace-head">
+          <div><b id="studentWorkspaceTitle">Ortak Çalışma</b><div class="small muted" id="studentWorkspacePrompt">Birlikte çözün.</div></div>
+          <span class="badge" id="studentControlBadge">İzle</span>
+        </div>
+        <canvas id="studentCanvas" width="1200" height="640"></canvas>
+        <textarea class="student-workspace-note" id="studentWorkspaceNote" placeholder="Ortak not..."></textarea>
+      </section>
+
+      <div class="control-banner hidden" id="controlBanner"><b>Kontrol sende</b>Öğretmen bu çalışma yüzeyini geçici olarak sana verdi. Çizim yapabilir ve ortak nota yazabilirsin.</div>
+    </div>
+    <footer class="student-footer"><span id="studentNameText">Öğrenci</span><span id="studentStatusText">Soru bekleniyor</span></footer>
+  </aside>
+</div>
+
+<div class="toast hidden" id="toast"></div>
+<script src="/student.js" type="module"></script>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("/sw.js").catch(()=>{});</script>
+</body>
+</html>

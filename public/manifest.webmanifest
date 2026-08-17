@@ -1,8 +1,8 @@
 {
-  "name": "Okul Simo",
-  "short_name": "Okul Simo",
-  "start_url": "./index.html",
-  "display": "standalone",
-  "background_color": "#f5f7fb",
-  "theme_color": "#0f172a"
+  "name":"Simo Classroom Assistant",
+  "short_name":"Simo Class",
+  "start_url":"/",
+  "display":"standalone",
+  "background_color":"#f4f7fb",
+  "theme_color":"#0b1220"
 }

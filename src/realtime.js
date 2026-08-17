@@ -4,7 +4,7 @@ const JSON_HEADERS = {
   "Content-Type": "application/json; charset=utf-8",
   "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
   "X-Content-Type-Options": "nosniff",
-  "X-Simo-Live": "v4-memory",
+  "X-Simo-Live": "v4.1-memory",
 };
 
 function json(data, status = 200, extra = {}) {
@@ -46,7 +46,7 @@ export default {
           "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type,X-File-Name",
           "Access-Control-Max-Age": "86400",
-          "X-Simo-Live": "v4-memory",
+          "X-Simo-Live": "v4.1-memory",
         },
       });
     }
@@ -54,7 +54,7 @@ export default {
     if (url.pathname === "/health" || url.pathname === "/api/live/health") {
       return json({
         ok: true,
-        service: "simo-live-v4",
+        service: "simo-live-v4.1",
         transport: "https-heartbeat",
         sameOrigin: true,
         liveState: "durable-object-memory",
@@ -183,6 +183,7 @@ export class LiveRoom extends DurableObject {
     catch { return json({ ok: false, error: "Geçersiz JSON", code: "BAD_JSON" }, 400); }
 
     const t = body.room || {};
+    const has = (key) => Object.prototype.hasOwnProperty.call(t, key);
     const newLesson = !!t.startedAt && Number(t.startedAt) !== Number(state.startedAt || 0);
     const newQuestion = !!t.question?.id && String(t.question.id) !== String(state.question?.id || "");
     const students = { ...(state.students || {}) };
@@ -202,14 +203,14 @@ export class LiveRoom extends DurableObject {
       ...state,
       code: roomCode,
       version: Number(state.version || 0) + 1,
-      question: t.question ?? state.question,
+      question: has("question") ? t.question : state.question,
       questionCount: Number.isFinite(t.questionCount) ? t.questionCount : (state.questionCount || 0),
-      lesson: t.lesson ?? state.lesson,
-      board: t.board ?? state.board,
-      zoom: t.zoom ?? state.zoom,
+      lesson: has("lesson") ? t.lesson : state.lesson,
+      board: has("board") ? t.board : state.board,
+      zoom: has("zoom") ? t.zoom : state.zoom,
       paused: typeof t.paused === "boolean" ? t.paused : !!state.paused,
-      startedAt: t.startedAt ?? state.startedAt,
-      endedAt: t.endedAt ?? state.endedAt,
+      startedAt: has("startedAt") ? t.startedAt : state.startedAt,
+      endedAt: has("endedAt") ? t.endedAt : state.endedAt,
       teacherUpdatedAt: Number(t.teacherUpdatedAt || now()),
       updated: now(),
       students,

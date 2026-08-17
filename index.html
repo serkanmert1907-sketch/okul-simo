@@ -70,7 +70,7 @@
 .present-nav button:hover,.present-nav button.active{background:#334155;color:#fff}
 .present-nav .present-page-btn{min-width:38px}
 .present-nav .present-exit{background:#fff;color:#0f172a}
-.presenting .present-nav,.app.presenting ~ .present-nav,body.okul-presenting .present-nav{display:flex}
+.app.presenting .present-nav,body.okul-presenting .present-nav{display:flex!important}
 .presenting.present-control-open .studio-drawer{display:block!important;position:fixed;right:12px;top:12px;bottom:74px;width:min(360px,calc(100vw - 24px));z-index:92;max-height:none;border-radius:18px}
 .presenting.present-control-open .studio-drawer .drawer-body{max-height:calc(100vh - 170px)}
 .presenting.present-control-open .lesson-screen.board-canvas{padding-right:32px}
@@ -153,17 +153,26 @@ body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.p
 .ink-laser-dot{position:absolute;width:18px;height:18px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 7px rgba(239,68,68,.18),0 0 24px rgba(239,68,68,.55);z-index:14;pointer-events:none;transform:translate(-50%,-50%);display:none}
 .ink-laser-dot.show{display:block}
 .ink-toolbar{display:none;position:fixed;left:14px;top:14px;z-index:115;align-items:center;gap:6px;flex-wrap:wrap;max-width:min(720px,calc(100vw - 28px));padding:8px 9px;border-radius:16px;background:rgba(15,23,42,.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.16);box-shadow:0 18px 55px rgba(15,23,42,.28)}
-.presenting .ink-toolbar,.app.presenting ~ .ink-toolbar,.app.ink-toolbar-open ~ .ink-toolbar,body.okul-presenting .ink-toolbar{display:flex}
+.app.presenting .ink-toolbar,.app.ink-toolbar-open .ink-toolbar,body.okul-presenting .ink-toolbar{display:flex!important}
 .ink-toolbar.collapsed>*:not(.ink-collapse):not(.ink-tool-label){display:none!important}
 .ink-toolbar button{border:0;background:transparent;color:#e2e8f0;border-radius:9px;padding:7px 9px;font-weight:850;white-space:nowrap}
 .ink-toolbar button:hover,.ink-toolbar button.active{background:#334155;color:#fff}.ink-toolbar .ink-tool-label{color:#fff;font-size:12px;font-weight:900;padding:0 4px}
 .ink-colors{display:flex;gap:5px;align-items:center}.ink-color{width:28px!important;height:28px!important;padding:0!important;border-radius:50%!important;border:2px solid rgba(255,255,255,.48)!important;box-shadow:0 0 0 2px transparent}.ink-color.active{box-shadow:0 0 0 3px #fff}.ink-sep{width:1px;height:27px;background:rgba(255,255,255,.17)}
 .present-quick-add{display:none;position:fixed;left:50%;bottom:72px;transform:translateX(-50%);z-index:112;width:min(660px,calc(100vw - 20px));padding:10px;border-radius:16px;background:rgba(255,255,255,.97);border:1px solid var(--line);box-shadow:0 20px 65px rgba(15,23,42,.3);grid-template-columns:repeat(4,1fr);gap:7px}
-.presenting.present-add-open .present-quick-add,.app.presenting.present-add-open ~ .present-quick-add,body.okul-presenting.present-add-open .present-quick-add{display:grid}.present-quick-add button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px 8px;font-weight:850;color:#334155}.present-quick-add button:hover{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8}.present-quick-add .danger{color:#b91c1c}
+.app.presenting.present-add-open .present-quick-add,body.okul-presenting.present-add-open .present-quick-add{display:grid!important}.present-quick-add button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px 8px;font-weight:850;color:#334155}.present-quick-add button:hover{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8}.present-quick-add .danger{color:#b91c1c}
 .student-board-stage{position:relative}.student-ink-layer{z-index:9}.student-board-topic,.student-board-content,.student-session-banner{position:relative;z-index:2}
 .presenting .lesson-screen.board-canvas{overflow:hidden}
 .presenting .board-content{z-index:1}.presenting .board-ink-layer{z-index:20}.presenting .ink-laser-dot{z-index:21}
 @media(max-width:760px){.ink-toolbar{left:7px;right:7px;top:7px;max-width:none;padding:6px;border-radius:13px;gap:4px}.ink-toolbar button{padding:7px;font-size:11px}.ink-color{width:25px!important;height:25px!important}.ink-sep{display:none}.present-quick-add{bottom:64px;grid-template-columns:repeat(2,1fr)}.present-nav{padding-top:6px}.present-nav button{font-size:11px}.ink-tool-label{display:none}}
+
+/* ===== V13 SUNUM ARAÇLARI .APP İÇİNDE — KALICI DÜZELTME ===== */
+.app.presenting{position:relative;min-height:100vh}
+.app.presenting #inkToolbar{display:flex!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+.app.presenting #presentNav{display:flex!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important}
+.app.presenting.present-add-open #presentQuickAdd{display:grid!important}
+.app:fullscreen #inkToolbar,.app:-webkit-full-screen #inkToolbar{display:flex!important}
+.app:fullscreen #presentNav,.app:-webkit-full-screen #presentNav{display:flex!important}
+.app:fullscreen .lesson-screen.board-canvas,.app:-webkit-full-screen .lesson-screen.board-canvas{padding-top:72px!important;padding-bottom:78px!important}
 
 /* ===== V12 TAM EKRAN ARAÇLARI GÖRÜNÜRLÜK DÜZELTMESİ ===== */
 body.okul-presenting .mobilebar{display:none!important}
@@ -438,6 +447,35 @@ body.okul-presenting .ink-toolbar.collapsed .ink-collapse{display:inline-block!i
     <div class="teacher-tools"><div class="toolbox"><h3>📁 PC dosyaları</h3><p>Önemli ders dosyaları için bilgisayarından bir klasör seç ve yedek oluştur.</p><button class="btn" data-view="files">Dosyalarım</button></div><div class="toolbox"><h3>✦ Kendi AI’n</h3><p>Kendi endpoint, model ve anahtarınla AI ders yardımcısını kullan.</p><button class="btn" data-open="aiSettingsModal">AI bağlantısı</button></div><div class="toolbox"><h3>🎥 Zoom + sunum</h3><p>Zoom toplantısını bağla; PC’de uygulama içinde aç, istersen tahtayı tam ekran paylaş.</p><div style="display:flex;gap:7px;flex-wrap:wrap"><button class="btn" id="settingsZoomOpen">Zoom paneli</button><button class="btn" id="settingsPresent">Tam ekran anlatım</button></div></div></div>
   </section>
 </main>
+
+<!-- V13: Sunum/çizim araçları .app içinde; tam ekranın gerçek parçasıdır. -->
+<div class="ink-toolbar" id="inkToolbar">
+  <span class="ink-tool-label" title="Sunum araçları V13">✏ Tahta</span>
+  <button id="inkPen" class="active" title="Kalem">✏ Kalem</button>
+  <button id="inkHighlighter" title="Fosforlu kalem">🖍 Fosfor</button>
+  <button id="inkEraser" title="Çizgiyi sil">⌫ Silgi</button>
+  <button id="inkLaser" title="Geçici lazer işaretçi">● Lazer</button>
+  <span class="ink-sep"></span>
+  <span class="ink-colors" id="inkColors">
+    <button class="ink-color" data-ink-color="#111827" style="background:#111827" aria-label="Siyah"></button>
+    <button class="ink-color active" data-ink-color="#ef4444" style="background:#ef4444" aria-label="Kırmızı"></button>
+    <button class="ink-color" data-ink-color="#2563eb" style="background:#2563eb" aria-label="Mavi"></button>
+    <button class="ink-color" data-ink-color="#16a34a" style="background:#16a34a" aria-label="Yeşil"></button>
+    <button class="ink-color" data-ink-color="#eab308" style="background:#eab308" aria-label="Sarı"></button>
+  </span>
+  <button id="inkWidth" title="Kalem kalınlığı">● Orta</button>
+  <span class="ink-sep"></span>
+  <button id="inkUndo" title="Son çizgiyi geri al">↶ Geri</button>
+  <button id="inkClear" title="Bu sayfadaki çizimleri temizle">🧽 Temizle</button>
+  <button id="inkHand" title="Çizimi kapat, yazı ve kutuları düzenle">☝ Düzenle</button>
+  <button class="ink-collapse" id="inkCollapse" title="Kalem çubuğunu küçült">−</button>
+</div>
+<div class="present-quick-add" id="presentQuickAdd">
+  <button data-present-add="title">＋ Başlık</button><button data-present-add="text">＋ Metin</button><button data-present-add="example">＋ Örnek</button><button data-present-add="test">? Test</button>
+  <button data-present-add="pdf">📄 PDF</button><button data-present-add="image">🖼 Görsel</button><button id="presentAddPage">＋ Yeni sayfa</button><button class="danger" id="presentAddClose">Kapat</button>
+</div>
+<div class="present-nav" id="presentNav"><button id="presentPrev">←</button><div id="presentPageButtons" style="display:flex;gap:4px"></div><button id="presentNext">→</button><span class="present-pdf-controls hidden" id="presentPdfControls"><button id="presentPdfPrev">PDF ‹</button><button id="presentPdfNext">PDF ›</button><button id="presentPdfZoomOut">PDF −</button><button id="presentPdfZoomIn">PDF +</button></span><button id="presentInkToggle">✏ Kalem</button><button id="presentAddToggle">＋ Ekle</button><button id="presentQuestions">? Sorular</button><button id="presentControl">☰ Kontrol</button><button class="present-exit" id="presentExit2">Çık</button></div><div class="modal hidden" id="sectionToolsModal"><div class="modal-card"><div class="modal-head"><h2>Sunum bölümleri</h2><button class="x" data-close>×</button></div><div class="modal-body"><p class="muted">Öğrencinin o anda görmesini istemediğin bölümü kapat. Tekrar açmak için aynı yere dön.</p><div class="section-toggle-list"><div class="section-toggle-row"><b>Ana cümle</b><button class="btn sm sectionToggle" data-section="heroSection">Gösteriliyor</button></div><div class="section-toggle-row"><b>Kısa anlatım</b><button class="btn sm sectionToggle" data-section="explainSection">Gösteriliyor</button></div><div class="section-toggle-row"><b>Ders metni</b><button class="btn sm sectionToggle" data-section="lessonBodyBox">Gösteriliyor</button></div><div class="section-toggle-row"><b>Örnekler</b><button class="btn sm sectionToggle" data-section="examplesGroup">Gösteriliyor</button></div><div class="section-toggle-row"><b>Canlı etkileşim</b><button class="btn sm sectionToggle" data-section="interactionPanel">Gösteriliyor</button></div></div></div></div></div>
+
 </div>
 
 <div class="mobilebar"><button class="active" data-view="home"><i>⌂</i>Ana</button><button data-view="live"><i>◉</i>Canlı</button><button data-view="prepare"><i>▤</i>Hazırla</button><button data-view="files"><i>📁</i>Dosya</button><button data-view="ai"><i>✦</i>AI</button></div>
@@ -476,32 +514,6 @@ D seçeneği"></textarea></div><div class="form-grid"><div class="field"><label>
 
 <div class="modal hidden" id="confusionModal"><div class="modalbox"><div class="modal-head"><h2>🙋 Anlamadığım noktayı bildir</h2><button class="x" data-close>×</button></div><div class="modal-body"><div class="confusion-modal-target" id="confusionTargetLabel">Seçili bölüm</div><div class="field"><label>İstersen kısa not yaz</label><textarea id="confusionNoteInput" rows="3" placeholder="Örn. Bu kelimenin neden burada kullanıldığını anlamadım."></textarea><div class="hint">Not yazmak zorunlu değil. Bildirim sadece öğretmene gider.</div></div></div><div class="modal-foot"><button class="btn" data-close>Vazgeç</button><button class="btn primary" id="sendConfusionBtn">Öğretmene bildir</button></div></div></div>
 <button class="exit-present hidden" id="exitPresent">Sunumdan çık</button>
-<div class="ink-toolbar" id="inkToolbar">
-  <span class="ink-tool-label">✏ Tahta</span>
-  <button id="inkPen" class="active" title="Kalem">✏ Kalem</button>
-  <button id="inkHighlighter" title="Fosforlu kalem">🖍 Fosfor</button>
-  <button id="inkEraser" title="Çizgiyi sil">⌫ Silgi</button>
-  <button id="inkLaser" title="Geçici lazer işaretçi">● Lazer</button>
-  <span class="ink-sep"></span>
-  <span class="ink-colors" id="inkColors">
-    <button class="ink-color" data-ink-color="#111827" style="background:#111827" aria-label="Siyah"></button>
-    <button class="ink-color active" data-ink-color="#ef4444" style="background:#ef4444" aria-label="Kırmızı"></button>
-    <button class="ink-color" data-ink-color="#2563eb" style="background:#2563eb" aria-label="Mavi"></button>
-    <button class="ink-color" data-ink-color="#16a34a" style="background:#16a34a" aria-label="Yeşil"></button>
-    <button class="ink-color" data-ink-color="#eab308" style="background:#eab308" aria-label="Sarı"></button>
-  </span>
-  <button id="inkWidth" title="Kalem kalınlığı">● Orta</button>
-  <span class="ink-sep"></span>
-  <button id="inkUndo" title="Son çizgiyi geri al">↶ Geri</button>
-  <button id="inkClear" title="Bu sayfadaki çizimleri temizle">🧽 Temizle</button>
-  <button id="inkHand" title="Çizimi kapat, yazı ve kutuları düzenle">☝ Düzenle</button>
-  <button class="ink-collapse" id="inkCollapse" title="Kalem çubuğunu küçült">−</button>
-</div>
-<div class="present-quick-add" id="presentQuickAdd">
-  <button data-present-add="title">＋ Başlık</button><button data-present-add="text">＋ Metin</button><button data-present-add="example">＋ Örnek</button><button data-present-add="test">? Test</button>
-  <button data-present-add="pdf">📄 PDF</button><button data-present-add="image">🖼 Görsel</button><button id="presentAddPage">＋ Yeni sayfa</button><button class="danger" id="presentAddClose">Kapat</button>
-</div>
-<div class="present-nav" id="presentNav"><button id="presentPrev">←</button><div id="presentPageButtons" style="display:flex;gap:4px"></div><button id="presentNext">→</button><span class="present-pdf-controls hidden" id="presentPdfControls"><button id="presentPdfPrev">PDF ‹</button><button id="presentPdfNext">PDF ›</button><button id="presentPdfZoomOut">PDF −</button><button id="presentPdfZoomIn">PDF +</button></span><button id="presentInkToggle">✏ Kalem</button><button id="presentAddToggle">＋ Ekle</button><button id="presentQuestions">? Sorular</button><button id="presentControl">☰ Kontrol</button><button class="present-exit" id="presentExit2">Çık</button></div><div class="modal hidden" id="sectionToolsModal"><div class="modal-card"><div class="modal-head"><h2>Sunum bölümleri</h2><button class="x" data-close>×</button></div><div class="modal-body"><p class="muted">Öğrencinin o anda görmesini istemediğin bölümü kapat. Tekrar açmak için aynı yere dön.</p><div class="section-toggle-list"><div class="section-toggle-row"><b>Ana cümle</b><button class="btn sm sectionToggle" data-section="heroSection">Gösteriliyor</button></div><div class="section-toggle-row"><b>Kısa anlatım</b><button class="btn sm sectionToggle" data-section="explainSection">Gösteriliyor</button></div><div class="section-toggle-row"><b>Ders metni</b><button class="btn sm sectionToggle" data-section="lessonBodyBox">Gösteriliyor</button></div><div class="section-toggle-row"><b>Örnekler</b><button class="btn sm sectionToggle" data-section="examplesGroup">Gösteriliyor</button></div><div class="section-toggle-row"><b>Canlı etkileşim</b><button class="btn sm sectionToggle" data-section="interactionPanel">Gösteriliyor</button></div></div></div></div></div>
 <div class="toast hidden" id="toast"></div>
 <script>
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -516,7 +528,7 @@ $$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classLi
 function studentRoomUrl(r=getRoom()){const u=new URL(location.href);u.hash='';u.search='';u.searchParams.set('room',r.code);const ep=normalizedEndpoint(realtimeCfg().endpoint);if(ep)u.searchParams.set('rt',ep);return u.toString()}
 async function copyStudentRoomLink(r=getRoom(),notify=true){const link=studentRoomUrl(r);try{await navigator.clipboard.writeText(link);if(notify)toast('Öğrenci linki kopyalandı • Oda '+r.code,3600);return true}catch{if(notify)toast('Oda '+r.code+' • Linki üstteki “Oda linkini kopyala” butonundan tekrar deneyebilirsin',4600);return false}}
 $('#copyRoom').onclick=()=>copyStudentRoomLink(getRoom(),true);
-function present(force){const app=$('.app'), on=typeof force==='boolean'?force:!app.classList.contains('presenting');showView('live');app.classList.toggle('presenting',on);document.body.classList.toggle('okul-presenting',on);document.body.classList.toggle('present-add-open',on&&app.classList.contains('present-add-open'));app.classList.remove('present-control-open');$('#exitPresent').classList.add('hidden');renderPresentNav();if(on&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen().catch(()=>{});toast(on?'Sunum modu açık — üstte çizim araçları, altta ders kumandası hazır':'Sunum modu kapatıldı')}
+function present(force){const app=$('.app'), on=typeof force==='boolean'?force:!app.classList.contains('presenting');showView('live');app.classList.toggle('presenting',on);document.body.classList.toggle('okul-presenting',on);document.body.classList.toggle('present-add-open',on&&app.classList.contains('present-add-open'));app.classList.remove('present-control-open');$('#exitPresent').classList.add('hidden');renderPresentNav();if(on&&app.requestFullscreen)app.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen().catch(()=>{});toast(on?'Sunum modu açık — üstte çizim araçları, altta ders kumandası hazır':'Sunum modu kapatıldı')}
 $('#presentBtn').onclick=()=>present(true);$('#settingsPresent').onclick=()=>present(true);$('#exitPresent').onclick=()=>present(false);$('#presentExit2').onclick=()=>present(false);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('.app').classList.contains('presenting'))present(false)});
 $('#prevSlide').onclick=()=>toast('Önceki içerik');$('#nextSlide').onclick=()=>toast('Sonraki içerik');$('#showExamples').onclick=()=>document.querySelector('.examples-title').scrollIntoView({behavior:'smooth',block:'center'});$('#toggleTranslation').onclick=()=>{const box=$('.lesson-screen');const hide=box.classList.toggle('hide-translations');$('#toggleTranslation').textContent=hide?'Türkçeyi göster':'Türkçeyi gizle'};$('#quickPoll').onclick=()=>toast('Hızlı anket açıldı');
 

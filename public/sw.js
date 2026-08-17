@@ -1,4 +1,4 @@
-const CACHE='okul-simo-live-v4.2-20260817';
+const CACHE='okul-simo-live-v4.3-20260817-presentation-fix';
 const SHELL=['./','./index.html','./manifest.webmanifest','./zoom_meeting_embed.html'];
 self.addEventListener('install',event=>event.waitUntil((async()=>{
   const keys=await caches.keys();

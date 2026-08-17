@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="theme-color" content="#0f172a" />
-<meta name="simo-build" content="2026-08-17-LIVE-V4.2-FILL-FULLSCREEN">
+<meta name="simo-build" content="2026-08-17-LIVE-V4.3-PRESENTATION-FIX">
 <meta name="simo-build" content="SIMOBOARD_STUDIO_3_20260817" />
 <meta name="simo-board-version" content="studio-2.0" />
 <title>Okul Simo • SimoBoard Studio 3 — Canlı Ders</title>
@@ -405,6 +405,55 @@ body.board-fullscreen-open{overflow:hidden!important}
 }
 
 </style>
+
+<style id="simo-v43-presentation-fix">
+/* === V4.3 SUNUM MANTIĞI DÜZELTMESİ === */
+.plan-slide-note{font-size:12px;color:#64748b;margin-top:6px}
+.board-plan-source{font-size:13px;color:#64748b;border-left:4px solid #bfdbfe;padding:8px 10px;background:#f8fbff;border-radius:8px;white-space:pre-wrap}
+
+/* PDF artık iframe'e bağımlı değil: PDF.js canvas + güvenli fallback */
+.pdf-v43-surface{position:relative;width:100%;min-height:420px;background:#eef2f7;border:1px solid #e2e8f0;border-radius:10px;overflow:auto;display:grid;place-items:center}
+.pdf-v43-canvas{display:block;max-width:none;background:#fff;box-shadow:0 3px 18px rgba(15,23,42,.10)}
+.pdf-v43-fallback{position:absolute;inset:0;width:100%;height:100%;border:0;background:#fff}
+.pdf-v43-status{position:absolute;left:10px;bottom:10px;z-index:2;background:rgba(15,23,42,.86);color:#fff;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:750;pointer-events:none}
+.pdf-v43-open{position:absolute;right:10px;bottom:10px;z-index:3;border:1px solid #cbd5e1;background:#fff;color:#334155;border-radius:8px;padding:6px 9px;font-size:11px;font-weight:800;text-decoration:none}
+.pdf-inline-tools .pdf-remove-v43{color:#b91c1c;border-color:#fecaca;background:#fff}
+
+/* PDF odak modu artık gerçek bir sunum yüzeyidir. İçerik ve çizim aynı katmanda kalır. */
+#teacherBoard.simo-pdf-focus{overflow:hidden!important;background:#e9eef5!important}
+#teacherBoard.simo-pdf-focus #boardContent{position:absolute!important;inset:0!important;display:block!important;min-height:0!important;height:100%!important;width:100%!important;transform:none!important;z-index:10!important}
+#teacherBoard.simo-pdf-focus #boardContent>.board-block:not(.pdf-focus-active){display:none!important}
+#teacherBoard.simo-pdf-focus .pdf-focus-active{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;max-height:none!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;resize:none!important;box-shadow:none!important;overflow:hidden!important;background:#e9eef5!important}
+#teacherBoard.simo-pdf-focus .pdf-focus-active .pdf-inline-tools{position:absolute!important;top:8px!important;left:76px!important;right:8px!important;z-index:42!important;margin:0!important;display:flex!important;background:rgba(255,255,255,.94)!important}
+#teacherBoard.simo-pdf-focus .pdf-focus-active .pdf-v43-surface{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;border:0!important;border-radius:0!important;background:#dfe5ec!important;overflow:auto!important;padding:52px 8px 8px!important}
+#teacherBoard.simo-pdf-focus .simo-ink-layer{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;z-index:30!important}
+.pdf-focus-exit-v43{display:none;position:absolute;z-index:80;right:12px;top:12px;border:0;background:#0f172a;color:#fff;padding:9px 12px;border-radius:10px;font-weight:850;box-shadow:0 10px 28px rgba(15,23,42,.22)}
+#teacherBoard.simo-pdf-focus .pdf-focus-exit-v43{display:block}
+
+/* Öğrenci PDF sunumunda öğretmenin gördüğü yüzeyi koru; çizim daima PDF'nin üstünde. */
+#studentBoardStage.student-pdf-focus{padding:0!important;overflow:hidden!important;background:#e9eef5!important}
+#studentBoardStage.student-pdf-focus .student-session-banner,#studentBoardStage.student-pdf-focus .student-board-topic{display:none!important}
+#studentBoardStage.student-pdf-focus #studentBoardContent{position:relative!important;width:100%!important;min-height:min(75vh,800px)!important;height:min(75vh,800px)!important;display:block!important;background:#e9eef5!important;overflow:hidden!important}
+#studentBoardStage.student-pdf-focus #studentBoardContent>.student-board-block:not(.student-focus-active){display:none!important}
+#studentBoardStage.student-pdf-focus .student-focus-active{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;overflow:hidden!important;background:#e9eef5!important}
+#studentBoardStage.student-pdf-focus .student-focus-active .student-board-confuse{z-index:25}
+#studentBoardStage.student-pdf-focus .student-focus-active .pdf-v43-surface{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;border:0!important;border-radius:0!important;padding:0!important;background:#dfe5ec!important}
+#studentBoardStage.student-pdf-focus .student-simo-ink{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:0!important;z-index:30!important;pointer-events:none!important}
+
+/* Normal öğrenci görünümünde de çizim içerik üstünde kalır */
+.student-board-content{isolation:isolate}
+.student-board-block{position:relative;z-index:10}
+.student-simo-ink{z-index:30!important}
+
+@media(max-width:760px){
+  .pdf-v43-surface{min-height:52vh}
+  #teacherBoard.simo-pdf-focus .pdf-focus-active .pdf-inline-tools{left:8px!important;right:8px!important;top:8px!important;overflow-x:auto!important;white-space:nowrap!important}
+  #teacherBoard.simo-pdf-focus .pdf-focus-active .pdf-v43-surface{padding:58px 4px 70px!important}
+  .pdf-focus-exit-v43{right:8px;top:60px}
+  #studentBoardStage.student-pdf-focus #studentBoardContent{height:70vh!important;min-height:70vh!important}
+}
+</style>
+
 </head>
 <body>
 <div class="app">
@@ -1421,6 +1470,134 @@ simoInit=function(){SIMO_BASE_INIT_V2();const svg=$('#simoInkLayer'),ed=$('#simo
 };
 
 
+
+/* === V4.3 SUNUM MANTIĞI DÜZELTMESİ ===
+   1) Ders planı artık gerçekten tahta sayfalarına dönüştürülür ve öğrenciye yayınlanır.
+   2) PDF, mobilde harici görüntüleyiciye mecbur kalmadan PDF.js canvas üzerinde gösterilir.
+   3) PDF odak durumu snapshot'a eklenir; çizim ile PDF aynı canlı sahnede kalır.
+*/
+const SIMO_V43_BUILD='2026-08-17-V4.3-PRESENTATION-FIX';
+let simoPdfJsPromise=null;
+const SIMO_PDFJS_PRIMARY='https://cdn.jsdelivr.net/npm/pdfjs-dist@5.7.284/build/pdf.min.mjs';
+const SIMO_PDFJS_PRIMARY_WORKER='https://cdn.jsdelivr.net/npm/pdfjs-dist@5.7.284/build/pdf.worker.min.mjs';
+const SIMO_PDFJS_FALLBACK='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs';
+const SIMO_PDFJS_FALLBACK_WORKER='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.worker.min.mjs';
+
+async function simoLoadPdfJs(){
+  if(simoPdfJsPromise)return simoPdfJsPromise;
+  simoPdfJsPromise=(async()=>{
+    try{const lib=await import(SIMO_PDFJS_PRIMARY);lib.GlobalWorkerOptions.workerSrc=SIMO_PDFJS_PRIMARY_WORKER;return lib}
+    catch(e1){console.warn('PDF.js primary load',e1);const lib=await import(SIMO_PDFJS_FALLBACK);lib.GlobalWorkerOptions.workerSrc=SIMO_PDFJS_FALLBACK_WORKER;return lib}
+  })();
+  return simoPdfJsPromise;
+}
+function simoPdfCleanUrl(u){return String(u||'').split('#')[0]}
+async function simoRenderPdfCanvas(canvas){
+  if(!canvas||canvas.dataset.pdfBusy==='1')return;
+  const url=simoPdfCleanUrl(canvas.dataset.pdfUrl);if(!url)return;
+  const pageNo=Math.max(1,Number(canvas.dataset.pdfPage)||1),zoom=Math.max(50,Math.min(200,Number(canvas.dataset.pdfZoom)||100));
+  const holder=canvas.closest('.pdf-v43-surface'),status=holder?.querySelector('.pdf-v43-status'),fallback=holder?.querySelector('.pdf-v43-fallback');
+  canvas.dataset.pdfBusy='1';if(status)status.textContent='PDF hazırlanıyor…';
+  try{
+    const pdfjs=await simoLoadPdfJs();
+    const task=pdfjs.getDocument({url});const pdf=await task.promise;const n=Math.min(pageNo,pdf.numPages);const page=await pdf.getPage(n);
+    const base=page.getViewport({scale:1});
+    const hw=Math.max(280,(holder?.clientWidth||canvas.parentElement?.clientWidth||900)-16),hh=Math.max(300,(holder?.clientHeight||0)-16);
+    let fit=hw/base.width;if(holder?.classList.contains('pdf-focus-surface')&&hh>320)fit=Math.min(fit,hh/base.height);
+    const scale=Math.max(.25,Math.min(4,fit*(zoom/100)));const vp=page.getViewport({scale});const dpr=Math.min(2,window.devicePixelRatio||1);
+    canvas.width=Math.max(1,Math.floor(vp.width*dpr));canvas.height=Math.max(1,Math.floor(vp.height*dpr));canvas.style.width=vp.width+'px';canvas.style.height=vp.height+'px';
+    const ctx=canvas.getContext('2d',{alpha:false});ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#fff';ctx.fillRect(0,0,vp.width,vp.height);
+    await page.render({canvasContext:ctx,viewport:vp}).promise;
+    canvas.style.display='block';if(fallback)fallback.style.display='none';if(status)status.textContent=`Sayfa ${n} / ${pdf.numPages}`;
+  }catch(err){console.warn('PDF canvas render',err);canvas.style.display='none';if(fallback)fallback.style.display='block';if(status)status.textContent='PDF yerleşik görüntüleyici ile açıldı';}
+  finally{canvas.dataset.pdfBusy='0'}
+}
+function simoRenderVisiblePdfs(root=document){root.querySelectorAll?.('canvas.pdf-v43-canvas[data-pdf-url]').forEach(c=>simoRenderPdfCanvas(c))}
+
+function simoPlanTextChunks(text,max=1300){
+  const paras=String(text||'').split(/\n\s*\n/).map(x=>x.trim()).filter(Boolean),out=[];let cur='';
+  for(const p of paras){if((cur+'\n\n'+p).trim().length>max&&cur){out.push(cur);cur=p}else cur=(cur?cur+'\n\n':'')+p}if(cur)out.push(cur);return out;
+}
+function simoPlanPages(plan){
+  const p=plan||{},pages=[];const mk=(key,name,blocks)=>({name,layout:'one',split:50,blocks,inkObjects:[],generatedPlanV43:true,generatedKey:key});
+  const first=[];
+  if(p.topic)first.push({id:'v43_topic',type:'title',content:p.topic,full:true,generatedPlanV43:true});
+  if(p.main||p.tr)first.push({id:'v43_main',type:'example',content:p.main||'',sub:p.tr||'',full:true,generatedPlanV43:true});
+  if(p.source)first.push({id:'v43_source',type:'text',content:'Kaynak: '+p.source,full:true,generatedPlanV43:true});
+  if(first.length)pages.push(mk('intro','Ders Sunumu',first));
+  const explain=[String(p.explain||'').trim(),String(p.note||'').trim()].filter(Boolean).join('\n\n');
+  if(explain)pages.push(mk('explain','Kısa Anlatım',[{id:'v43_explain',type:'text',content:explain,full:true,generatedPlanV43:true}]));
+  simoPlanTextChunks(p.body,1250).forEach((txt,i)=>pages.push(mk('body_'+i,`Ders Notu ${i+1}`,[{id:'v43_body_'+i,type:'text',content:txt,full:true,generatedPlanV43:true}])));
+  const ex=String(p.examples||'').split('\n').map(x=>x.trim()).filter(Boolean);for(let i=0;i<ex.length;i+=4){const blocks=ex.slice(i,i+4).map((line,j)=>{const parts=line.split('|');return{id:'v43_ex_'+(i+j),type:'example',content:(parts[0]||'').trim(),sub:parts.slice(1).join('|').trim(),full:true,generatedPlanV43:true}});pages.push(mk('examples_'+i,`Örnekler ${Math.floor(i/4)+1}`,blocks))}
+  return pages.length?pages:[mk('empty','Ders Sunumu',[{id:'v43_empty',type:'text',content:'Ders içeriğini hazırlayıp “Sunuma uygula” dediğinde burada görünecek.',full:true,generatedPlanV43:true}])];
+}
+function simoApplyPlanToBoard(plan,activate=true){
+  const generated=simoPlanPages(plan),oldGenerated=new Map((boardState.pages||[]).filter(x=>x.generatedPlanV43).map(x=>[x.generatedKey,x]));
+  generated.forEach(pg=>{const old=oldGenerated.get(pg.generatedKey);if(old?.inkObjects?.length)pg.inkObjects=old.inkObjects});
+  const manual=(boardState.pages||[]).filter(x=>!x.generatedPlanV43);
+  const trulyManual=manual.filter((x,i)=>{const meaningful=(x.blocks||[]).length||(x.inkObjects||[]).length;return meaningful||i>2});
+  boardState.pages=[...generated,...trulyManual];boardState.topic=plan?.topic||boardState.topic||'Ders';if(activate)boardState.activePage=0;
+  $('#boardTopicName').value=boardState.topic;localStorage.setItem(BOARD_KEY,JSON.stringify(boardState));renderBoardPages();renderBoard();renderPresentNav();boardSave();pushBoardLiveNow(true);
+}
+/* Eski "planı kaydet ama tahtayı boş bırak" davranışını iptal et. */
+applyPlan=function(plan=getPlan()){
+  if(!plan)return;oldApplyPlan(plan);simoApplyPlanToBoard(plan,true);toast('Ders sunumu tahtaya aktarıldı • öğrenci ekranına canlı gider',3200)
+};
+
+/* Snapshot artık PDF odak modunu da taşır. */
+liveBoardSnapshot=function(){return{
+  topic:boardState.topic||'Yeni Konu',brandName:(getBrand().name||'Okul Simo'),activePage:boardState.activePage||0,focusBlockId:boardState.liveFocusBlockId||null,
+  pages:(boardState.pages||[]).map(p=>({name:p.name||'',layout:p.layout||'one',split:p.split||50,generatedPlanV43:!!p.generatedPlanV43,generatedKey:p.generatedKey||'',inkObjects:JSON.parse(JSON.stringify(p.inkObjects||[])),blocks:(p.blocks||[]).map(b=>({id:b.id,type:b.type,content:b.content||'',sub:b.sub||'',options:Array.isArray(b.options)?b.options.slice(0,4):undefined,url:b.cloudUrl||b.url||'',cloudUrl:b.cloudUrl||'',mediaId:b.mediaId||'',name:b.name||'',pdfPage:b.pdfPage||1,pdfZoom:b.pdfZoom||100,full:!!b.full,slot:b.slot??0,height:b.height||null,highlighted:!!b.highlighted,generatedPlanV43:!!b.generatedPlanV43}))}))
+}};
+
+const SIMO_V43_PREV_BLOCK_HTML=blockHTML;
+blockHTML=function(b,i){
+  if(b.type!=='pdf')return SIMO_V43_PREV_BLOCK_HTML(b,i);
+  const u=simoPdfCleanUrl(b.url||b.cloudUrl||'');const safe=escapeHTML(u),id=escapeHTML(String(b.id));
+  const actions=`<div class="block-actions non-present"><button class="move-btn" onclick="boardMove(${i},-1)">↑</button><button class="move-btn" onclick="boardMove(${i},1)">↓</button><button title="Sil" onclick="boardDelete(${i})">×</button></div>`;
+  return `<section class="board-block board-document-object full ${b.highlighted?'markable-highlight':''}" data-bi="${i}" data-block-id="${id}" data-slot="${b.slot??0}">${actions}<div class="pdf-inline-tools"><span>📄 ${escapeHTML(b.name||'PDF')} • Sayfa ${b.pdfPage||1} • %${b.pdfZoom||100}</span><button onclick="boardPdfStep(${i},-1)">←</button><button onclick="boardPdfStep(${i},1)">→</button><button onclick="boardPdfZoom(${i},-1)">−</button><button onclick="boardPdfZoom(${i},1)">＋</button><button class="pdf-primary" onclick="boardPdfFullscreen(${i})">⛶ PDF odak</button><button class="pdf-remove-v43" onclick="boardPdfRemove(${i})">✕ PDF kaldır</button></div>${u?`<div class="pdf-v43-surface"><canvas class="pdf-v43-canvas" data-pdf-url="${safe}" data-pdf-page="${b.pdfPage||1}" data-pdf-zoom="${b.pdfZoom||100}"></canvas><iframe class="pdf-v43-fallback" src="${escapeHTML(pdfBlockSrc({url:u,pdfPage:b.pdfPage,pdfZoom:b.pdfZoom}))}" title="PDF"></iframe><span class="pdf-v43-status">PDF hazırlanıyor…</span><a class="pdf-v43-open" href="${safe}" target="_blank" rel="noopener">PDF'yi ayrı aç</a></div>`:`<div class="pdf-placeholder"><b>PDF hazırlanıyor</b></div>`}</section>`;
+};
+const SIMO_V43_PREV_RENDER_BOARD=renderBoard;
+renderBoard=function(){SIMO_V43_PREV_RENDER_BOARD();simoApplyTeacherPdfFocus();requestAnimationFrame(()=>simoRenderVisiblePdfs($('#boardContent')))};
+window.boardPdfRemove=function(i){const b=currentBoardPage()?.blocks?.[i];if(!b||b.type!=='pdf')return;if(!confirm('Bu PDF tahtadan kaldırılsın mı?'))return;if(String(boardState.liveFocusBlockId||'')===String(b.id))boardState.liveFocusBlockId=null;boardDelete(i);simoApplyTeacherPdfFocus();pushBoardLiveNow(true)};
+window.boardPdfFullscreen=function(i){const b=currentBoardPage()?.blocks?.[i];if(!b||b.type!=='pdf')return;const active=String(boardState.liveFocusBlockId||'')===String(b.id);boardState.liveFocusBlockId=active?null:b.id;boardSave();renderBoard();pushBoardLiveNow(true);if(!active){$('#teacherBoard')?.requestFullscreen?.().catch(()=>{});toast('PDF sunumu açık • çizimler öğrenci ekranında PDF ile birlikte görünür',3200)}else{if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});toast('PDF odak modu kapatıldı')}};
+const SIMO_V43_PREV_ADD_BOARD_FILE=simoAddBoardFile;
+simoAddBoardFile=async function(file,type){
+  const resolved=type||(file?.type==='application/pdf'?'pdf':'image');await SIMO_V43_PREV_ADD_BOARD_FILE(file,type);
+  if(resolved==='pdf'){const p=currentBoardPage(),b=[...(p?.blocks||[])].reverse().find(x=>x.type==='pdf');if(b){boardState.liveFocusBlockId=b.id;boardSave();renderBoard();pushBoardLiveNow(true);toast('PDF sunum yüzeyinde açıldı • çizimler öğrenciye PDF ile birlikte gider',3200)}}
+};
+
+function simoApplyTeacherPdfFocus(){
+  const board=$('#teacherBoard');if(!board)return;const id=boardState.liveFocusBlockId;board.classList.toggle('simo-pdf-focus',!!id);board.querySelectorAll('.pdf-focus-active').forEach(x=>x.classList.remove('pdf-focus-active'));if(id){const el=[...board.querySelectorAll('#boardContent [data-block-id]')].find(x=>String(x.dataset.blockId)===String(id));el?.classList.add('pdf-focus-active');el?.querySelector('.pdf-v43-surface')?.classList.add('pdf-focus-surface')}
+  let exit=board.querySelector('.pdf-focus-exit-v43');if(!exit){exit=document.createElement('button');exit.type='button';exit.className='pdf-focus-exit-v43';exit.textContent='← PDF’den çık';exit.onclick=()=>{const p=currentBoardPage(),i=(p?.blocks||[]).findIndex(x=>String(x.id)===String(boardState.liveFocusBlockId));if(i>=0)boardPdfFullscreen(i);else{boardState.liveFocusBlockId=null;boardSave();renderBoard()}};board.appendChild(exit)}
+}
+
+const SIMO_V43_PREV_STUDENT_BLOCK=studentBoardBlockHTML;
+studentBoardBlockHTML=function(b,pi){
+  if(b.type!=='pdf'){let html=SIMO_V43_PREV_STUDENT_BLOCK(b,pi);return html.replace('<section class="student-board-block',`<section data-block-id="${escapeHTML(String(b.id))}" class="student-board-block`)}
+  const target=`board:${pi}:${b.id}`,sent=studentHasConfusion(target,getRoom()),confuse=`<button class="student-board-confuse ${sent?'sent':''}" data-confuse="${escapeHTML(target)}">${sent?'✓ Bildirildi':'🙋 Anlamadım'}</button>`;const u=simoPdfCleanUrl(b.url||b.cloudUrl||''),safe=escapeHTML(u);
+  return `<section data-block-id="${escapeHTML(String(b.id))}" class="student-board-block full" data-slot="${b.slot??0}">${confuse}${u?`<div class="pdf-v43-surface"><canvas class="pdf-v43-canvas" data-pdf-url="${safe}" data-pdf-page="${b.pdfPage||1}" data-pdf-zoom="${b.pdfZoom||100}"></canvas><iframe class="pdf-v43-fallback" src="${escapeHTML(pdfBlockSrc({url:u,pdfPage:b.pdfPage,pdfZoom:b.pdfZoom}))}" title="PDF"></iframe><span class="pdf-v43-status">PDF hazırlanıyor…</span><a class="pdf-v43-open" href="${safe}" target="_blank" rel="noopener">PDF'yi ayrı aç</a></div>`:`<div class="pdf-placeholder">PDF hazırlanıyor</div>`}</section>`;
+};
+function simoLessonFallbackRoom(r){
+  const hasBoard=(r?.board?.pages||[]).some(p=>(p.blocks||[]).length);if(hasBoard||!r?.lesson)return r;
+  const pages=simoPlanPages(r.lesson).map(p=>({name:p.name,layout:p.layout,split:p.split,blocks:p.blocks,inkObjects:[]}));return{...r,board:{topic:r.lesson.topic||'Canlı Ders',brandName:(getBrand().name||'Okul Simo'),activePage:0,focusBlockId:null,pages}};
+}
+const SIMO_V43_PREV_RENDER_STUDENT=renderStudentLesson;
+renderStudentLesson=function(r=getRoom()){
+  const rr=simoLessonFallbackRoom(r);SIMO_V43_PREV_RENDER_STUDENT(rr);const stage=$('#studentBoardStage'),content=$('#studentBoardContent'),focus=rr?.board?.focusBlockId||null;stage?.classList.toggle('student-pdf-focus',!!focus);content?.querySelectorAll('.student-focus-active').forEach(x=>x.classList.remove('student-focus-active'));if(focus){const el=[...content.querySelectorAll('[data-block-id]')].find(x=>String(x.dataset.blockId)===String(focus));el?.classList.add('student-focus-active');el?.querySelector('.pdf-v43-surface')?.classList.add('pdf-focus-surface')}
+  requestAnimationFrame(()=>simoRenderVisiblePdfs(content));
+};
+
+/* Sunuma girerken boş tahta varsa planı otomatik sayfalara çevir ve aktif odaya tam snapshot gönder. */
+const SIMO_V43_PREV_PRESENT=present;
+present=function(force){const on=typeof force==='boolean'?force:!$('.app').classList.contains('presenting');if(on&&!(boardState.pages||[]).some(pg=>(pg.blocks||[]).length)){const p=getPlan();if(p?.topic||p?.main||p?.body||p?.explain||p?.examples)simoApplyPlanToBoard(p,true)}const out=SIMO_V43_PREV_PRESENT(force);if(on){try{const r=getRoom();if(r.startedAt&&!r.endedAt){r.lesson=getPlan();r.board=liveBoardSnapshot();saveRoom(r)}pushBoardLiveNow(true)}catch(e){console.warn('presentation live push',e)}}return out};
+
+/* PDF sayfa/zoom değişiklikleri ve sayfa geçişleri anında öğrenciye gönderilir. */
+const SIMO_V43_PDF_STEP=window.boardPdfStep, SIMO_V43_PDF_ZOOM=window.boardPdfZoom;
+window.boardPdfStep=function(i,dir){SIMO_V43_PDF_STEP(i,dir);pushBoardLiveNow(true);requestAnimationFrame(()=>simoRenderVisiblePdfs($('#boardContent')))};
+window.boardPdfZoom=function(i,dir){SIMO_V43_PDF_ZOOM(i,dir);pushBoardLiveNow(true);requestAnimationFrame(()=>simoRenderVisiblePdfs($('#boardContent')))};
+
+
 /* Board fullscreen v4.2: native Fullscreen API + iPhone/iPad fallback */
 function boardFullscreenActive(el){return !!el&&(document.fullscreenElement===el||el.classList.contains('board-faux-fullscreen'))}
 async function toggleBoardFullscreen(el){
@@ -1441,7 +1618,7 @@ $('#studentBoardFullscreen').onclick=()=>toggleBoardFullscreen($('#studentBoardS
 document.addEventListener('fullscreenchange',()=>{if(!document.fullscreenElement)document.body.classList.remove('board-fullscreen-open')});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeFauxBoardFullscreen()});
 
-(async function init(){applyBrand();boardLoad();if(!STUDENT_PORTAL){const ended=getRoom().endedAt,lastCleared=localStorage.getItem(BOARD_LAST_CLEARED_END_KEY)||'';if(ended&&String(ended)!==lastCleared&&boardHasMeaningfulContent()){resetBoardLocal('Yeni Konu');localStorage.setItem(BOARD_LAST_CLEARED_END_KEY,String(ended))}}simoNormalizeBoardBlocks();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt'),autoBackend=okulSimoBackendDefault();if(rtParam){try{const clean=new URL(location.href);clean.searchParams.delete('rt');history.replaceState(null,'',clean.toString())}catch{}}if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');const restored=restoreStudentSession(roomParam);if(restored)$('#studentStatusText').textContent='Odaya bağlanılıyor • tahta eşitleniyor'}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=20260817-v42-fill-fullscreen',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})})();
+(async function init(){applyBrand();boardLoad();if(!STUDENT_PORTAL){const ended=getRoom().endedAt,lastCleared=localStorage.getItem(BOARD_LAST_CLEARED_END_KEY)||'';if(ended&&String(ended)!==lastCleared&&boardHasMeaningfulContent()){resetBoardLocal('Yeni Konu');localStorage.setItem(BOARD_LAST_CLEARED_END_KEY,String(ended))}}simoNormalizeBoardBlocks();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt'),autoBackend=okulSimoBackendDefault();if(rtParam){try{const clean=new URL(location.href);clean.searchParams.delete('rt');history.replaceState(null,'',clean.toString())}catch{}}if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');const restored=restoreStudentSession(roomParam);if(restored)$('#studentStatusText').textContent='Odaya bağlanılıyor • tahta eşitleniyor'}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=20260817-v43-presentation-fix',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})})();
 
 
 </script>

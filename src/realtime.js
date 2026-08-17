@@ -4,7 +4,7 @@ const JSON_HEADERS = {
   "Content-Type": "application/json; charset=utf-8",
   "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
   "X-Content-Type-Options": "nosniff",
-  "X-Simo-Live": "v4.1-memory",
+  "X-Simo-Live": "v4.2-memory",
 };
 
 function json(data, status = 200, extra = {}) {
@@ -15,6 +15,7 @@ function cleanId(value, max = 120) { return String(value || "").replace(/[<>]/g,
 function cleanName(value) { return cleanId(value || "Öğrenci", 80) || "Öğrenci"; }
 function now() { return Date.now(); }
 function byteLength(value) { return new TextEncoder().encode(value).byteLength; }
+function normalizeAnswer(value) { return String(value ?? "").trim().replace(/\s+/g, " ").toLocaleLowerCase("tr-TR"); }
 function makeState(code = "") {
   return {
     code,
@@ -46,7 +47,7 @@ export default {
           "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type,X-File-Name",
           "Access-Control-Max-Age": "86400",
-          "X-Simo-Live": "v4.1-memory",
+          "X-Simo-Live": "v4.2-memory",
         },
       });
     }
@@ -54,7 +55,7 @@ export default {
     if (url.pathname === "/health" || url.pathname === "/api/live/health") {
       return json({
         ok: true,
-        service: "simo-live-v4.1",
+        service: "simo-live-v4.2",
         transport: "https-heartbeat",
         sameOrigin: true,
         liveState: "durable-object-memory",
@@ -143,7 +144,12 @@ export class LiveRoom extends DurableObject {
     const sid = cleanId(studentId);
     const own = sid && state.students?.[sid] ? { [sid]: state.students[sid] } : {};
     const safeQuestion = state.question
-      ? { ...state.question, correct: state.question.revealed ? state.question.correct : null }
+      ? {
+          ...state.question,
+          correct: state.question.revealed ? state.question.correct : null,
+          answerText: state.question.revealed ? (state.question.answerText || null) : null,
+          acceptedAnswers: state.question.revealed ? (state.question.acceptedAnswers || []) : [],
+        }
       : null;
 
     return {
@@ -191,12 +197,18 @@ export class LiveRoom extends DurableObject {
     if (newLesson) {
       for (const st of Object.values(students)) {
         st.answer = null;
+        st.answerText = null;
+        st.answerCorrect = null;
         st.totalAnswered = 0;
         st.totalCorrect = 0;
         st.joined = now();
       }
     } else if (newQuestion) {
-      for (const st of Object.values(students)) st.answer = null;
+      for (const st of Object.values(students)) {
+        st.answer = null;
+        st.answerText = null;
+        st.answerCorrect = null;
+      }
     }
 
     this.room = {
@@ -236,26 +248,46 @@ export class LiveRoom extends DurableObject {
 
     state.students ||= {};
     const prev = state.students[sid] || {
-      id: sid, name, answer: null, joined: now(), totalAnswered: 0, totalCorrect: 0,
+      id: sid, name, answer: null, answerText: null, answerCorrect: null,
+      joined: now(), totalAnswered: 0, totalCorrect: 0,
     };
 
     let answer = prev.answer ?? null;
+    let answerText = prev.answerText ?? null;
+    let answerCorrect = typeof prev.answerCorrect === "boolean" ? prev.answerCorrect : null;
     let totalAnswered = Number(prev.totalAnswered || 0);
     let totalCorrect = Number(prev.totalCorrect || 0);
     const incomingAnswer = Number.isInteger(body.student?.answer) && body.student.answer >= 0 && body.student.answer <= 3
       ? body.student.answer : null;
+    const incomingText = cleanId(body.student?.answerText || "", 220);
     const canAnswer = !!state.question && !state.paused && !state.endedAt;
+    const isFill = state.question?.type === "fill";
 
-    if (canAnswer && answer == null && incomingAnswer != null) {
-      answer = incomingAnswer;
+    if (canAnswer && isFill && answerText == null && incomingText) {
+      answerText = incomingText;
+      answer = null;
+      const accepted = (Array.isArray(state.question.acceptedAnswers) && state.question.acceptedAnswers.length
+        ? state.question.acceptedAnswers
+        : [state.question.answerText])
+        .filter(Boolean)
+        .map(normalizeAnswer);
+      answerCorrect = accepted.includes(normalizeAnswer(incomingText));
       totalAnswered += 1;
-      if (incomingAnswer === state.question.correct) totalCorrect += 1;
+      if (answerCorrect) totalCorrect += 1;
+    } else if (canAnswer && !isFill && answer == null && incomingAnswer != null) {
+      answer = incomingAnswer;
+      answerText = null;
+      answerCorrect = incomingAnswer === state.question.correct;
+      totalAnswered += 1;
+      if (answerCorrect) totalCorrect += 1;
     }
 
     state.students[sid] = {
       id: sid,
       name,
       answer,
+      answerText,
+      answerCorrect,
       joined: prev.joined || now(),
       totalAnswered,
       totalCorrect,

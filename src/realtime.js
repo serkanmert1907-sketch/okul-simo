@@ -2,9 +2,8 @@ import { DurableObject } from "cloudflare:workers";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
+  "Access-Control-Allow-Methods": "GET,PUT,OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type,X-File-Name",
-  "Access-Control-Max-Age": "86400",
 };
 
 function json(data, status = 200, extra = {}) {
@@ -23,7 +22,7 @@ export default {
     const room = (url.searchParams.get("room") || "").replace(/[^0-9A-Za-z_-]/g, "").slice(0, 32);
     if (!room) return json({ ok: false, error: "room gerekli" }, 400);
 
-    if (url.pathname === "/ws" || url.pathname === "/sync" || url.pathname.startsWith("/media/")) {
+    if (url.pathname === "/ws" || url.pathname.startsWith("/media/")) {
       const stub = env.LIVE_ROOMS.getByName(room);
       return stub.fetch(request);
     }
@@ -102,162 +101,6 @@ export class LiveRoom extends DurableObject {
       const current = await this.state(room);
       server.send(JSON.stringify({ type: "room", room: this.roomFor(role, current, attachment.studentId) }));
       return new Response(null, { status: 101, webSocket: client });
-    }
-
-
-    if (url.pathname === "/sync") {
-      const role = url.searchParams.get("role") === "teacher" ? "teacher" : "student";
-      const studentId = String(url.searchParams.get("studentId") || "").slice(0, 120);
-      if (role === "teacher") {
-        const ok = await this.validTeacher(url.searchParams.get("token") || "", true);
-        if (!ok) return json({ ok: false, error: "Öğretmen anahtarı geçersiz" }, 403);
-      }
-      if (request.method !== "GET" && request.method !== "POST") {
-        return json({ ok: false, error: "Method not allowed" }, 405);
-      }
-
-      let state = await this.state(room);
-      let sid = studentId;
-      let studentName = "Öğrenci";
-
-      if (request.method === "POST") {
-        const msg = await request.json().catch(() => null);
-        if (!msg || typeof msg !== "object") return json({ ok: false, error: "Geçersiz veri" }, 400);
-
-        if (role === "teacher" && msg.type === "teacher_update") {
-          const t = msg.room || {};
-          const newLesson = !!t.startedAt && Number(t.startedAt) !== Number(state.startedAt || 0);
-          const newQuestion = !!t.question?.id && String(t.question.id) !== String(state.question?.id || "");
-          const students = { ...(state.students || {}) };
-          if (newLesson) {
-            for (const st of Object.values(students)) {
-              st.answer = null; st.totalAnswered = 0; st.totalCorrect = 0; st.joined = Date.now();
-            }
-          } else if (newQuestion) {
-            for (const st of Object.values(students)) st.answer = null;
-          }
-          state = {
-            ...state,
-            code: t.code || state.code || room,
-            question: t.question ?? state.question,
-            questionCount: Number.isFinite(t.questionCount) ? t.questionCount : (state.questionCount || 0),
-            lesson: t.lesson ?? state.lesson,
-            board: t.board ?? state.board,
-            zoom: t.zoom ?? state.zoom,
-            paused: typeof t.paused === "boolean" ? t.paused : !!state.paused,
-            startedAt: t.startedAt ?? state.startedAt,
-            endedAt: t.endedAt ?? state.endedAt,
-            teacherUpdatedAt: Number(t.teacherUpdatedAt || Date.now()),
-            students,
-            confusions: state.confusions || [],
-          };
-          await this.persistAndBroadcast(state);
-          await this.ctx.storage.put("pollTeacherAt", Date.now());
-        }
-
-        if (role === "teacher" && msg.type === "teacher_confusions") {
-          state.confusions = Array.isArray(msg.confusions) ? msg.confusions.slice(0, 1000) : state.confusions || [];
-          await this.persistAndBroadcast(state);
-          await this.ctx.storage.put("pollTeacherAt", Date.now());
-        }
-
-        if (role === "student" && msg.type === "student_update") {
-          sid = String(msg.studentId || sid || "").slice(0, 120);
-          if (!sid) return json({ ok: false, error: "studentId gerekli" }, 400);
-          studentName = String(msg.student?.name || "Öğrenci").slice(0, 80);
-          state.students = state.students || {};
-          const prev = state.students[sid] || { id: sid, name: studentName, answer: null, joined: Date.now(), totalAnswered: 0, totalCorrect: 0 };
-          let answer = prev.answer ?? null;
-          let totalAnswered = Number(prev.totalAnswered || 0);
-          let totalCorrect = Number(prev.totalCorrect || 0);
-          const incomingAnswer = Number.isInteger(msg.student?.answer) && msg.student.answer >= 0 && msg.student.answer <= 3 ? msg.student.answer : null;
-          const canAnswer = !!state.question && !state.paused && !state.endedAt;
-          if (canAnswer && answer == null && incomingAnswer != null) {
-            answer = incomingAnswer;
-            totalAnswered += 1;
-            if (incomingAnswer === state.question.correct) totalCorrect += 1;
-          }
-          state.students[sid] = {
-            id: sid,
-            name: studentName,
-            answer,
-            joined: prev.joined || Date.now(),
-            totalAnswered,
-            totalCorrect,
-          };
-          const others = (state.confusions || []).filter((x) => x.studentId !== sid);
-          const resolvedOwn = (state.confusions || []).filter((x) => x.studentId === sid && x.resolved);
-          const own = Array.isArray(msg.confusions)
-            ? msg.confusions.filter((x) => String(x.studentId) === sid && !x.resolved).slice(0, 200).map((x) => ({
-                id: String(x.id || "").slice(0, 160),
-                studentId: sid,
-                studentName,
-                target: String(x.target || "").slice(0, 220),
-                label: String(x.label || "").slice(0, 300),
-                note: String(x.note || "").slice(0, 240),
-                at: Number(x.at || Date.now()),
-                resolved: false,
-              }))
-            : [];
-          state.confusions = [...others, ...resolvedOwn, ...own].slice(-1000);
-          await this.persistAndBroadcast(state);
-
-          const pollStudents = (await this.ctx.storage.get("pollStudents")) || {};
-          pollStudents[sid] = Date.now();
-          const cutoff = Date.now() - 15000;
-          for (const [id, at] of Object.entries(pollStudents)) if (Number(at) < cutoff) delete pollStudents[id];
-          await this.ctx.storage.put("pollStudents", pollStudents);
-        }
-      } else {
-        if (role === "teacher") await this.ctx.storage.put("pollTeacherAt", Date.now());
-        if (role === "student" && sid) {
-          const pollStudents = (await this.ctx.storage.get("pollStudents")) || {};
-          pollStudents[sid] = Date.now();
-          const cutoff = Date.now() - 15000;
-          for (const [id, at] of Object.entries(pollStudents)) if (Number(at) < cutoff) delete pollStudents[id];
-          await this.ctx.storage.put("pollStudents", pollStudents);
-        }
-      }
-
-      state = await this.state(room);
-      const wsPresence = this.presence();
-      const teacherAt = Number((await this.ctx.storage.get("pollTeacherAt")) || 0);
-      const pollStudents = (await this.ctx.storage.get("pollStudents")) || {};
-      const now = Date.now(), cutoff = now - 15000;
-      let pollOnline = 0;
-      for (const at of Object.values(pollStudents)) if (Number(at) >= cutoff) pollOnline++;
-      const presence = {
-        onlineStudents: Math.max(wsPresence.onlineStudents || 0, pollOnline),
-        teacherOnline: !!wsPresence.teacherOnline || (teacherAt > 0 && now - teacherAt < 15000),
-      };
-
-      if (role === "teacher") {
-        return json({ ok: true, transport: "https-sync", room: { ...state, presence } });
-      }
-      const own = sid && state.students?.[sid] ? { [sid]: state.students[sid] } : {};
-      const safeQuestion = state.question
-        ? { ...state.question, correct: state.question.revealed ? state.question.correct : null }
-        : null;
-      return json({
-        ok: true,
-        transport: "https-sync",
-        room: {
-          code: state.code || room,
-          question: safeQuestion,
-          questionCount: state.questionCount || 0,
-          lesson: state.lesson,
-          board: state.board,
-          zoom: state.zoom || null,
-          paused: !!state.paused,
-          startedAt: state.startedAt,
-          endedAt: state.endedAt,
-          teacherUpdatedAt: state.teacherUpdatedAt || 0,
-          updated: state.updated,
-          presence,
-          students: own,
-          confusions: (state.confusions || []).filter((x) => x.studentId === sid),
-        },
-      });
     }
 
     if (url.pathname.startsWith("/media/")) {

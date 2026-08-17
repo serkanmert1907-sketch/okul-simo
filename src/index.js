@@ -20,7 +20,7 @@ export default {
       return zoomWorker.fetch(request, env);
     }
 
-    if (url.pathname === '/health' || url.pathname === '/ws' || url.pathname === '/sync' || url.pathname.startsWith('/media/')) {
+    if (url.pathname === '/health' || url.pathname === '/ws' || url.pathname.startsWith('/media/')) {
       return realtimeWorker.fetch(request, env);
     }
 

@@ -4,7 +4,9 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="theme-color" content="#0f172a" />
-<title>Okul Simo • SimoBoard Pro — Canlı Ders</title>
+<meta name="simo-build" content="SIMOBOARD_STUDIO_3_20260817" />
+<meta name="simo-board-version" content="studio-2.0" />
+<title>Okul Simo • SimoBoard Studio 3 — Canlı Ders</title>
 <link rel="manifest" href="manifest.webmanifest" />
 <style>
 :root{--bg:#f5f7fb;--panel:#fff;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;--soft:#f8fafc;--blue:#1467f5;--blue2:#0b55d4;--good:#16a34a;--warn:#d97706;--bad:#dc2626;--shadow:0 16px 46px rgba(15,23,42,.09)}
@@ -139,7 +141,7 @@ body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.p
 .simo-tool-panel{position:absolute;z-index:41;left:70px;top:54px;display:none;align-items:center;gap:7px;padding:7px 9px;background:rgba(255,255,255,.98);border:1px solid #d9e1ea;border-radius:12px;box-shadow:0 10px 28px rgba(15,23,42,.12)}
 .simo-tool-panel.show{display:flex}.simo-color{width:22px;height:22px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #cbd5e1}.simo-color.active{box-shadow:0 0 0 2px #0f9f8f}.simo-size{min-width:30px;height:30px;border:1px solid #dbe3ea;background:#fff;border-radius:8px;font-weight:850;color:#475569}.simo-size.active{background:#e7f7f4;border-color:#8dd9ce;color:#087f73}
 .simo-shape-choice{height:30px;min-width:32px;border:1px solid #dbe3ea;background:#fff;border-radius:8px;font-size:15px}.simo-shape-choice.active{background:#e7f7f4;border-color:#8dd9ce;color:#087f73}
-.simo-ink-layer{position:absolute;z-index:24;inset:0;width:100%;height:100%;min-height:610px;overflow:visible;touch-action:none;pointer-events:none}
+.simo-ink-layer{position:absolute;z-index:24;user-select:none;inset:0;width:100%;height:100%;min-height:610px;overflow:visible;touch-action:none;pointer-events:none}
 .simo-ink-layer.capture{pointer-events:auto;cursor:crosshair}.simo-ink-layer.selecting{pointer-events:none;cursor:default}.simo-ink-layer.selecting .simo-ink-object{pointer-events:visiblePainted;cursor:move}.simo-ink-object{vector-effect:non-scaling-stroke}.simo-ink-object.selected{filter:drop-shadow(0 0 2px rgba(8,127,115,.75))}.simo-ink-object.selected:not(text){stroke-dasharray:8 5}
 .simo-selection-bar{position:absolute;z-index:45;display:none;align-items:center;gap:5px;padding:5px;background:#fff;border:1px solid #d9e1ea;border-radius:10px;box-shadow:0 8px 24px rgba(15,23,42,.15)}.simo-selection-bar.show{display:flex}.simo-selection-bar button{height:29px;border:0;background:#f8fafc;border-radius:7px;padding:0 8px;font-size:12px;font-weight:800;color:#475569}.simo-selection-bar button:hover{background:#f1f5f9}.simo-selection-bar button.danger{color:#b91c1c}
 .simo-zoom-controls{position:absolute;z-index:40;right:12px;bottom:12px;display:flex;align-items:center;gap:3px;padding:5px;background:rgba(255,255,255,.97);border:1px solid #d9e1ea;border-radius:12px;box-shadow:0 10px 26px rgba(15,23,42,.12)}.simo-zoom-controls button{height:32px;min-width:32px;border:0;background:transparent;border-radius:8px;color:#334155;font-weight:900}.simo-zoom-controls button:hover{background:#f1f5f9}.simo-zoom-controls span{min-width:52px;text-align:center;font-size:12px;font-weight:900;color:#475569}
@@ -154,6 +156,83 @@ body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.p
  .simo-board-badge{display:none}.simo-canvas-toolbar{left:8px;right:8px;top:auto;bottom:8px;width:auto;flex-direction:row;overflow-x:auto;padding:5px;border-radius:13px}.simo-tool{flex:0 0 37px}.simo-tool.sep{margin-top:0;margin-left:5px}.simo-tool.sep:before{top:4px;bottom:4px;left:-5px;right:auto;border-top:0;border-left:1px solid #e2e8f0}.simo-tool[data-tip]:hover:after{display:none}.simo-tool-panel{position:fixed;left:8px;right:8px;top:auto;bottom:58px;justify-content:center;overflow:auto}.simo-zoom-controls{right:8px;bottom:64px}.simo-mini-pages{right:8px;top:8px}.simo-selection-bar{position:fixed!important;left:8px!important;right:8px!important;bottom:58px!important;top:auto!important;justify-content:center}.lesson-screen.board-canvas{padding-bottom:62px}.presenting .simo-canvas-toolbar{left:8px;right:8px;bottom:8px;top:auto}.presenting .simo-tool-panel{left:8px;right:8px;bottom:58px;top:auto}.presenting .simo-zoom-controls{right:8px;bottom:64px}.presenting .simo-mini-pages{right:8px;top:8px}.presenting .lesson-screen.board-canvas{padding:12px 12px 76px!important}
 }
 .student-board-content{position:relative}.student-simo-ink{position:absolute;z-index:8;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.student-board-block{z-index:2}
+
+
+
+/* ===== SIMOBOARD STUDIO 2 — PROFESYONEL ÇALIŞMA YÜZEYİ ===== */
+.lesson-screen.board-canvas{background:#f7f9fc;border-color:#dfe5ec;box-shadow:0 14px 38px rgba(15,23,42,.07);padding:62px 34px 74px 82px}
+.board-canvas:before{background-image:radial-gradient(#cfd8e5 .7px,transparent .7px);background-size:22px 22px;opacity:.26}
+.board-content{gap:10px;min-height:650px;align-content:start}
+.board-block{background:rgba(255,255,255,.42);border:1px solid transparent;border-radius:11px;padding:12px 14px;min-height:64px;box-shadow:none;transition:border-color .14s,background .14s,box-shadow .14s;resize:vertical;overflow:auto}
+.board-block:hover{border-color:#cbd5e1;background:rgba(255,255,255,.9);box-shadow:0 4px 15px rgba(15,23,42,.045)}
+.board-block:focus-within{border-color:#91b9f8;background:#fff;box-shadow:0 0 0 3px rgba(59,130,246,.10)}
+.board-block .block-kicker{font-size:10px;letter-spacing:.08em;color:#94a3b8;margin-bottom:5px;opacity:.72}
+.board-block:not(:hover):not(:focus-within) .block-kicker{opacity:.22}
+.block-title{font-size:clamp(28px,3.5vw,48px);font-weight:800;color:#15233d;letter-spacing:-.025em}
+.block-text{font-size:clamp(17px,1.55vw,21px);line-height:1.65;color:#26364e}
+.block-example{color:#172554}.block-translation{color:#64748b}
+.block-actions{top:7px;right:7px;padding:3px;background:rgba(255,255,255,.95);border:1px solid #e2e8f0;border-radius:10px;box-shadow:0 5px 16px rgba(15,23,42,.08)}
+.block-actions button{width:28px;height:28px;border:0;background:transparent;border-radius:7px}.block-actions button:hover{background:#f1f5f9}
+.board-block.markable-highlight,.markable-highlight{outline:2px solid rgba(59,130,246,.45)!important;outline-offset:1px!important;background:rgba(239,246,255,.78)!important}
+.blank-board{min-height:570px;border:0;background:transparent;border-radius:0}.blank-board .blank-icon{background:#eef6f5;color:#087f73}.blank-board h2{font-size:23px;color:#334155}
+.simo-pdf-tool{font-size:9px;letter-spacing:-.02em}
+.simo-inline-text-editor{display:none;position:absolute;z-index:70;min-width:90px;max-width:min(680px,70%);min-height:34px;padding:2px 4px;border:1px solid transparent;border-radius:5px;outline:none;background:rgba(255,255,255,.92);box-shadow:0 0 0 3px rgba(15,159,143,.13);white-space:pre-wrap;overflow-wrap:anywhere;color:#1f2937;line-height:1.25;caret-color:#087f73}
+.simo-inline-text-editor.show{display:block}.simo-inline-text-editor:empty:before{content:'Yazmaya başlayın…';color:#94a3b8;pointer-events:none}
+.simo-text-selection-tools{display:none;align-items:center;gap:3px;padding-right:4px;margin-right:2px;border-right:1px solid #e2e8f0}.simo-text-selection-tools.show{display:flex}.simo-text-selection-tools input[type=color]{width:27px;height:27px;padding:2px;border:1px solid #d9e1ea;background:#fff;border-radius:7px}
+.simo-text-selection-tools button.active{background:#e7f7f4;color:#087f73}
+.board-document-object{padding:9px;background:#fff;border-color:#dbe3ea;box-shadow:0 6px 22px rgba(15,23,42,.055);resize:both;min-width:280px;min-height:320px}
+.board-document-object .pdf-inline-tools{position:sticky;top:0;z-index:3;margin:0 0 7px;background:rgba(248,250,252,.96);backdrop-filter:blur(8px)}
+.board-document-object .board-pdf{height:560px;border:1px solid #e5eaf0;border-radius:9px;background:#fff}
+.board-image-object{padding:8px;background:#fff;border-color:#e2e8f0;resize:both;min-width:180px;min-height:140px}.board-image-object .board-media{height:100%;max-height:none;object-fit:contain}
+.board-document-object:fullscreen{background:#eef2f7;padding:10px}.board-document-object:fullscreen .board-pdf{height:calc(100vh - 62px)}
+.pdf-inline-tools .pdf-primary{background:#087f73;color:#fff;border-color:#087f73}.pdf-inline-tools .pdf-danger{color:#b91c1c}
+.simo-file-status{font-size:11px;font-weight:750;color:#64748b}
+@media(max-width:760px){.lesson-screen.board-canvas{padding:48px 9px 72px}.board-block{padding:10px 11px}.board-document-object{min-width:0;width:100%;resize:vertical}.board-document-object .board-pdf{height:55vh}.simo-inline-text-editor{max-width:84%;font-size:22px}.simo-text-selection-tools{overflow-x:auto;max-width:62vw}.simo-selection-bar{overflow-x:auto}}
+
+
+/* ===== SIMOBOARD STUDIO 3 — TEMİZ NESNE TABANLI TAHTA ===== */
+.lesson-screen.board-canvas{background:#fbfcfe;border:1px solid #dfe5ec;box-shadow:0 12px 34px rgba(15,23,42,.065);padding:58px 30px 72px 78px}
+.board-canvas:before{background-image:radial-gradient(#cbd5e1 .62px,transparent .62px);background-size:24px 24px;opacity:.18}
+.board-content{gap:4px;min-height:650px;align-content:start}
+.board-block:not(.board-document-object):not(.board-image-object){background:transparent!important;border:1px solid transparent!important;border-radius:8px!important;box-shadow:none!important;min-height:0!important;height:auto;padding:7px 10px;resize:none!important;overflow:visible}
+.board-block:not(.board-document-object):not(.board-image-object):hover{border-color:#d7dee8!important;background:rgba(255,255,255,.72)!important;box-shadow:0 2px 9px rgba(15,23,42,.035)!important}
+.board-block:not(.board-document-object):not(.board-image-object):focus-within{border-color:#7dd3c7!important;background:#fff!important;box-shadow:0 0 0 3px rgba(13,148,136,.10)!important}
+.board-block .block-kicker{height:0;margin:0;overflow:hidden;opacity:0!important;transition:.14s}
+.board-block:hover .block-kicker,.board-block:focus-within .block-kicker{height:auto;margin:0 0 4px;opacity:.52!important;font-size:9px;color:#64748b}
+.block-title{margin:0;font-size:clamp(27px,3vw,44px);line-height:1.12;font-weight:780;color:#172033;letter-spacing:-.025em}
+.block-text{font-size:clamp(17px,1.45vw,21px);line-height:1.58;color:#26354a;max-width:1050px}
+.block-example{font-size:clamp(20px,1.9vw,28px);line-height:1.38;color:#132d70}.block-translation{margin-top:3px;color:#748197}
+.board-test{padding:3px 0}.board-test-option{background:#fff;border-color:#e3e8ef}
+.block-actions{top:5px;right:5px;opacity:0!important;pointer-events:none;transform:translateY(-3px);transition:.12s}
+.board-block:hover>.block-actions,.board-block:focus-within>.block-actions{opacity:1!important;pointer-events:auto;transform:none}
+.markable-highlight{outline:2px solid rgba(13,148,136,.45)!important;outline-offset:1px!important;background:rgba(240,253,250,.68)!important}
+.simo-inline-text-editor{background:rgba(255,255,255,.98);border:1px solid #99f6e4;box-shadow:0 0 0 4px rgba(13,148,136,.12),0 8px 26px rgba(15,23,42,.08)}
+.simo-inline-text-editor:empty:before{content:'Buraya yaz…'}
+.simo-tool-panel{max-width:min(640px,calc(100vw - 130px));padding:5px 7px;gap:5px}
+.board-document-object{border:1px solid #dce3eb!important;border-radius:12px!important;background:#fff!important;box-shadow:0 8px 26px rgba(15,23,42,.06)!important}
+.board-image-object{border:1px solid #e1e7ee!important;border-radius:12px!important;background:#fff!important;box-shadow:0 6px 20px rgba(15,23,42,.045)!important}
+@media(max-width:760px){.lesson-screen.board-canvas{padding:45px 8px 72px}.board-block:not(.board-document-object):not(.board-image-object){padding:6px 7px}.simo-tool-panel{max-width:none}}
+
+
+/* PDF odak modu: PDF büyür, SimoBoard araçları ve çizim katmanı görünür kalır. */
+#teacherBoard.simo-pdf-focus{overflow:hidden;background:#eef2f6}
+#teacherBoard.simo-pdf-focus #boardContent{display:block!important;min-height:100%;height:100%;transform:none!important;width:100%!important}
+#teacherBoard.simo-pdf-focus #boardContent>.board-block:not(.pdf-focus-active){display:none!important}
+#teacherBoard.simo-pdf-focus .pdf-focus-active{position:absolute!important;inset:8px 10px 10px 70px!important;width:auto!important;height:calc(100% - 18px)!important;min-height:0!important;max-height:none!important;z-index:12!important;resize:none!important;margin:0!important;padding:8px!important}
+#teacherBoard.simo-pdf-focus .pdf-focus-active .board-pdf{height:calc(100% - 48px)!important;min-height:0!important}
+#teacherBoard.simo-pdf-focus .simo-ink-layer{z-index:24!important}
+#teacherBoard.simo-pdf-focus .simo-canvas-toolbar,#teacherBoard.simo-pdf-focus .simo-tool-panel,#teacherBoard.simo-pdf-focus .simo-mini-pages,#teacherBoard.simo-pdf-focus .simo-zoom-controls,#teacherBoard.simo-pdf-focus .simo-selection-bar{z-index:50!important}
+@media(max-width:760px){
+ .simo-canvas-toolbar{position:fixed!important;left:8px!important;right:8px!important;top:auto!important;bottom:74px!important;z-index:67!important}
+ .simo-tool-panel{bottom:128px!important;z-index:68!important}
+ .simo-selection-bar{bottom:128px!important;z-index:69!important}
+ .simo-zoom-controls{position:fixed!important;right:8px!important;bottom:136px!important;z-index:66!important}
+ .simo-mini-pages{position:fixed!important;right:8px!important;top:70px!important;z-index:66!important}
+ .presenting .simo-canvas-toolbar{bottom:8px!important}
+ .presenting .simo-tool-panel,.presenting .simo-selection-bar{bottom:60px!important}
+ .presenting .simo-zoom-controls{bottom:68px!important}
+ #teacherBoard.simo-pdf-focus .pdf-focus-active{inset:8px 6px 68px 6px!important}
+}
 
 </style>
 </head>
@@ -237,16 +316,32 @@ body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.p
             <button class="simo-tool" data-simo-tool="note" data-tip="Not kartı">▣</button>
             <button class="simo-tool" data-simo-tool="shape" data-tip="Şekil">◇</button>
             <button class="simo-tool" data-simo-tool="arrow" data-tip="Ok / bağlantı">↗</button>
-            <button class="simo-tool sep" data-simo-action="upload" data-tip="PDF / görsel ekle">＋</button>
+            <button class="simo-tool sep" data-simo-action="image" data-tip="Görsel ekle">▧</button>
+            <button class="simo-tool simo-pdf-tool" data-simo-action="pdf" data-tip="PDF ekle">PDF</button>
+            <button class="simo-tool" data-simo-action="upload" data-tip="Daha fazla içerik">＋</button>
             <button class="simo-tool" data-simo-action="undo" data-tip="Geri al">↶</button>
             <button class="simo-tool" data-simo-action="redo" data-tip="İleri al">↷</button>
             <button class="simo-tool" data-simo-action="clear" data-tip="Çizimleri temizle">⋯</button>
           </div>
           <div class="simo-tool-panel" id="simoToolPanel"></div>
-          <div class="simo-selection-bar" id="simoSelectionBar"><button data-sel-action="duplicate">Çoğalt</button><button data-sel-action="front">Öne al</button><button class="danger" data-sel-action="delete">Sil</button></div>
+          <div class="simo-selection-bar" id="simoSelectionBar">
+            <span class="simo-text-selection-tools" id="simoTextSelectionTools">
+              <button data-text-style="bold" title="Kalın"><b>B</b></button>
+              <button data-text-style="italic" title="İtalik"><i>I</i></button>
+              <button data-text-style="underline" title="Altı çizili"><u>U</u></button>
+              <button data-text-align="start" title="Sola hizala">≡</button>
+              <button data-text-align="middle" title="Ortala">≣</button>
+              <button data-text-align="end" title="Sağa hizala">≡</button>
+              <button data-text-size="down" title="Yazıyı küçült">A−</button>
+              <button data-text-size="up" title="Yazıyı büyüt">A＋</button>
+              <input type="color" id="simoSelectedTextColor" value="#1f2937" title="Yazı rengi">
+            </span>
+            <button data-sel-action="duplicate">Çoğalt</button><button data-sel-action="front">Öne al</button><button class="danger" data-sel-action="delete">Sil</button>
+          </div>
           <div class="simo-mini-pages"><button id="simoPrevPage" title="Önceki sayfa">←</button><button id="simoPageCount">1 / 1</button><button id="simoNextPage" title="Sonraki sayfa">→</button></div>
           <div class="simo-zoom-controls"><button id="simoZoomOut" title="Uzaklaştır">−</button><span id="simoZoomLabel">100%</span><button id="simoZoomIn" title="Yakınlaştır">＋</button><button id="simoZoomFit" title="Ekrana sığdır">⊙</button></div>
           <svg class="simo-ink-layer" id="simoInkLayer" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-label="Çizim katmanı"></svg>
+          <div class="simo-inline-text-editor" id="simoInlineTextEditor" contenteditable="true" role="textbox" aria-multiline="true" spellcheck="false"></div>
           <div class="simo-help-toast" id="simoHelpToast"></div>
 
           <div class="board-content layout-one" id="boardContent"></div>
@@ -1013,11 +1108,11 @@ function simoSetTool(t){simoTool=t;simoSelected=null;$$('[data-simo-tool]').forE
 function simoPositionSelection(){const bar=$('#simoSelectionBar');if(!bar)return;const obj=simoObjects().find(o=>o.id===simoSelected);if(!obj){bar.classList.remove('show');return}const svg=$('#simoInkLayer'),r=svg.getBoundingClientRect();let x=obj.x??obj.x1??obj.cx??100,y=obj.y??obj.y1??obj.cy??100;x+=(obj.tx||0);y+=(obj.ty||0);bar.style.left=(r.left-$('#teacherBoard').getBoundingClientRect().left+x/SIMO_VIEW_W*r.width)+'px';bar.style.top=(r.top-$('#teacherBoard').getBoundingClientRect().top+y/SIMO_VIEW_H*r.height-42)+'px';bar.classList.add('show')}
 function simoFind(id){return simoObjects().find(o=>o.id===id)}
 function simoStart(e){if(e.button!=null&&e.button!==0)return;const svg=e.currentTarget;const target=e.target.closest?.('[data-ink-id]');
- if(simoTool==='pointer'){if(target){simoSelected=target.dataset.inkId;simoDrawing={kind:'move',id:simoSelected,start:simoPoint(e),base:{tx:simoFind(simoSelected)?.tx||0,ty:simoFind(simoSelected)?.ty||0}};simoPushUndo();simoRenderInk();svg.setPointerCapture?.(e.pointerId);e.preventDefault()}else{simoSelected=null;simoRenderInk()}return}
+ if(simoTool==='pointer'){if(target){const id=target.dataset.inkId,obj=simoFind(id),now=Date.now();if(obj?.type==='text'&&simoLastTextTapId===id&&now-simoLastTextTapAt<430){simoLastTextTapId=null;simoLastTextTapAt=0;simoDrawing=null;simoSelected=id;simoOpenTextEditor({x:obj.x,y:obj.y},obj,'text');e.preventDefault();return}simoLastTextTapId=id;simoLastTextTapAt=now;simoSelected=id;simoDrawing={kind:'move',id:simoSelected,start:simoPoint(e),base:{tx:obj?.tx||0,ty:obj?.ty||0},moved:false};simoPushUndo();svg.querySelectorAll('.simo-ink-object.selected').forEach(x=>x.classList.remove('selected'));target.classList.add('selected');simoPositionSelection()}else{simoSelected=null;simoLastTextTapId=null;simoRenderInk()}return}
  if(simoTool==='eraser'){if(target){simoPushUndo();const a=simoObjects(),i=a.findIndex(o=>o.id===target.dataset.inkId);if(i>=0)a.splice(i,1);simoSave()}return}
  if(!['pen','highlighter','shape','arrow','text','note'].includes(simoTool))return;const p=simoPoint(e);simoPushUndo();
- if(simoTool==='text'){const txt=prompt('Tahtaya yazılacak metin:','Metin');if(txt){simoObjects().push({id:simoId(),type:'text',x:p.x,y:p.y,color:simoColor,fontSize:Math.max(24,simoSize*7),text:txt});simoSave()}return}
- if(simoTool==='note'){const txt=prompt('Not kartı:','Kısa not');if(txt){simoObjects().push({id:simoId(),type:'note',x:p.x,y:p.y,w:220,h:120,color:'#b59b6a',fill:'#f4ead5',text:txt});simoSave()}return}
+ if(simoTool==='text'){simoOpenTextEditor(p,null,'text');e.preventDefault();return}
+ if(simoTool==='note'){simoOpenTextEditor(p,null,'note');e.preventDefault();return}
  const o={id:simoId(),color:simoColor,size:simoSize};if(simoTool==='pen'||simoTool==='highlighter'){o.type='path';o.opacity=simoTool==='highlighter'?.32:1;o.size=simoTool==='highlighter'?Math.max(14,simoSize*4):simoSize;o.points=[[p.x,p.y]];o.d=`M ${p.x.toFixed(1)} ${p.y.toFixed(1)}`}
  else if(simoTool==='shape'){o.type=simoShape;o.start=p;if(simoShape==='rect')Object.assign(o,{x:p.x,y:p.y,w:1,h:1});else Object.assign(o,{cx:p.x,cy:p.y,rx:1,ry:1})}
  else if(simoTool==='arrow'){o.type='arrow';Object.assign(o,{x1:p.x,y1:p.y,x2:p.x,y2:p.y})}
@@ -1037,7 +1132,74 @@ function simoInit(){const svg=$('#simoInkLayer');if(!svg)return;svg.addEventList
  const board=$('#teacherBoard');board.addEventListener('pointerdown',e=>{if(simoTool!=='hand'||e.target.closest('.simo-canvas-toolbar,.simo-tool-panel,.simo-zoom-controls,.simo-mini-pages'))return;simoPanStart={x:e.clientX,y:e.clientY,sl:board.scrollLeft,st:board.scrollTop};board.style.cursor='grabbing'});board.addEventListener('pointermove',e=>{if(!simoPanStart)return;board.scrollLeft=simoPanStart.sl-(e.clientX-simoPanStart.x);board.scrollTop=simoPanStart.st-(e.clientY-simoPanStart.y)});document.addEventListener('pointerup',()=>{simoPanStart=null;if(simoTool==='hand')board.style.cursor='grab'});
 }
 
-(async function init(){applyBrand();boardLoad();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt'),autoBackend=okulSimoBackendDefault();if(rtParam)localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:normalizedEndpoint(rtParam)}));if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');restoreStudentSession(roomParam)}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})})();
+
+
+/* ===== SIMOBOARD STUDIO 2 ENGINE OVERRIDES ===== */
+let simoTextEditingId=null,simoTextEditingKind='text',simoTextDefaults={bold:false,italic:false,underline:false,align:'start'},simoLastTextTapId=null,simoLastTextTapAt=0;
+const SIMO_BASE_BLOCK_HTML_V2=blockHTML;
+
+const SIMO_BASE_RENDER_INK_V2=simoRenderInk;
+simoRenderInk=function(){SIMO_BASE_RENDER_INK_V2();const svg=$('#simoInkLayer');if(!svg)return;svg.querySelectorAll('text[data-ink-id]').forEach(el=>{el.ondblclick=e=>{const o=simoFind(el.dataset.inkId);if(o?.type!=='text')return;e.preventDefault();e.stopPropagation();simoSelected=o.id;simoOpenTextEditor({x:o.x,y:o.y},o,'text')}})};
+
+function simoTextSVG(o,common){
+ const text=String(o.text||'').split(/\n/);const fs=o.fontSize||30;const weight=o.bold?'800':'600';const style=o.italic?'italic':'normal';const deco=o.underline?'underline':'none';const anchor=o.align||'start';
+ return `<text ${common} x="${o.x}" y="${o.y}" fill="${simoEsc(o.color)}" font-size="${fs}" font-family="Inter,system-ui,sans-serif" font-weight="${weight}" font-style="${style}" text-decoration="${deco}" text-anchor="${anchor}">${text.map((line,i)=>`<tspan x="${o.x}" dy="${i?fs*1.28:0}">${simoEsc(line||' ')}</tspan>`).join('')}</text>`
+}
+
+simoObjHTML=function(o,student=false){const sel=!student&&simoSelected===o.id?' selected':'';const cls='simo-ink-object'+sel;const tr=o.tx||o.ty?` transform="translate(${o.tx||0} ${o.ty||0})"`:'';const common=`class="${cls}" data-ink-id="${simoEsc(o.id)}"${tr}`;
+ if(o.type==='path')return `<path ${common} d="${simoEsc(o.d)}" fill="none" stroke="${simoEsc(o.color)}" stroke-width="${o.size||4}" stroke-linecap="round" stroke-linejoin="round" opacity="${o.opacity??1}"/>`;
+ if(o.type==='line'||o.type==='arrow'){const marker=o.type==='arrow'?' marker-end="url(#simoArrow)"':'';return `<line ${common} x1="${o.x1}" y1="${o.y1}" x2="${o.x2}" y2="${o.y2}" stroke="${simoEsc(o.color)}" stroke-width="${o.size||4}" stroke-linecap="round"${marker}/>`}
+ if(o.type==='rect'||o.type==='note')return `<g ${common}><rect x="${o.x}" y="${o.y}" width="${o.w}" height="${o.h}" rx="${o.type==='note'?18:8}" fill="${o.type==='note'?(o.fill||'#f4ead5'):'transparent'}" stroke="${simoEsc(o.color)}" stroke-width="${o.type==='note'?1.5:(o.size||4)}"/>${o.type==='note'?`<text class="simo-note-text" x="${o.x+18}" y="${o.y+34}">${simoEsc(o.text||'Not')}</text>`:''}</g>`;
+ if(o.type==='ellipse')return `<ellipse ${common} cx="${o.cx}" cy="${o.cy}" rx="${o.rx}" ry="${o.ry}" fill="transparent" stroke="${simoEsc(o.color)}" stroke-width="${o.size||4}"/>`;
+ if(o.type==='text')return simoTextSVG(o,common);return ''
+};
+
+function simoEditorPosition(x,y,fontSize){const ed=$('#simoInlineTextEditor'),svg=$('#simoInkLayer'),board=$('#teacherBoard');const sr=svg.getBoundingClientRect(),br=board.getBoundingClientRect();ed.style.left=(board.scrollLeft+sr.left-br.left+(x/SIMO_VIEW_W)*sr.width)+'px';ed.style.top=(board.scrollTop+sr.top-br.top+(y/SIMO_VIEW_H)*sr.height-Math.max(6,(fontSize||30)*.65))+'px'}
+function simoCaretEnd(el){const r=document.createRange(),sel=getSelection();r.selectNodeContents(el);r.collapse(false);sel.removeAllRanges();sel.addRange(r)}
+function simoOpenTextEditor(p,obj=null,kind='text'){
+ const ed=$('#simoInlineTextEditor');if(!ed)return;simoTextEditingId=obj?.id||null;simoTextEditingKind=kind;const fs=obj?.fontSize||Math.max(24,simoSize*7);ed.dataset.kind=kind;ed.dataset.simoX=String(obj?.x??p.x);ed.dataset.simoY=String(obj?.y??p.y);ed.textContent=obj?.text||'';ed.style.fontSize=fs+'px';ed.style.fontWeight=obj?.bold?'800':'600';ed.style.fontStyle=obj?.italic?'italic':'normal';ed.style.textDecoration=obj?.underline?'underline':'none';ed.style.color=obj?.color||simoColor;ed.style.textAlign=obj?.align==='middle'?'center':obj?.align==='end'?'right':'left';ed.style.background=kind==='note'?'#fff7d6':'rgba(255,255,255,.93)';ed.style.padding=kind==='note'?'12px 14px':'2px 4px';ed.style.minWidth=kind==='note'?'220px':'110px';ed.style.minHeight=kind==='note'?'90px':'34px';simoEditorPosition((obj?.x??p.x)+(obj?.tx||0),(obj?.y??p.y)+(obj?.ty||0),fs);ed.classList.add('show');requestAnimationFrame(()=>{ed.focus();if(obj)simoCaretEnd(ed)})
+}
+function simoCommitTextEditor(){const ed=$('#simoInlineTextEditor');if(!ed?.classList.contains('show'))return;const txt=ed.innerText.replace(/\n+$/,'');const kind=simoTextEditingKind;let o=simoTextEditingId?simoFind(simoTextEditingId):null;if(o){o.text=txt||o.text||''}else if(txt.trim()){const x=Number(ed.dataset.simoX);const y=Number(ed.dataset.simoY);if(kind==='note')o={id:simoId(),type:'note',x:Number.isFinite(x)?x:120,y:Number.isFinite(y)?y:120,w:260,h:125,color:'#c9a83d',fill:'#fff7d6',text:txt};else o={id:simoId(),type:'text',x:Number.isFinite(x)?x:120,y:Number.isFinite(y)?y:120,color:simoColor,fontSize:parseFloat(ed.style.fontSize)||Math.max(24,simoSize*7),text:txt,bold:!!simoTextDefaults.bold,italic:!!simoTextDefaults.italic,underline:!!simoTextDefaults.underline,align:simoTextDefaults.align||'start'};simoObjects().push(o);simoSelected=o.id}
+ ed.classList.remove('show');ed.textContent='';simoTextEditingId=null;simoSave();simoSetTool('pointer');if(o){simoSelected=o.id;simoRenderInk()}
+}
+
+simoToolPanel=function(){const p=$('#simoToolPanel');if(!p)return;const colors=['#1f2937','#c0262d','#1769aa','#0f8a5f','#7c3aed','#d97706'];const colorHTML=colors.map(c=>`<button class="simo-color ${c===simoColor?'active':''}" style="background:${c}" data-simo-color="${c}" title="Renk"></button>`).join('');let sizeHTML='';if(['pen','highlighter','shape','arrow'].includes(simoTool))sizeHTML=[2,4,7].map(n=>`<button class="simo-size ${n===simoSize?'active':''}" data-simo-size="${n}">${n===2?'İnce':n===4?'Orta':'Kalın'}</button>`).join('');if(simoTool==='text')sizeHTML=[24,32,44,60].map(n=>`<button class="simo-size ${Math.max(24,simoSize*7)===n?'active':''}" data-simo-fontsize="${n}">${n}</button>`).join('');let extra='';if(simoTool==='shape')extra=['rect','ellipse'].map(x=>`<button class="simo-shape-choice ${x===simoShape?'active':''}" data-simo-shape="${x}">${x==='rect'?'▭':'○'}</button>`).join('');if(simoTool==='text')extra='<span class="simo-file-status">Tahtada istediğin yere tıkla ve yaz.</span>';p.innerHTML=colorHTML+sizeHTML+extra;p.classList.toggle('show',['pen','highlighter','shape','arrow','text'].includes(simoTool));p.querySelectorAll('[data-simo-color]').forEach(b=>b.onclick=()=>{simoColor=b.dataset.simoColor;simoToolPanel()});p.querySelectorAll('[data-simo-size]').forEach(b=>b.onclick=()=>{simoSize=+b.dataset.simoSize;simoToolPanel()});p.querySelectorAll('[data-simo-fontsize]').forEach(b=>b.onclick=()=>{simoSize=Math.max(2,Math.round(+b.dataset.simoFontsize/7));simoToolPanel()});p.querySelectorAll('[data-simo-shape]').forEach(b=>b.onclick=()=>{simoShape=b.dataset.simoShape;simoToolPanel()})};
+
+const SIMO_BASE_POSITION_SELECTION_V2=simoPositionSelection;
+simoPositionSelection=function(){SIMO_BASE_POSITION_SELECTION_V2();const tools=$('#simoTextSelectionTools'),o=simoFind(simoSelected),bar=$('#simoSelectionBar'),svg=$('#simoInkLayer'),board=$('#teacherBoard');tools?.classList.toggle('show',!!o&&o.type==='text');if(o?.type==='text'){const c=$('#simoSelectedTextColor');if(c)c.value=/^#[0-9a-f]{6}$/i.test(o.color||'')?o.color:'#1f2937';tools?.querySelector('[data-text-style="bold"]')?.classList.toggle('active',!!o.bold);tools?.querySelector('[data-text-style="italic"]')?.classList.toggle('active',!!o.italic);tools?.querySelector('[data-text-style="underline"]')?.classList.toggle('active',!!o.underline)}if(bar?.classList.contains('show')&&svg&&board&&window.innerWidth>760){const el=svg.querySelector(`[data-ink-id="${CSS.escape(String(simoSelected))}"]`);if(el){const er=el.getBoundingClientRect(),br=board.getBoundingClientRect();bar.style.left=Math.max(6,board.scrollLeft+er.left-br.left)+'px';bar.style.top=Math.max(6,board.scrollTop+er.top-br.top-bar.offsetHeight-9)+'px'}}};
+
+simoStart=function(e){if(e.button!=null&&e.button!==0)return;const svg=e.currentTarget;const target=e.target.closest?.('[data-ink-id]');
+ if(simoTool==='pointer'){if(target){const id=target.dataset.inkId,obj=simoFind(id),now=Date.now();if(obj?.type==='text'&&(e.detail>=2||(simoLastTextTapId===id&&now-simoLastTextTapAt<500))){simoLastTextTapId=null;simoLastTextTapAt=0;simoDrawing=null;simoSelected=id;simoOpenTextEditor({x:obj.x,y:obj.y},obj,'text');e.preventDefault();e.stopPropagation();return}simoLastTextTapId=id;simoLastTextTapAt=now;simoSelected=id;simoDrawing={kind:'move',id:simoSelected,start:simoPoint(e),base:{tx:obj?.tx||0,ty:obj?.ty||0},moved:false};simoPushUndo();svg.querySelectorAll('.simo-ink-object.selected').forEach(x=>x.classList.remove('selected'));target.classList.add('selected');simoPositionSelection();svg.setPointerCapture?.(e.pointerId);e.preventDefault()}else{simoSelected=null;simoLastTextTapId=null;simoRenderInk()}return}
+ if(simoTool==='eraser'){if(target){simoPushUndo();const a=simoObjects(),i=a.findIndex(o=>o.id===target.dataset.inkId);if(i>=0)a.splice(i,1);simoSave()}return}
+ if(!['pen','highlighter','shape','arrow','text','note'].includes(simoTool))return;const p=simoPoint(e);
+ if(simoTool==='text'||simoTool==='note'){simoPushUndo();simoOpenTextEditor(p,null,simoTool);e.preventDefault();return}
+ simoPushUndo();const o={id:simoId(),color:simoColor,size:simoSize};if(simoTool==='pen'||simoTool==='highlighter'){o.type='path';o.opacity=simoTool==='highlighter'?.32:1;o.size=simoTool==='highlighter'?Math.max(14,simoSize*4):simoSize;o.points=[[p.x,p.y]];o.d=`M ${p.x.toFixed(1)} ${p.y.toFixed(1)}`}
+ else if(simoTool==='shape'){o.type=simoShape;o.start=p;if(simoShape==='rect')Object.assign(o,{x:p.x,y:p.y,w:1,h:1});else Object.assign(o,{cx:p.x,cy:p.y,rx:1,ry:1})}
+ else if(simoTool==='arrow'){o.type='arrow';Object.assign(o,{x1:p.x,y1:p.y,x2:p.x,y2:p.y})}
+ simoObjects().push(o);simoDrawing={kind:'draw',id:o.id,start:p};svg.setPointerCapture?.(e.pointerId);e.preventDefault();simoRenderInk()};
+
+
+simoMove=function(e){if(!simoDrawing)return;const p=simoPoint(e),o=simoFind(simoDrawing.id);if(!o)return;if(simoDrawing.kind==='move'){const dx=p.x-simoDrawing.start.x,dy=p.y-simoDrawing.start.y;if(Math.abs(dx)>1||Math.abs(dy)>1)simoDrawing.moved=true;o.tx=simoDrawing.base.tx+dx;o.ty=simoDrawing.base.ty+dy;simoRenderInk();return}if(o.type==='path'){o.points.push([p.x,p.y]);o.d=o.points.map((q,i)=>(i?'L ':'M ')+q[0].toFixed(1)+' '+q[1].toFixed(1)).join(' ')}else if(o.type==='rect'){o.x=Math.min(simoDrawing.start.x,p.x);o.y=Math.min(simoDrawing.start.y,p.y);o.w=Math.abs(p.x-simoDrawing.start.x);o.h=Math.abs(p.y-simoDrawing.start.y)}else if(o.type==='ellipse'){o.cx=(simoDrawing.start.x+p.x)/2;o.cy=(simoDrawing.start.y+p.y)/2;o.rx=Math.abs(p.x-simoDrawing.start.x)/2;o.ry=Math.abs(p.y-simoDrawing.start.y)/2}else if(o.type==='arrow'){o.x2=p.x;o.y2=p.y}simoRenderInk()};
+simoEnd=function(e){if(!simoDrawing)return;const d=simoDrawing;simoDrawing=null;if(d.kind==='move'&&!d.moved){if(simoInkUndo.length)simoInkUndo.pop();simoPositionSelection();return}simoSave()};
+
+async function simoAddBoardFile(file,type){if(!file)return;type=type||(file.type==='application/pdf'?'pdf':'image');if(type==='pdf'&&file.type!=='application/pdf'&&!/\.pdf$/i.test(file.name))return toast('Lütfen PDF dosyası seçin.',3500);if(type==='image'&&!/^image\//.test(file.type))return toast('Lütfen JPG, PNG veya WEBP görsel seçin.',3500);const mediaId=crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());const url=URL.createObjectURL(file);boardObjectUrls.push(url);const block={id:Date.now()+Math.random(),type,url,mediaId,name:file.name,pdfPage:1,pdfZoom:100,full:type==='pdf'};currentBoardPage().blocks.push(block);boardSave();renderBoard();toast(file.name+' tahtaya eklendi');try{await dbPut('boardMedia',{id:mediaId,name:file.name,type:file.type||'',size:file.size,added:new Date().toISOString(),blob:file})}catch(err){toast('Dosya tahtada açık • yerel arşiv kaydı yapılamadı.',3800)}if(realtimeLastState==='online'&&!STUDENT_PORTAL){realtimeUploadMedia(file,mediaId).then(cloudUrl=>{if(!cloudUrl)return;block.cloudUrl=cloudUrl;boardSave();pushBoardLiveNow(true);renderBoard()}).catch(()=>toast('Dosya tahtada açık • internet paylaşımı daha sonra denenebilir.',3800))}}
+function simoPickFile(type){pendingBoardFileType=type;const picker=$('#boardFilePicker');picker.accept=type==='pdf'?'application/pdf':'image/png,image/jpeg,image/webp';picker.value='';picker.click()}
+window.boardPdfFullscreen=function(i){const board=$('#teacherBoard'),el=document.querySelector(`.board-block[data-bi="${i}"]`);if(!board||!el)return;const active=board.classList.contains('simo-pdf-focus')&&el.classList.contains('pdf-focus-active');if(active){board.classList.remove('simo-pdf-focus');el.classList.remove('pdf-focus-active');if(document.fullscreenElement)document.exitFullscreen?.().catch(()=>{});renderBoard();return}board.classList.add('simo-pdf-focus');el.classList.add('pdf-focus-active');board.requestFullscreen?.().catch(()=>{});toast('PDF odak modu • Kalem ve araçlar kullanılabilir',2600)};
+blockHTML=function(b,i){let html=SIMO_BASE_BLOCK_HTML_V2(b,i);if(b.type==='pdf'){html=html.replace('class="board-block full','class="board-block board-document-object full');html=html.replace(`<button onclick="boardPdfZoom(${i},1)">＋</button></div>`,`<button onclick="boardPdfZoom(${i},1)">＋</button><button class="pdf-primary" onclick="boardPdfFullscreen(${i})">⛶ PDF odak</button></div>`)}else if(b.type==='image'){html=html.replace('class="board-block ','class="board-block board-image-object ')}return html};
+
+
+function simoNormalizeBoardBlocks(){let changed=false;for(const page of boardState.pages||[]){for(const b of page.blocks||[]){if(['title','text','pdftext','example','test'].includes(b.type)&&Number(b.height)>300){delete b.height;changed=true}if(b.type!=='pdf'&&b.type!=='image'&&Number(b.height)>0&&Number(b.height)<52){delete b.height;changed=true}}}if(changed)boardSave()}
+
+const SIMO_BASE_INIT_V2=simoInit;
+simoInit=function(){SIMO_BASE_INIT_V2();const svg=$('#simoInkLayer'),ed=$('#simoInlineTextEditor'),picker=$('#boardFilePicker');
+ if(svg){svg.addEventListener('dblclick',e=>{const t=e.target.closest?.('[data-ink-id]');if(!t)return;const o=simoFind(t.dataset.inkId);if(o?.type==='text'){e.preventDefault();e.stopPropagation();simoSelected=o.id;simoOpenTextEditor({x:o.x,y:o.y},o,'text')}})}
+ if(ed){ed.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();ed.blur()}});ed.addEventListener('blur',()=>setTimeout(()=>simoCommitTextEditor(),0))}
+ $$('[data-simo-action="pdf"]').forEach(b=>b.onclick=()=>simoPickFile('pdf'));$$('[data-simo-action="image"]').forEach(b=>b.onclick=()=>simoPickFile('image'));
+ if(picker)picker.onchange=async e=>{const file=e.target.files?.[0];if(!file)return;await simoAddBoardFile(file,pendingBoardFileType);e.target.value=''};
+ const tb=$('#simoTextSelectionTools');tb?.querySelectorAll('[data-text-style]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();const k=b.dataset.textStyle;o[k]=!o[k];simoSave()});tb?.querySelectorAll('[data-text-align]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();o.align=b.dataset.textAlign;simoSave()});tb?.querySelectorAll('[data-text-size]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();o.fontSize=Math.max(14,Math.min(120,(o.fontSize||30)+(b.dataset.textSize==='up'?4:-4)));simoSave()});const tc=$('#simoSelectedTextColor');if(tc)tc.oninput=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;o.color=tc.value;simoSave()};document.addEventListener('pointerup',e=>{if(simoDrawing)simoEnd(e)});
+};
+
+(async function init(){applyBrand();boardLoad();simoNormalizeBoardBlocks();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt'),autoBackend=okulSimoBackendDefault();if(rtParam)localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:normalizedEndpoint(rtParam)}));if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');restoreStudentSession(roomParam)}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})})();
 
 
 </script>

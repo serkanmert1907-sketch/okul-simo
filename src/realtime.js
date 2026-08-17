@@ -4,7 +4,7 @@ const JSON_HEADERS = {
   "Content-Type": "application/json; charset=utf-8",
   "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
   "X-Content-Type-Options": "nosniff",
-  "X-Simo-Live": "v4.2-memory",
+  "X-Simo-Live": "v4.3-memory",
 };
 
 function json(data, status = 200, extra = {}) {
@@ -47,7 +47,7 @@ export default {
           "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
           "Access-Control-Allow-Headers": "Content-Type,X-File-Name",
           "Access-Control-Max-Age": "86400",
-          "X-Simo-Live": "v4.2-memory",
+          "X-Simo-Live": "v4.3-memory",
         },
       });
     }
@@ -55,7 +55,7 @@ export default {
     if (url.pathname === "/health" || url.pathname === "/api/live/health") {
       return json({
         ok: true,
-        service: "simo-live-v4.2",
+        service: "simo-live-v4.3",
         transport: "https-heartbeat",
         sameOrigin: true,
         liveState: "durable-object-memory",

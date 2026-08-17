@@ -667,7 +667,7 @@ function refreshLiveConnectionStrip(r=getRoom()){
   if(sync)sync.textContent=relativeSyncText(realtimeLastSyncAt||r.updated||0);
   if(code)code.textContent=r.code||'----';
 }
-function setRealtimeUI(state,text=''){realtimeLastState=state;const map={local:['Yerel bağlantı','Aynı cihazdaki sekmeler arasında çalışıyor.'],connecting:['Bağlanıyor…','Canlı internet odasına bağlanılıyor.'],online:['İnternet canlı','Telefon ve bilgisayar aynı canlı odaya bağlanabilir.'],error:['Bağlantı yok','İnternet bağlantısı kurulamadı; yerel mod çalışmaya devam ediyor.']};const [title,def]=map[state]||map.local;const el=$('#realtimeState');if(el){el.className='realtime-state '+(state==='online'?'online':state==='connecting'?'connecting':state==='error'?'error':'');$('#realtimeStateTitle').textContent=title;$('#realtimeStateText').textContent=text||def}const badge=$('#realtimeStatusBadge'),sb=$('#realtimeSettingsBadge');if(badge){badge.className='badge '+(state==='online'?'rt-online':state==='error'?'rt-warn':'rt-local');badge.textContent=state==='online'?'● İnternet canlı':state==='connecting'?'● Bağlanıyor':state==='error'?'● Yerel yedek':'● Yerel bağlantı'}if(sb){sb.className='badge '+(state==='online'?'rt-online':state==='error'?'rt-warn':'rt-local');sb.textContent=state==='online'?'İnternet bağlı':state==='error'?'Yerel yedek':'Yerel önizleme'}const sn=$('#studentConnectionNote');if(sn)sn.textContent=state==='online'?'Canlı internet bağlantısı açık. “Anlamadım” ve cevapların öğretmene anında gider.':'Yerel önizleme açık. İnternet adresi bağlandığında farklı cihazlar aynı odada çalışır.';refreshLiveConnectionStrip()}
+function setRealtimeUI(state,text=''){realtimeLastState=state;const map={local:['Yerel bağlantı','Aynı cihazdaki sekmeler arasında çalışıyor.'],connecting:['Bağlanıyor…','Canlı internet odasına bağlanılıyor.'],online:['İnternet canlı','Telefon ve bilgisayar aynı canlı odaya bağlanabilir.'],error:['Bağlantı yok','İnternet bağlantısı kurulamadı; yerel mod çalışmaya devam ediyor.']};const [title,def]=map[state]||map.local;const el=$('#realtimeState');if(el){el.className='realtime-state '+(state==='online'?'online':state==='connecting'?'connecting':state==='error'?'error':'');$('#realtimeStateTitle').textContent=title;$('#realtimeStateText').textContent=text||def}const badge=$('#realtimeStatusBadge'),sb=$('#realtimeSettingsBadge');if(badge){badge.className='badge '+(state==='online'?'rt-online':state==='error'?'rt-warn':'rt-local');badge.textContent=state==='online'?'● İnternet canlı':state==='connecting'?'● Bağlanıyor':state==='error'?'● Yerel yedek':'● Yerel bağlantı'}if(sb){sb.className='badge '+(state==='online'?'rt-online':state==='error'?'rt-warn':'rt-local');sb.textContent=state==='online'?'İnternet bağlı':state==='error'?'Yerel yedek':'Yerel önizleme'}const sn=$('#studentConnectionNote');if(sn)sn.textContent=state==='online'?'Canlı internet bağlantısı açık. “Anlamadım” ve cevapların öğretmene anında gider.':'Yerel önizleme açık. İnternet adresi bağlandığında farklı cihazlar aynı odada çalışır.';const ss=$('#studentStatusText');if(ss&&studentSession){if(state==='online')ss.textContent='Derse bağlandın • canlı tahta eşitleniyor';else if(state==='connecting')ss.textContent='Derse bağlandın • canlı sunucuya bağlanılıyor';else if(state==='error')ss.textContent='Derse bağlandın • canlı bağlantı kurulamadı'}refreshLiveConnectionStrip()}
 
 function getRoom(){try{const r=JSON.parse(localStorage.getItem(LOCAL_ROOM_KEY)||'null');if(r){r.students=r.students||{};r.confusions=r.confusions||[];if(!('lesson' in r))r.lesson=null;if(!('board' in r))r.board=null;if(!('zoom' in r))r.zoom=null;if(!('paused' in r))r.paused=false;if(!('teacherUpdatedAt' in r))r.teacherUpdatedAt=0;if(!r.teacherToken&&!STUDENT_PORTAL){r.teacherToken=randomSecret();localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r))}return r}return createRoom(true)}catch{return createRoom(true)}}
 function createRoom(save=true){const room={code:String(Math.floor(1000+Math.random()*9000)),teacherToken:STUDENT_PORTAL?'':randomSecret(),students:{},question:null,questionCount:0,lesson:null,board:null,zoom:null,paused:false,confusions:[],startedAt:null,endedAt:null,teacherUpdatedAt:STUDENT_PORTAL?0:Date.now(),updated:Date.now()};if(save)localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(room));return room}
@@ -711,15 +711,48 @@ function realtimeConnect(force=false){
 async function realtimeHealth(endpoint){
   const base=normalizedEndpoint(endpoint);if(!base)throw new Error('Canlı bağlantı adresi boş.');
   const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),4500);
-  try{const res=await fetch(base+'/health',{method:'GET',signal:ctrl.signal,cache:'no-store'});if(!res.ok)throw new Error('Canlı sunucu yanıt vermedi ('+res.status+')');const data=await res.json().catch(()=>({ok:true}));if(data.ok===false)throw new Error(data.error||'Canlı sunucu hazır değil');realtimeHealthOkAt=Date.now();return data}
+  try{
+    const res=await fetch(base+'/health',{method:'GET',signal:ctrl.signal,cache:'no-store',headers:{'Accept':'application/json'}});
+    if(!res.ok)throw new Error('Canlı sunucu yanıt vermedi ('+res.status+')');
+    const ct=String(res.headers.get('content-type')||'').toLowerCase();
+    if(!ct.includes('application/json'))throw new Error('Bu adres canlı ders sunucusu değil');
+    const data=await res.json();
+    if(data?.ok!==true)throw new Error(data?.error||'Canlı sunucu hazır değil');
+    const service=String(data?.service||'');
+    if(service&&service!=='ogretmen-live-realtime')console.warn('Beklenmeyen health servisi:',service);
+    realtimeHealthOkAt=Date.now();return data;
+  }
   catch(e){if(e.name==='AbortError')throw new Error('Canlı sunucu zaman aşımına uğradı');throw e}
   finally{clearTimeout(timer)}
 }
+function realtimeCandidateEndpoints(preferred=''){
+  const out=[];const add=x=>{x=normalizedEndpoint(x);if(x&&!out.includes(x))out.push(x)};
+  add(preferred);
+  try{add(new URLSearchParams(location.search).get('rt')||'')}catch{}
+  add(okulSimoBackendDefault());
+  try{const h=String(location.hostname||'').toLowerCase();if(h==='okul.simoegitim.com')add('https://simookul.simoegitim.com');if(h==='simookul.simoegitim.com')add('https://okul.simoegitim.com')}catch{}
+  add(realtimeCfg().endpoint||'');
+  return out;
+}
+async function realtimeFindWorkingEndpoint(preferred=''){
+  const candidates=realtimeCandidateEndpoints(preferred);let lastErr=null;
+  for(const base of candidates){
+    try{await realtimeHealth(base);return base}catch(e){lastErr=e;console.warn('Canlı endpoint başarısız',base,e?.message||e)}
+  }
+  if(lastErr)throw lastErr;throw new Error('Canlı bağlantı adresi bulunamadı');
+}
 async function realtimePrepareAndConnect(endpoint,showToast=true){
-  const base=normalizedEndpoint(endpoint);if(!base){localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:''}));setRealtimeUI('local');return false}
-  setRealtimeUI('connecting','Canlı sunucu kontrol ediliyor…');
-  try{await realtimeHealth(base);localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:base}));realtimeWanted=true;realtimeConnect(true);if(showToast)toast('Canlı sunucu hazır • odaya bağlanılıyor…');return true}
-  catch(e){setRealtimeUI('error',e.message+' • Yerel mod çalışmaya devam ediyor.');if(showToast)toast(e.message,4600);return false}
+  setRealtimeUI('connecting','Canlı sunucu aranıyor…');
+  try{
+    const base=await realtimeFindWorkingEndpoint(endpoint);
+    localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:base}));
+    if($('#realtimeEndpoint'))$('#realtimeEndpoint').value=base;
+    realtimeWanted=true;realtimeConnect(true);
+    if(showToast)toast('Canlı sunucu bulundu • odaya bağlanılıyor…');return true;
+  }catch(e){
+    setRealtimeUI('error',(e?.message||'Canlı sunucu bulunamadı')+' • Öğrenci canlı tahtaya bağlanamadı.');
+    if(showToast)toast(e?.message||'Canlı sunucu bulunamadı',4600);return false;
+  }
 }
 async function syncPendingBoardMedia(){
   if(STUDENT_PORTAL||realtimeLastState!=='online')return;
@@ -734,7 +767,7 @@ async function syncPendingBoardMedia(){
   if(uploaded){boardSave();renderBoard();pushBoardLiveNow(true);toast(uploaded+' eski PDF/görsel internet paylaşımına hazırlandı',3600)}
 }
 async function realtimeUploadMedia(file,mediaId){const cfg=realtimeCfg(),base=normalizedEndpoint(cfg.endpoint);if(!base||realtimeLastState!=='online'||STUDENT_PORTAL)return null;const r=getRoom();const u=base+'/media/'+encodeURIComponent(mediaId)+'?room='+encodeURIComponent(r.code)+'&token='+encodeURIComponent(r.teacherToken||'');const res=await fetch(u,{method:'PUT',headers:{'Content-Type':file.type||'application/octet-stream','X-File-Name':encodeURIComponent(file.name||'dosya')},body:file});if(!res.ok)throw new Error('Medya internet alanına yüklenemedi ('+res.status+')');const data=await res.json();return data.url||base+'/media/'+encodeURIComponent(mediaId)+'?room='+encodeURIComponent(r.code)}
-function realtimeLoad(){let c=realtimeCfg();const auto=okulSimoBackendDefault();if(!c.endpoint&&auto){c={endpoint:auto};localStorage.setItem(REALTIME_KEY,JSON.stringify(c))}if($('#realtimeEndpoint'))$('#realtimeEndpoint').value=c.endpoint||'';realtimeWanted=true;setRealtimeUI(c.endpoint?'connecting':'local');if(c.endpoint)realtimePrepareAndConnect(c.endpoint,false)}
+function realtimeLoad(){const c=realtimeCfg();const auto=okulSimoBackendDefault();const preferred=new URLSearchParams(location.search).get('rt')||auto||c.endpoint||'';if($('#realtimeEndpoint'))$('#realtimeEndpoint').value=preferred;realtimeWanted=true;setRealtimeUI('connecting','Canlı ders sunucusu aranıyor…');realtimePrepareAndConnect(preferred,false)}
 
 function sessionTotals(r=getRoom()){const students=Object.values(r.students||{});const answers=students.reduce((n,x)=>n+(x.totalAnswered||0),0);const correct=students.reduce((n,x)=>n+(x.totalCorrect||0),0);return{students,answers,correct,accuracy:answers?Math.round(correct/answers*100):0}}
 let pendingConfusion=null;

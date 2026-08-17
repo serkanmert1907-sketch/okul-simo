@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="theme-color" content="#0f172a" />
-<meta name="simo-build" content="2026-08-17-board-downstream-fix1">
+<meta name="simo-build" content="2026-08-17-LIVE-V2-CLEAN">
 <meta name="simo-build" content="SIMOBOARD_STUDIO_3_20260817" />
 <meta name="simo-board-version" content="studio-2.0" />
 <title>Okul Simo • SimoBoard Studio 3 — Canlı Ders</title>
@@ -604,7 +604,7 @@ body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.p
 
   <section class="page view hidden" id="view-student">
     <div class="page-head"><div><h1>Öğrenci katılım ekranı</h1><p>Öğrenci adını ve oda kodunu yazar; canlı sorular bu ekranda görünür.</p></div></div>
-    <div class="card join-card"><div class="card-body"><div class="field" style="margin:0"><label>Adın</label><input id="studentJoinName" placeholder="Örn. Zeynep"></div><div class="field" style="margin:0"><label>Oda kodu</label><input id="studentJoinCode" inputmode="numeric" maxlength="4" placeholder="4821"></div><button class="btn primary" id="studentJoinBtn">Derse katıl</button></div></div>
+    <div class="card join-card"><div class="card-body"><div class="field" style="margin:0"><label>Adın</label><input id="studentJoinName" placeholder="Örn. Zeynep"></div><div class="field" style="margin:0"><label>Oda kodu</label><input id="studentJoinCode" inputmode="numeric" maxlength="6" placeholder="482163"></div><button class="btn primary" id="studentJoinBtn">Derse katıl</button></div></div>
     <div class="student-live-shell" id="studentLiveShell">
       <div class="student-live-head">
         <div class="student-live-brand"><div class="student-live-logo" id="studentLiveLogo">📘</div><div><b id="studentBrandName">Okul Simo Canlı Ders</b><small id="studentStatusText">Önce derse katıl</small></div></div>
@@ -639,7 +639,7 @@ body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.p
       </div></div>
       <div class="card"><div class="card-head"><h2>Önizleme</h2></div><div class="card-body"><div class="brand-preview"><div class="preview-logo" id="brandPreviewLogo">📘</div><div><b id="brandPreviewName" style="font-size:18px">Okul Simo</b><div class="muted">Canlı Ders</div></div></div><p class="muted" style="margin:12px 0 0">Bu isim ve logo öğretmen, sunum ve öğrenci ekranlarında görünür.</p></div></div>
     </div>
-    <div class="card realtime-settings"><div class="card-head"><h2>🌐 Canlı internet bağlantısı</h2><span class="badge rt-local" id="realtimeSettingsBadge">Yerel önizleme</span></div><div class="card-body"><div class="realtime-grid"><div><div class="field"><label>Canlı bağlantı adresi</label><input class="realtime-url" id="realtimeEndpoint" placeholder="https://senin-worker-adresin.workers.dev"><div class="hint">Boş bırakırsan uygulama mevcut yerel/sekme önizleme modunda çalışır. Son aşamada Cloudflare Worker adresini buraya bağlayacağız.</div></div><div class="connection-actions"><button class="btn primary" id="saveRealtime">Bağlantıyı kaydet</button><button class="btn" id="testRealtime">Bağlantıyı dene</button><button class="btn" id="disconnectRealtime">Yerel moda dön</button></div></div><div><div class="realtime-state" id="realtimeState"><span class="realtime-lamp"></span><div><b id="realtimeStateTitle">Yerel bağlantı</b><div class="muted" id="realtimeStateText">Aynı cihazdaki sekmeler arasında çalışıyor.</div></div></div><div class="connection-note" style="margin-top:10px"><b>Güvenli rol ayrımı</b>Öğretmen bağlantısı gizli oda anahtarıyla açılır. Öğrenci yalnızca kendi ders görünümünü alır; doğru cevap açıklanana kadar sunucuda gizli tutulur ve başarı hesabını sunucu yapar.</div></div></div></div></div>
+    <div class="card realtime-settings"><div class="card-head"><h2>🌐 Canlı internet bağlantısı</h2><span class="badge rt-local" id="realtimeSettingsBadge">Yerel önizleme</span></div><div class="card-body"><div class="realtime-grid"><div><div class="field"><label>Canlı sistem</label><input class="realtime-url" id="realtimeEndpoint" readonly placeholder="Aynı site üzerinden otomatik"><div class="hint">Canlı ders artık aynı site üzerinden otomatik çalışır. Ayrı Worker adresi veya bağlantı ayarı gerekmez.</div></div><div class="connection-actions"><button class="btn primary" id="saveRealtime">Canlı bağlantıyı yenile</button><button class="btn" id="testRealtime">Bağlantıyı dene</button><button class="btn hidden" id="disconnectRealtime">Yerel moda dön</button></div></div><div><div class="realtime-state" id="realtimeState"><span class="realtime-lamp"></span><div><b id="realtimeStateTitle">Yerel bağlantı</b><div class="muted" id="realtimeStateText">Aynı cihazdaki sekmeler arasında çalışıyor.</div></div></div><div class="connection-note" style="margin-top:10px"><b>Güvenli rol ayrımı</b>Öğretmen bağlantısı gizli oda anahtarıyla açılır. Öğrenci yalnızca kendi ders görünümünü alır; doğru cevap açıklanana kadar sunucuda gizli tutulur ve başarı hesabını sunucu yapar.</div></div></div></div></div>
     <div class="card zoom-settings"><div class="card-head"><h2>🎥 Zoom bağlantısı</h2><span class="badge" id="zoomSettingsBadge">Bağlı değil</span></div><div class="card-body">
       <div class="zoom-settings-grid">
         <div>
@@ -715,7 +715,7 @@ $$('[data-manual-question]').forEach(b=>b.addEventListener('click',()=>openQuest
 $$('[data-close]').forEach(b=>b.addEventListener('click',()=>b.closest('.modal')?.classList.add('hidden')));
 $$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.add('hidden')}));
 
-$('#copyRoom').onclick=async()=>{const r=getRoom();try{const u=studentAppURL();u.hash='';u.search='';u.searchParams.set('room',r.code);const ep=normalizedEndpoint(realtimeCfg().endpoint)||'https://okul.simoegitim.com';u.searchParams.set('rt',ep);await navigator.clipboard.writeText(u.toString());toast('İnternet oda linki kopyalandı',3200)}catch{toast('Oda kodu: '+r.code)}};
+$('#copyRoom').onclick=async()=>{const r=getRoom();try{const u=studentAppURL();u.hash='';u.search='';u.searchParams.set('room',r.code);await navigator.clipboard.writeText(u.toString());toast('Canlı oda linki kopyalandı',2600)}catch{toast('Oda kodu: '+r.code)}};
 function present(force){const app=$('.app'), on=typeof force==='boolean'?force:!app.classList.contains('presenting');showView('live');app.classList.toggle('presenting',on);app.classList.remove('present-control-open');$('#exitPresent').classList.add('hidden');renderPresentNav();if(on&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen().catch(()=>{});toast(on?'Sunum modu açık — sayfa değiştirmek için alttaki kumandayı kullan':'Sunum modu kapatıldı')}
 $('#presentBtn').onclick=()=>present(true);$('#settingsPresent').onclick=()=>present(true);$('#exitPresent').onclick=()=>present(false);$('#presentExit2').onclick=()=>present(false);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('.app').classList.contains('presenting'))present(false)});
 $('#prevSlide').onclick=()=>toast('Önceki içerik');$('#nextSlide').onclick=()=>toast('Sonraki içerik');$('#showExamples').onclick=()=>document.querySelector('.examples-title').scrollIntoView({behavior:'smooth',block:'center'});$('#toggleTranslation').onclick=()=>{const box=$('.lesson-screen');const hide=box.classList.toggle('hide-translations');$('#toggleTranslation').textContent=hide?'Türkçeyi göster':'Türkçeyi gizle'};$('#quickPoll').onclick=()=>toast('Hızlı anket açıldı');
@@ -780,178 +780,92 @@ $('#sendQuestion').onclick=()=>{const x=questionFormData();if(!publishQuestion(x
 $$('.phoneChoice').forEach((b,i)=>b.onclick=()=>{if(!studentSession)return;$$('.phoneChoice').forEach(x=>x.classList.remove('selected'));b.classList.add('selected');studentSelected=i;$('#studentSend').disabled=false;$('#studentAnswerResult').className='student-result hidden'});$('#studentSend').onclick=()=>sendStudentAnswer();
 
 
-/* ===== LIVE ROOM TRANSPORT: local preview + optional internet WebSocket ===== */
-const ROOM_KEY='ogretmen.room.v1';
+/* ===== SIMO LIVE V2 — SAME-ORIGIN HTTPS / DURABLE OBJECT ===== */
+const ROOM_KEY='ogretmen.room.v2';
 const LIVE_EVENT='ogretmen.live.event.v1';
 const HISTORY_KEY='ogretmen.lesson.history.v1';
-const REALTIME_KEY='ogretmen.realtime.v1';
-const liveChannel=('BroadcastChannel' in window)?new BroadcastChannel('ogretmen-live-v1'):null;
+const REALTIME_KEY='ogretmen.realtime.v2';
+const liveChannel=('BroadcastChannel' in window)?new BroadcastChannel('ogretmen-live-v2'):null;
 const STUDENT_PORTAL=new URLSearchParams(location.search).has('room');
-const LOCAL_ROOM_KEY=STUDENT_PORTAL?'ogretmen.student.room.v1':ROOM_KEY;
-const STUDENT_SESSION_KEY='ogretmen.student.session.v1';
-
+const LOCAL_ROOM_KEY=STUDENT_PORTAL?'ogretmen.student.room.v2':ROOM_KEY;
+const STUDENT_SESSION_KEY='ogretmen.student.session.v2';
 const STUDENT_APP_ORIGIN='https://simookul.simoegitim.com';
-function studentAppURL(){
-  try{
-    const h=String(location.hostname||'').toLowerCase();
-    if(h==='simookul.simoegitim.com'||h==='okul.simoegitim.com')return new URL(STUDENT_APP_ORIGIN+'/');
-    return new URL(location.origin+'/');
-  }catch{return new URL(STUDENT_APP_ORIGIN+'/')}
-}
-function ensureStudentAppOrigin(){
-  try{
-    if(!STUDENT_PORTAL)return false;
-    const h=String(location.hostname||'').toLowerCase();
-    if(h!=='okul.simoegitim.com')return false;
-    const u=new URL(location.href);
-    const target=new URL(STUDENT_APP_ORIGIN+'/');
-    target.search=u.search;
-    target.hash=u.hash;
-    location.replace(target.toString());
-    return true;
-  }catch{return false}
-}
+
+function studentAppURL(){try{return new URL(STUDENT_APP_ORIGIN+'/')}catch{return new URL(location.origin+'/')}}
+function ensureStudentAppOrigin(){try{if(!STUDENT_PORTAL)return false;const h=String(location.hostname||'').toLowerCase();if(h!=='okul.simoegitim.com')return false;const u=new URL(location.href),target=new URL(STUDENT_APP_ORIGIN+'/');target.search=u.search;target.searchParams.delete('rt');target.hash=u.hash;location.replace(target.toString());return true}catch{return false}}
 function setStudentJoinedUI(on=true){document.body.classList.toggle('student-joined',!!on)}
 
-let studentSession=null, studentSelected=null, studentQuestionId=null, studentQuestionRevealed=false;
+let studentSession=null,studentSelected=null,studentQuestionId=null,studentQuestionRevealed=false;
 let realtimeSocket=null,realtimeTimer=null,realtimeWanted=true,realtimeRole=STUDENT_PORTAL?'student':'teacher',realtimeLastState='local';
-let realtimeLastSyncAt=0,realtimeHealthOkAt=0,realtimeReconnectAttempt=0,realtimeInitialRoomSeen=false,realtimeInitialSyncTimer=null;
+let realtimeLastSyncAt=0,realtimeHealthOkAt=0,realtimePollBusy=false,realtimePushBusy=false,realtimePushTimer=null,realtimePendingPush=null;
 function randomSecret(){const a=new Uint8Array(24);crypto.getRandomValues(a);return [...a].map(x=>x.toString(16).padStart(2,'0')).join('')}
-function realtimeCfg(){try{return JSON.parse(localStorage.getItem(REALTIME_KEY)||'{}')}catch{return{}}}
 function normalizedEndpoint(x){return String(x||'').trim().replace(/\/+$/,'')}
-function okulSimoBackendDefault(){try{
-  if(!/^https?:$/.test(location.protocol))return '';
-  const h=String(location.hostname||'').toLowerCase();
-  if(!h||h==='localhost'||h==='127.0.0.1'||h.endsWith('.oaiusercontent.com'))return '';
-  // Web uygulaması simookul'da, canlı oda Worker'ı okul alt alanında çalışıyor.
-  if(h==='simookul.simoegitim.com')return 'https://okul.simoegitim.com';
-  if(h==='okul.simoegitim.com')return location.origin;
-  return location.origin;
-}catch{return ''}}
-function wsEndpoint(http){return normalizedEndpoint(http).replace(/^https:/i,'wss:').replace(/^http:/i,'ws:')}
-function relativeSyncText(ts){if(!ts)return '—';const s=Math.max(0,Math.round((Date.now()-ts)/1000));if(s<3)return 'şimdi';if(s<60)return s+' sn';const m=Math.floor(s/60);return m+' dk'}
+function okulSimoBackendDefault(){try{return /^https?:$/.test(location.protocol)?location.origin:''}catch{return ''}}
+function realtimeCfg(){return{endpoint:okulSimoBackendDefault()}}
+function wsEndpoint(http){return normalizedEndpoint(http)}
+function relativeSyncText(ts){if(!ts)return '—';const sec=Math.max(0,Math.round((Date.now()-ts)/1000));if(sec<3)return 'şimdi';if(sec<60)return sec+' sn';return Math.floor(sec/60)+' dk'}
+
 function refreshLiveConnectionStrip(r=getRoom()){
   const mode=$('#liveConnMode'),online=$('#liveOnlineStudents'),sync=$('#liveLastSync'),code=$('#liveRoomCode');
-  if(mode){mode.className='live-connection-chip '+(realtimeLastState==='online'?'online':realtimeLastState==='error'?'warn':'');mode.textContent=realtimeLastState==='online'?'● İnternet':realtimeLastState==='connecting'?'● Bağlanıyor':realtimeLastState==='error'?'● Yerel yedek':'● Yerel'}
-  if(online)online.textContent=realtimeLastState==='online'?(r.presence?.onlineStudents??Object.keys(r.students||{}).length):Object.keys(r.students||{}).length;
+  if(mode){mode.className='live-connection-chip '+(realtimeLastState==='online'?'online':realtimeLastState==='error'?'warn':'');mode.textContent=realtimeLastState==='online'?'● Canlı':realtimeLastState==='connecting'?'● Bağlanıyor':realtimeLastState==='error'?'● Yeniden bağlanıyor':'● Hazır'}
+  if(online)online.textContent=r.presence?.onlineStudents??Object.keys(r.students||{}).length;
   if(sync)sync.textContent=relativeSyncText(realtimeLastSyncAt||r.updated||0);
-  if(code)code.textContent=r.code||'----';
+  if(code)code.textContent=r.code||'------';
 }
-function setRealtimeUI(state,text=''){realtimeLastState=state;const map={local:['Yerel bağlantı','Aynı cihazdaki sekmeler arasında çalışıyor.'],connecting:['Bağlanıyor…','Canlı internet odasına bağlanılıyor.'],online:['İnternet canlı','Telefon ve bilgisayar aynı canlı odaya bağlanabilir.'],error:['Bağlantı yok','İnternet bağlantısı kurulamadı; yerel mod çalışmaya devam ediyor.']};const [title,def]=map[state]||map.local;const el=$('#realtimeState');if(el){el.className='realtime-state '+(state==='online'?'online':state==='connecting'?'connecting':state==='error'?'error':'');$('#realtimeStateTitle').textContent=title;$('#realtimeStateText').textContent=text||def}const badge=$('#realtimeStatusBadge'),sb=$('#realtimeSettingsBadge');if(badge){badge.className='badge '+(state==='online'?'rt-online':state==='error'?'rt-warn':'rt-local');badge.textContent=state==='online'?'● İnternet canlı':state==='connecting'?'● Bağlanıyor':state==='error'?'● Yerel yedek':'● Yerel bağlantı'}if(sb){sb.className='badge '+(state==='online'?'rt-online':state==='error'?'rt-warn':'rt-local');sb.textContent=state==='online'?'İnternet bağlı':state==='error'?'Yerel yedek':'Yerel önizleme'}const sn=$('#studentConnectionNote');if(sn)sn.textContent=state==='online'?'Canlı internet bağlantısı açık. “Anlamadım” ve cevapların öğretmene anında gider.':'Yerel önizleme açık. İnternet adresi bağlandığında farklı cihazlar aynı odada çalışır.';const ss=$('#studentStatusText');if(ss&&studentSession){if(state==='online')ss.textContent='Derse bağlandın • canlı tahta eşitleniyor';else if(state==='connecting')ss.textContent='Derse bağlandın • canlı sunucuya bağlanılıyor';else if(state==='error')ss.textContent='Derse bağlandın • canlı bağlantı kurulamadı'}refreshLiveConnectionStrip()}
+function setRealtimeUI(state,text=''){
+  realtimeLastState=state;
+  const map={local:['Canlı sistem hazır','Aynı site içindeki canlı oda kullanılacak.'],connecting:['Bağlanıyor…','Canlı oda hazırlanıyor.'],online:['Canlı bağlantı açık','Telefon ve bilgisayar aynı oda durumunu kullanıyor.'],error:['Yeniden bağlanıyor','Canlı sunucuya tekrar bağlanılıyor.']};
+  const [title,def]=map[state]||map.local,el=$('#realtimeState');
+  if(el){el.className='realtime-state '+(state==='online'?'online':state==='connecting'?'connecting':state==='error'?'error':'');$('#realtimeStateTitle').textContent=title;$('#realtimeStateText').textContent=text||def}
+  const badge=$('#realtimeStatusBadge'),sb=$('#realtimeSettingsBadge');
+  if(badge){badge.className='badge '+(state==='online'?'rt-online':state==='error'?'rt-warn':'rt-local');badge.textContent=state==='online'?'● Canlı bağlı':state==='connecting'?'● Bağlanıyor':state==='error'?'● Yeniden bağlanıyor':'● Canlı hazır'}
+  if(sb){sb.className='badge '+(state==='online'?'rt-online':state==='error'?'rt-warn':'rt-local');sb.textContent=state==='online'?'Canlı bağlı':state==='error'?'Yeniden bağlanıyor':'Otomatik'}
+  const sn=$('#studentConnectionNote');if(sn)sn.textContent=state==='online'?'Canlı bağlantı açık. Cevapların ve “Anlamadım” bildirimlerin öğretmene gider.':'Canlı oda hazırlanıyor.';
+  const ss=$('#studentStatusText');if(ss&&studentSession){if(state==='online')ss.textContent='Derse bağlandın • canlı tahta açık';else if(state==='connecting')ss.textContent='Derse bağlandın • canlı oda açılıyor';else if(state==='error')ss.textContent='Derse bağlandın • yeniden bağlanılıyor'}
+  refreshLiveConnectionStrip();
+}
 
-function getRoom(){try{const r=JSON.parse(localStorage.getItem(LOCAL_ROOM_KEY)||'null');if(r){r.students=r.students||{};r.confusions=r.confusions||[];if(!('lesson' in r))r.lesson=null;if(!('board' in r))r.board=null;if(!('zoom' in r))r.zoom=null;if(!('paused' in r))r.paused=false;if(!('teacherUpdatedAt' in r))r.teacherUpdatedAt=0;if(!r.teacherToken&&!STUDENT_PORTAL){r.teacherToken=randomSecret();localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r))}return r}return createRoom(true)}catch{return createRoom(true)}}
-function createRoom(save=true){const room={code:String(Math.floor(1000+Math.random()*9000)),teacherToken:STUDENT_PORTAL?'':randomSecret(),students:{},question:null,questionCount:0,lesson:null,board:null,zoom:null,paused:false,confusions:[],startedAt:null,endedAt:null,teacherUpdatedAt:STUDENT_PORTAL?0:Date.now(),updated:Date.now()};if(save)localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(room));return room}
+function getRoom(){try{const r=JSON.parse(localStorage.getItem(LOCAL_ROOM_KEY)||'null');if(r){r.students=r.students||{};r.confusions=r.confusions||[];if(!('lesson'in r))r.lesson=null;if(!('board'in r))r.board=null;if(!('zoom'in r))r.zoom=null;if(!('paused'in r))r.paused=false;if(!('teacherUpdatedAt'in r))r.teacherUpdatedAt=0;if(!r.teacherToken&&!STUDENT_PORTAL){r.teacherToken=randomSecret();localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r))}return r}return createRoom(true)}catch{return createRoom(true)}}
+function createRoom(save=true){const room={code:String(Math.floor(100000+Math.random()*900000)),teacherToken:STUDENT_PORTAL?'':randomSecret(),students:{},question:null,questionCount:0,lesson:null,board:null,zoom:null,paused:false,confusions:[],startedAt:null,endedAt:null,teacherUpdatedAt:STUDENT_PORTAL?0:Date.now(),updated:Date.now()};if(save)localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(room));return room}
 function teacherCloudRoom(r){return{code:r.code,question:r.question||null,questionCount:r.questionCount||0,lesson:r.lesson||null,board:r.board||null,zoom:r.zoom||null,paused:!!r.paused,startedAt:r.startedAt||null,endedAt:r.endedAt||null,teacherUpdatedAt:r.teacherUpdatedAt||r.updated||Date.now(),updated:r.updated||Date.now()}}
-function studentCloudPayload(r){if(!studentSession)return null;return{studentId:studentSession.id,student:r.students?.[studentSession.id]||{id:studentSession.id,name:studentSession.name},confusions:(r.confusions||[]).filter(x=>x.studentId===studentSession.id)}}
+function studentCloudPayload(r){if(!studentSession)return null;return{studentId:studentSession.id,name:studentSession.name,student:r.students?.[studentSession.id]||{id:studentSession.id,name:studentSession.name},confusions:(r.confusions||[]).filter(x=>x.studentId===studentSession.id)}}
+function liveV2URL(path,extra={}){const u=new URL(path,location.origin),r=getRoom();u.searchParams.set('room',r.code);Object.entries(extra).forEach(([k,v])=>{if(v!==undefined&&v!==null&&String(v)!=='')u.searchParams.set(k,String(v))});return u.toString()}
 
-function realtimeSend(obj){try{if(realtimeSocket?.readyState===WebSocket.OPEN)realtimeSocket.send(JSON.stringify(obj))}catch(e){console.warn('realtime send',e)}}
-function sendRoomToInternet(r){if(realtimeLastState!=='online')return;if(STUDENT_PORTAL){const x=studentCloudPayload(r);if(x)realtimeSend({type:'student_update',...x})}else realtimeSend({type:'teacher_update',room:teacherCloudRoom(r)})}
+async function realtimeHealth(){const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),4500);try{const res=await fetch('/api/live/health',{cache:'no-store',signal:ctrl.signal});if(!res.ok)throw new Error('Canlı sunucu '+res.status);const data=await res.json();if(data?.ok!==true)throw new Error(data?.error||'Canlı sistem hazır değil');realtimeHealthOkAt=Date.now();return data}finally{clearTimeout(timer)}}
+
+async function liveV2TeacherPush(r=getRoom(),confusions=null){
+  if(STUDENT_PORTAL||!realtimeWanted)return false;
+  const body={room:teacherCloudRoom(r)};if(Array.isArray(confusions))body.confusions=confusions;else body.confusions=r.confusions||[];
+  try{const res=await fetch(liveV2URL('/api/live/teacher',{token:r.teacherToken||''}),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'});const data=await res.json().catch(()=>({}));if(!res.ok||data?.ok===false)throw new Error(data?.error||('Canlı öğretmen '+res.status));realtimeLastSyncAt=Date.now();setRealtimeUI('online');if(data.room)applyInternetRoom(data.room);return true}catch(e){console.warn('teacher live push',e);setRealtimeUI('error',e.message||'Öğretmen canlı bağlantısı tekrar deneniyor');return false}}
+async function liveV2StudentPush(r=getRoom()){
+  if(!STUDENT_PORTAL||!studentSession||!realtimeWanted)return false;const payload=studentCloudPayload(r);if(!payload)return false;
+  try{const res=await fetch(liveV2URL('/api/live/student',{studentId:studentSession.id}),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload),cache:'no-store'});const data=await res.json().catch(()=>({}));if(!res.ok||data?.ok===false)throw new Error(data?.error||('Canlı öğrenci '+res.status));realtimeLastSyncAt=Date.now();setRealtimeUI('online');if(data.room)applyInternetRoom(data.room);return true}catch(e){console.warn('student live push',e);setRealtimeUI('error',e.message||'Öğrenci canlı bağlantısı tekrar deneniyor');return false}}
+function queueRealtimePush(r=getRoom(),confusions=null){realtimePendingPush={r:JSON.parse(JSON.stringify(r)),confusions:Array.isArray(confusions)?JSON.parse(JSON.stringify(confusions)):null};clearTimeout(realtimePushTimer);realtimePushTimer=setTimeout(async()=>{if(realtimePushBusy||!realtimePendingPush)return;const x=realtimePendingPush;realtimePendingPush=null;realtimePushBusy=true;try{if(STUDENT_PORTAL)await liveV2StudentPush(x.r);else await liveV2TeacherPush(x.r,x.confusions)}finally{realtimePushBusy=false;if(realtimePendingPush)queueRealtimePush(realtimePendingPush.r,realtimePendingPush.confusions)}},120)}
+
+async function realtimePollOnce(){
+  if(!realtimeWanted||realtimePollBusy)return;realtimePollBusy=true;
+  try{const r=getRoom(),extra={role:realtimeRole};if(STUDENT_PORTAL){if(studentSession?.id){extra.studentId=studentSession.id;extra.name=studentSession.name}}else extra.token=r.teacherToken||'';const res=await fetch(liveV2URL('/api/live/state',extra),{cache:'no-store'});const data=await res.json().catch(()=>({}));if(!res.ok||data?.ok===false)throw new Error(data?.error||('Canlı durum '+res.status));realtimeLastSyncAt=Date.now();setRealtimeUI('online');if(data.room)applyInternetRoom(data.room)}catch(e){console.warn('live poll',e);setRealtimeUI('error',e.message||'Canlı oda tekrar deneniyor')}finally{realtimePollBusy=false;clearTimeout(realtimeTimer);if(realtimeWanted){const delay=document.visibilityState==='visible'?1000:3500;realtimeTimer=setTimeout(realtimePollOnce,delay)}}
+}
+function realtimeStopPolling(){clearTimeout(realtimeTimer);realtimeTimer=null;realtimePollBusy=false}
+function realtimeStartPolling(){realtimeStopPolling();realtimeWanted=true;realtimePollOnce()}
+function realtimeSyncURL(){return liveV2URL('/api/live/state')}
+async function realtimeSendFallback(obj){realtimeSend(obj);return true}
+function realtimeSend(obj){if(!obj||!realtimeWanted)return;try{if(obj.type==='teacher_update'&&!STUDENT_PORTAL){const r=getRoom();if(obj.room)Object.assign(r,obj.room);queueRealtimePush(r);return}if(obj.type==='teacher_confusions'&&!STUDENT_PORTAL){const r=getRoom();r.confusions=Array.isArray(obj.confusions)?obj.confusions:r.confusions;queueRealtimePush(r,r.confusions);return}if((obj.type==='student_update'||obj.type==='hello')&&STUDENT_PORTAL&&studentSession){queueRealtimePush(getRoom());return}}catch(e){console.warn('realtime send',e)}}
+function sendRoomToInternet(r){if(!realtimeWanted)return;if(STUDENT_PORTAL){if(studentSession)queueRealtimePush(r)}else queueRealtimePush(r)}
 function saveRoom(r){r.updated=Date.now();if(!STUDENT_PORTAL)r.teacherUpdatedAt=r.updated;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r));renderRoomState(r);emitLive({type:'room',room:r,role:STUDENT_PORTAL?'student':'teacher'});sendRoomToInternet(r)}
 function emitLive(data){data._t=Date.now();try{localStorage.setItem(LIVE_EVENT,JSON.stringify(data))}catch{};try{liveChannel?.postMessage(data)}catch{}}
 function applyInternetRoom(room){
   if(!room)return;realtimeLastSyncAt=Date.now();const local=getRoom();
-  if(STUDENT_PORTAL){
-    const ownId=studentSession?.id;const ownLocal=ownId?local.students?.[ownId]:null;const remoteOwn=ownId?room.students?.[ownId]:null;
-    const merged={...local,...room,teacherToken:'',students:(remoteOwn||ownLocal)&&ownId?{[ownId]:{...(ownLocal||{}),...(remoteOwn||{})}}:{},confusions:room.confusions||local.confusions||[]};
-    localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(merged));renderRoomState(merged);syncStudentQuestion(merged);if(merged.board&&studentSession)renderStudentLesson(merged);return;
-  }
-  // Öğretmen canlı dersin sahibi: sunucudan gelen eski/null tahta öğretmenin güncel tahtasını ezmemeli.
-  const beforeStudentCount=Object.keys(local.students||{}).length;
-  const remoteStudentCount=Object.keys(room.students||{}).length;
-  const activeTeacherLesson=!!local.startedAt&&!local.endedAt;
-  const merged={
-    ...room,...local,
-    teacherToken:local.teacherToken||'',
-    students:room.students||local.students||{},
-    confusions:room.confusions||local.confusions||[],
-    presence:room.presence||local.presence||null,
-    // aktif derste öğretmenin yerel ders/tahta/soru durumu otoritedir
-    board:activeTeacherLesson?(local.board||liveBoardSnapshot()):(room.board??local.board??null),
-    lesson:activeTeacherLesson?(local.lesson||getPlan()):(room.lesson??local.lesson??null),
-    question:activeTeacherLesson?(local.question??room.question??null):(room.question??local.question??null),
-    questionCount:activeTeacherLesson?(local.questionCount||0):(room.questionCount??local.questionCount??0),
-    paused:activeTeacherLesson?!!local.paused:!!room.paused,
-    startedAt:activeTeacherLesson?local.startedAt:(room.startedAt??local.startedAt??null),
-    endedAt:activeTeacherLesson?local.endedAt:(room.endedAt??local.endedAt??null),
-    teacherUpdatedAt:local.teacherUpdatedAt||local.updated||Date.now(),
-    updated:Math.max(Number(local.updated||0),Number(room.updated||0),Date.now())
-  };
-  localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(merged));renderRoomState(merged);syncStudentQuestion(merged);
-  // Yeni öğrenci geldiğinde veya sunucudaki tahta boş kaldığında güncel öğretmen tahtasını tek sefer yeniden bas.
-  const remoteBoardMissing=!room.board?.pages?.length;
-  if(activeTeacherLesson&&(remoteStudentCount>beforeStudentCount||remoteBoardMissing)){
-    clearTimeout(window.__simoTeacherBoardReassertTimer);
-    window.__simoTeacherBoardReassertTimer=setTimeout(()=>{
-      try{
-        const fresh=getRoom();
-        fresh.lesson=getPlan();
-        fresh.board=liveBoardSnapshot();
-        fresh.teacherUpdatedAt=Date.now();
-        localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(fresh));
-        if(realtimeSocket?.readyState===WebSocket.OPEN)realtimeSend({type:'teacher_update',room:teacherCloudRoom(fresh)});
-      }catch(e){console.warn('teacher board reassert',e)}
-    },120);
-  }
+  if(STUDENT_PORTAL){const ownId=studentSession?.id,ownLocal=ownId?local.students?.[ownId]:null,remoteOwn=ownId?room.students?.[ownId]:null;const merged={...local,...room,teacherToken:'',students:(remoteOwn||ownLocal)&&ownId?{[ownId]:{...(ownLocal||{}),...(remoteOwn||{})}}:{},confusions:room.confusions||local.confusions||[]};localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(merged));renderRoomState(merged);syncStudentQuestion(merged);if(studentSession)renderStudentLesson(merged);return}
+  const merged={...local,students:room.students||local.students||{},confusions:room.confusions||local.confusions||[],presence:room.presence||local.presence||{},version:room.version||local.version||0,updated:Math.max(Number(local.updated||0),Number(room.updated||0))};localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(merged));renderRoomState(merged);syncStudentQuestion(merged)
 }
-function realtimeConnect(force=false){
-  clearTimeout(realtimeTimer);clearTimeout(realtimeInitialSyncTimer);
-  const cfg=realtimeCfg(),base=normalizedEndpoint(cfg.endpoint);
-  if(!base||!realtimeWanted){setRealtimeUI('local');return}
-  try{realtimeSocket?.close()}catch{}
-  const r=getRoom();
-  if(STUDENT_PORTAL){const rp=new URLSearchParams(location.search).get('room');if(rp&&r.code!==rp){r.code=rp;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r))}}
-  const q=new URLSearchParams({room:r.code,role:realtimeRole});
-  if(realtimeRole==='teacher')q.set('token',r.teacherToken||'');
-  const url=wsEndpoint(base)+'/ws?'+q.toString();
-  setRealtimeUI('connecting','Canlı odaya bağlanılıyor…');
-  try{
-    const ws=new WebSocket(url);realtimeSocket=ws;let opened=false;
-    ws.onopen=()=>{
-      opened=true;realtimeReconnectAttempt=0;realtimeLastSyncAt=Date.now();setRealtimeUI('online','Telefon ve bilgisayar aynı canlı odada.');
-      realtimeSend({type:'hello',studentId:studentSession?.id||null,name:studentSession?.name||null});
-      if(!STUDENT_PORTAL)realtimeSend({type:'teacher_update',room:teacherCloudRoom(getRoom())});
-      else if(studentSession){
-        const x=studentCloudPayload(getRoom());if(x)realtimeSend({type:'student_update',...x});
-        // İlk oda mesajı oturum kurulmadan önce geldiyse güncel tahtayı tekrar iste.
-        setTimeout(()=>realtimeSend({type:'request_room'}),120);
-        setTimeout(()=>{if(!getRoom().board?.pages?.length)realtimeSend({type:'request_room'})},850);
-      }
-      if(!STUDENT_PORTAL)setTimeout(()=>syncPendingBoardMedia(),180);
-    };
-    ws.onmessage=e=>{try{realtimeLastSyncAt=Date.now();refreshLiveConnectionStrip();const m=JSON.parse(e.data);if(m.type==='room'&&m.room)applyInternetRoom(m.room);if(m.type==='error')toast('Canlı bağlantı: '+m.message,4200)}catch(err){console.warn('realtime message',err)}};
-    ws.onerror=()=>{if(!opened)setRealtimeUI('error','Canlı odaya bağlanılamadı.');};
-    ws.onclose=()=>{if(realtimeSocket!==ws)return;realtimeSocket=null;if(realtimeWanted&&normalizedEndpoint(realtimeCfg().endpoint)){setRealtimeUI('error','Bağlantı koptu • tekrar bağlanılıyor…');realtimeTimer=setTimeout(()=>realtimeConnect(),2200)}else setRealtimeUI('local')};
-  }catch(e){setRealtimeUI('error',e.message)}
-}
-async function realtimePrepareAndConnect(endpoint,showToast=true){
-  const base=normalizedEndpoint(endpoint);
-  if(!base){localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:''}));setRealtimeUI('local');return false}
-  localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:base}));
-  if($('#realtimeEndpoint'))$('#realtimeEndpoint').value=base;
-  realtimeWanted=true;realtimeConnect(true);
-  if(showToast)toast('Canlı bağlantı kaydedildi • odaya bağlanılıyor…',3200);
-  return true;
-}
-async function syncPendingBoardMedia(){
-  if(STUDENT_PORTAL||realtimeLastState!=='online')return;
-  const pending=[];
-  for(const page of boardState.pages||[])for(const b of page.blocks||[])if((b.type==='pdf'||b.type==='image')&&b.mediaId&&!b.cloudUrl)pending.push(b);
-  if(!pending.length)return;
-  let uploaded=0;
-  for(const b of pending){
-    try{const rec=await dbGet('boardMedia',b.mediaId);if(!rec?.blob)continue;const cloudUrl=await realtimeUploadMedia(rec.blob,b.mediaId);if(cloudUrl){b.cloudUrl=cloudUrl;uploaded++}}
-    catch(e){console.warn('pending media upload',b.name||b.mediaId,e)}
-  }
-  if(uploaded){boardSave();renderBoard();pushBoardLiveNow(true)}
-}
-async function realtimeUploadMedia(file,mediaId){const cfg=realtimeCfg(),base=normalizedEndpoint(cfg.endpoint);if(!base||realtimeLastState!=='online'||STUDENT_PORTAL)return null;const r=getRoom();const u=base+'/media/'+encodeURIComponent(mediaId)+'?room='+encodeURIComponent(r.code)+'&token='+encodeURIComponent(r.teacherToken||'');const res=await fetch(u,{method:'PUT',headers:{'Content-Type':file.type||'application/octet-stream','X-File-Name':encodeURIComponent(file.name||'dosya')},body:file});if(!res.ok)throw new Error('Medya internet alanına yüklenemedi ('+res.status+')');const data=await res.json();return data.url||base+'/media/'+encodeURIComponent(mediaId)+'?room='+encodeURIComponent(r.code)}
-function realtimeLoad(){
-  const qs=new URLSearchParams(location.search),rt=normalizedEndpoint(qs.get('rt')||''),c=realtimeCfg();
-  const endpoint=rt||normalizedEndpoint(c.endpoint)||'https://okul.simoegitim.com';
-  localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint}));
-  if($('#realtimeEndpoint'))$('#realtimeEndpoint').value=endpoint;
-  realtimeWanted=true;setRealtimeUI('connecting','Canlı odaya bağlanılıyor…');realtimeConnect(true);
-}
+async function realtimeConnect(force=false){if(!realtimeWanted)return setRealtimeUI('local');setRealtimeUI('connecting','Canlı oda açılıyor…');try{await realtimeHealth();if(!STUDENT_PORTAL)await liveV2TeacherPush(getRoom());else if(studentSession)await liveV2StudentPush(getRoom());realtimeStartPolling()}catch(e){setRealtimeUI('error',e.message||'Canlı bağlantı kurulamadı');clearTimeout(realtimeTimer);realtimeTimer=setTimeout(()=>realtimeConnect(true),1800)}}
+function realtimeCandidateEndpoints(){return[okulSimoBackendDefault()]}
+async function realtimeFindWorkingEndpoint(){await realtimeHealth();return okulSimoBackendDefault()}
+async function realtimePrepareAndConnect(endpoint='',showToast=true){realtimeWanted=true;try{await realtimeConnect(true);if(showToast)toast('Canlı sistem bağlı');return true}catch(e){if(showToast)toast(e.message||'Canlı sistem bağlanamadı',4200);return false}}
+async function syncPendingBoardMedia(){if(STUDENT_PORTAL||realtimeLastState!=='online')return;const pending=[];for(const page of boardState.pages||[])for(const b of page.blocks||[])if((b.type==='pdf'||b.type==='image')&&b.mediaId&&!b.cloudUrl)pending.push(b);let uploaded=0;for(const b of pending){try{const rec=await dbGet('boardMedia',b.mediaId);if(!rec?.blob)continue;const url=await realtimeUploadMedia(rec.blob,b.mediaId,rec.name||b.name||'dosya');if(url){b.cloudUrl=url;uploaded++}}catch(e){console.warn('pending media sync',e)}}if(uploaded){boardSave();renderBoard();pushBoardLiveNow(true)}}
+async function realtimeUploadMedia(file,mediaId,fileName=''){if(STUDENT_PORTAL)return null;const r=getRoom();if(!r.teacherToken)return null;const u=liveV2URL('/media/'+encodeURIComponent(mediaId),{token:r.teacherToken});const res=await fetch(u,{method:'PUT',headers:{'Content-Type':file.type||'application/octet-stream','X-File-Name':encodeURIComponent(fileName||file.name||'dosya')},body:file});const data=await res.json().catch(()=>({}));if(!res.ok||data?.ok===false)throw new Error(data?.error||('Medya yüklenemedi '+res.status));return data.url||('/media/'+encodeURIComponent(mediaId)+'?room='+encodeURIComponent(r.code))}
+function realtimeLoad(){const ep=okulSimoBackendDefault();localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:ep,mode:'same-origin-v2'}));if($('#realtimeEndpoint')){$('#realtimeEndpoint').value=ep;$('#realtimeEndpoint').readOnly=true}realtimeWanted=true;realtimeConnect(true)}
 
 function sessionTotals(r=getRoom()){const students=Object.values(r.students||{});const answers=students.reduce((n,x)=>n+(x.totalAnswered||0),0);const correct=students.reduce((n,x)=>n+(x.totalCorrect||0),0);return{students,answers,correct,accuracy:answers?Math.round(correct/answers*100):0}}
 let pendingConfusion=null;
@@ -1011,12 +925,9 @@ function renderRoomState(r=getRoom()){
 function publishQuestion(q){const r=getRoom();if(!r.startedAt||r.endedAt){toast('Önce canlı dersi başlat.');return false}if(r.paused){toast('Ders duraklatıldı. Önce “Devam et” de.');return false}r.lesson=getPlan();r.question={...q,id:Date.now(),revealed:false};r.questionCount=(r.questionCount||0)+1;Object.values(r.students||{}).forEach(st=>{st.answer=null});saveRoom(r);syncStudentQuestion(r);return true}
 function syncStudentQuestion(r=getRoom()){if(!studentSession||studentSession.code!==r.code)return;renderStudentLesson(r);const locked=!!r.paused||!!r.endedAt;if(!r.question){studentQuestionRevealed=false;$('#studentStatusText').textContent=r.endedAt?'Ders sona erdi':r.paused?'Ders duraklatıldı':r.startedAt?'Derse bağlısın • soru bekleniyor':'Derse bağlandın';$('#studentSend').disabled=true;return}const st=r.students?.[studentSession.id];const isNew=studentQuestionId!==r.question.id;const revealNow=!!r.question.revealed&&Number.isInteger(r.question.correct);const revealChanged=studentQuestionRevealed!==revealNow;if(isNew||revealChanged){studentQuestionId=r.question.id;studentQuestionRevealed=revealNow;renderQuestion(r.question.q,r.question.choices,r.question.correct,revealNow);if(isNew){studentSelected=null;$$('.phoneChoice').forEach(x=>x.classList.remove('selected'));$('#studentAnswerResult').className='student-result hidden';$('#studentAnswerResult').textContent='';$('#studentStatusText').textContent='Öğretmen yeni soru gönderdi'}}if(st?.answer!=null){studentSelected=st.answer;$$('.phoneChoice').forEach((x,i)=>x.classList.toggle('selected',i===st.answer));$('#studentSend').disabled=true;$('#studentSend').textContent='✓ Cevap gönderildi';if(revealNow){const res=$('#studentAnswerResult');res.className='student-result '+(st.answer===r.question.correct?'good':'bad');res.textContent=st.answer===r.question.correct?'✓ Doğru cevap':'Doğru cevap: '+String.fromCharCode(65+r.question.correct);$('#studentStatusText').textContent='Cevap açıklandı'}else $('#studentStatusText').textContent='Cevabın öğretmene ulaştı'}else if(isNew){$('#studentSend').disabled=true;$('#studentSend').textContent='Cevabımı gönder'}if(locked||revealNow){$$('.phoneChoice').forEach(x=>x.disabled=true);$('#studentSend').disabled=true;if(locked)$('#studentStatusText').textContent=r.endedAt?'Ders sona erdi':'Ders duraklatıldı'}else{$$('.phoneChoice').forEach(x=>x.disabled=false)}}
 function restoreStudentSession(code){try{const x=JSON.parse(sessionStorage.getItem(STUDENT_SESSION_KEY)||'null');if(!x?.id||!x?.name||String(x.code)!==String(code))return false;studentSession={id:x.id,name:x.name,code:String(code)};setStudentJoinedUI(true);$('#studentJoinName').value=x.name;$('#studentJoinCode').value=String(code);$('#studentRoomCode').textContent='ODA '+code;$('#studentJoinBtn').textContent='✓ Bağlı';const r=getRoom();r.students=r.students||{};const old=r.students[x.id]||{};r.students[x.id]={id:x.id,name:x.name,answer:old.answer??null,joined:old.joined||Date.now(),totalAnswered:old.totalAnswered||0,totalCorrect:old.totalCorrect||0};localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r));renderRoomState(r);syncStudentQuestion(r);return true}catch{return false}}
-function joinStudent(){const name=$('#studentJoinName').value.trim();const code=$('#studentJoinCode').value.trim();if(!name)return toast('Öğrenci adını yaz.');if(!/^[0-9A-Za-z_-]{4,32}$/.test(code))return toast('Geçerli oda kodunu yaz.');const id=sessionStorage.getItem('ogretmen.student.id')||(crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()));sessionStorage.setItem('ogretmen.student.id',id);studentSession={id,name,code};sessionStorage.setItem(STUDENT_SESSION_KEY,JSON.stringify(studentSession));setStudentJoinedUI(true);if(!STUDENT_PORTAL){const u=studentAppURL();u.hash='';u.search='';u.searchParams.set('room',code);const ep=normalizedEndpoint(realtimeCfg().endpoint)||'https://okul.simoegitim.com';u.searchParams.set('rt',ep);location.assign(u.toString());return}const r=getRoom();if(String(r.code)!==String(code)){r.code=code;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r))}r.students=r.students||{};const old=r.students[id]||{};r.students[id]={id,name,answer:old.answer??null,joined:old.joined||Date.now(),totalAnswered:old.totalAnswered||0,totalCorrect:old.totalCorrect||0};r.confusions=r.confusions||[];saveRoom(r);$('#studentRoomCode').textContent='ODA '+code;$('#studentStatusText').textContent=realtimeLastState==='online'?'Derse bağlandın • tahta eşitleniyor':'Derse bağlandın • bağlantı bekleniyor';$('#studentJoinBtn').textContent='✓ Katıldın';syncStudentQuestion(r);if(realtimeLastState==='online'){realtimeSend({type:'hello',studentId:id,name});const x=studentCloudPayload(r);if(x)realtimeSend({type:'student_update',...x})}else{const ep=normalizedEndpoint(realtimeCfg().endpoint)||'https://okul.simoegitim.com';realtimePrepareAndConnect(ep,false)}toast('Derse katıldın')}
+function joinStudent(){const name=$('#studentJoinName').value.trim();const code=$('#studentJoinCode').value.trim();if(!name)return toast('Öğrenci adını yaz.');if(!/^[0-9A-Za-z_-]{4,32}$/.test(code))return toast('Geçerli oda kodunu yaz.');const id=sessionStorage.getItem('ogretmen.student.id')||(crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()));sessionStorage.setItem('ogretmen.student.id',id);studentSession={id,name,code};sessionStorage.setItem(STUDENT_SESSION_KEY,JSON.stringify(studentSession));setStudentJoinedUI(true);if(!STUDENT_PORTAL){const u=studentAppURL();u.hash='';u.search='';u.searchParams.set('room',code);location.assign(u.toString());return}const r=getRoom();if(String(r.code)!==String(code)){r.code=code;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r))}r.students=r.students||{};const old=r.students[id]||{};r.students[id]={id,name,answer:old.answer??null,joined:old.joined||Date.now(),totalAnswered:old.totalAnswered||0,totalCorrect:old.totalCorrect||0};r.confusions=r.confusions||[];saveRoom(r);$('#studentRoomCode').textContent='ODA '+code;$('#studentStatusText').textContent=realtimeLastState==='online'?'Derse bağlandın • tahta eşitleniyor':'Derse bağlandın • bağlantı bekleniyor';$('#studentJoinBtn').textContent='✓ Katıldın';syncStudentQuestion(r);if(realtimeLastState==='online'){realtimeSend({type:'hello',studentId:id,name});const x=studentCloudPayload(r);if(x)realtimeSend({type:'student_update',...x})}else realtimePrepareAndConnect('',false);toast('Derse katıldın')}
 function sendStudentAnswer(){if(!studentSession||studentSelected==null)return;const r=getRoom();if(r.endedAt)return toast('Ders sona erdi.');if(r.paused)return toast('Ders şu an duraklatıldı.');const st=r.students?.[studentSession.id];if(!st)return toast('Önce derse tekrar katıl.');if(st.answer==null){if(realtimeLastState!=='online'){st.totalAnswered=(st.totalAnswered||0)+1;if(studentSelected===r.question?.correct)st.totalCorrect=(st.totalCorrect||0)+1}st.answer=studentSelected}saveRoom(r);$('#studentSend').textContent='✓ Cevap gönderildi';$('#studentSend').disabled=true;const res=$('#studentAnswerResult');res.className='student-result';res.textContent='Cevabın öğretmene gönderildi.';toast('Cevap öğretmene gönderildi')}
-function startLesson(){const r=getRoom();const isNewSession=!!r.endedAt||!r.startedAt;if(isNewSession){r.startedAt=Date.now();r.question=null;r.questionCount=0;r.confusions=[];r.endedAt=null;r.paused=false;Object.values(r.students||{}).forEach(st=>{st.answer=null;st.totalAnswered=0;st.totalCorrect=0;st.joined=Date.now()})}else r.startedAt=r.startedAt||Date.now();r.endedAt=null;r.paused=false;r.lesson=getPlan();r.board=liveBoardSnapshot();r.confusions=r.confusions||[];try{const z=typeof zoomCfg==='function'?zoomCfg():{};const zu=typeof zoomMeetingUrl==='function'?zoomMeetingUrl(z):'';r.zoom={meetingNumber:z.meetingNumber||'',joinUrl:zu||'',enabled:!!zu}}catch{}saveRoom(r);
-  // Dersi başlatınca socket açılış yarışına takılmasın: güncel tahta birkaç kez güvenli şekilde teyit edilir.
-  if(!STUDENT_PORTAL){[180,650,1600].forEach(ms=>setTimeout(()=>{try{if(realtimeSocket?.readyState===WebSocket.OPEN){const fresh=getRoom();fresh.lesson=getPlan();fresh.board=liveBoardSnapshot();fresh.teacherUpdatedAt=Date.now();localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(fresh));realtimeSend({type:'teacher_update',room:teacherCloudRoom(fresh)})}}catch(e){}},ms))}
-  toast(isNewSession?'Yeni ders başladı • mevcut tahta canlı':'Ders devam ediyor • tahta canlı')}
+function startLesson(){const r=getRoom();const isNewSession=!!r.endedAt||!r.startedAt;if(isNewSession){r.startedAt=Date.now();r.question=null;r.questionCount=0;r.confusions=[];r.endedAt=null;r.paused=false;Object.values(r.students||{}).forEach(st=>{st.answer=null;st.totalAnswered=0;st.totalCorrect=0;st.joined=Date.now()})}else r.startedAt=r.startedAt||Date.now();r.endedAt=null;r.paused=false;r.lesson=getPlan();r.board=liveBoardSnapshot();r.confusions=r.confusions||[];try{const z=typeof zoomCfg==='function'?zoomCfg():{};const zu=typeof zoomMeetingUrl==='function'?zoomMeetingUrl(z):'';r.zoom={meetingNumber:z.meetingNumber||'',joinUrl:zu||'',enabled:!!zu}}catch{}saveRoom(r);toast(isNewSession?'Yeni ders başladı • mevcut tahta canlı':'Ders devam ediyor • tahta canlı')}
 async function startLessonUnified(){
   const rt=normalizedEndpoint(realtimeCfg().endpoint);
   if(rt&&realtimeLastState!=='online')await realtimePrepareAndConnect(rt,false);
@@ -1102,14 +1013,14 @@ function saveAISettings(){const s={endpoint:$('#aiEndpoint').value.trim(),model:
 function aiCfg(){const s=JSON.parse(localStorage.getItem('ogretmen.ai')||'{}');return{...s,key:s.remember?(localStorage.getItem('ogretmen.ai.key')||''):(sessionStorage.getItem('ogretmen.ai.key')||'')}}
 function updateAIStatus(){const s=JSON.parse(localStorage.getItem('ogretmen.ai')||'{}');const el=$('#aiStatus');const ready=!!(s.endpoint&&s.model);el.classList.toggle('ok',ready);el.querySelector('span:last-child').textContent=ready?'AI bağlantısı hazır':'Bağlantı ayarlanmadı'}
 async function callAI(prompt){const c=aiCfg();if(!c.endpoint||!c.model)throw new Error('Önce API adresi ve model adını kaydet.');const headers={'Content-Type':'application/json'};if(c.key)headers.Authorization='Bearer '+c.key;const body={model:c.model,messages:[{role:'system',content:'Sen canlı ders hazırlayan bir öğretmen yardımcısısın. Cevapların net, düzenli ve sınıfta kullanılabilir olsun.'},{role:'user',content:prompt}],temperature:.4};const r=await fetch(c.endpoint,{method:'POST',headers,body:JSON.stringify(body)});if(!r.ok){const t=await r.text().catch(()=>String(r.status));throw new Error('AI isteği başarısız ('+r.status+'): '+t.slice(0,260))}const data=await r.json();const out=data?.choices?.[0]?.message?.content ?? data?.output_text ?? data?.response;if(!out)throw new Error('AI cevabı geldi fakat beklenen metin alanı bulunamadı.');return typeof out==='string'?out:JSON.stringify(out,null,2)}
-$('#saveRealtime').onclick=()=>realtimePrepareAndConnect($('#realtimeEndpoint').value,true);
-$('#disconnectRealtime').onclick=()=>{realtimeWanted=false;try{realtimeSocket?.close()}catch{};localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:''}));$('#realtimeEndpoint').value='';setRealtimeUI('local');toast('Yerel önizleme moduna dönüldü')};
+$('#saveRealtime').onclick=()=>realtimePrepareAndConnect('',true);
+$('#disconnectRealtime').onclick=()=>{};
 $('#copyRoomInline').onclick=()=>$('#copyRoom').click();
 $('#openConnectionSettings').onclick=()=>{showView('settings');setTimeout(()=>$('#realtimeEndpoint')?.focus(),80)};
 $('#copyLessonReport').onclick=async()=>{const t=lessonReportText();if(!t)return toast('Henüz ders raporu yok.');try{await navigator.clipboard.writeText(t);toast('Ders özeti kopyalandı')}catch{toast('Özet kopyalanamadı')}};
 setInterval(()=>refreshLiveConnectionStrip(),5000);
 
-$('#testRealtime').onclick=()=>realtimePrepareAndConnect($('#realtimeEndpoint').value,true);
+$('#testRealtime').onclick=()=>realtimePrepareAndConnect('',true);
 $('#saveAI').onclick=saveAISettings;$('#testAI').onclick=async()=>{saveAISettings();$('#aiSettingsModal').classList.remove('hidden');try{toast('AI bağlantısı deneniyor...');const out=await callAI('Sadece “Bağlantı başarılı” yaz.');toast('AI bağlantısı başarılı: '+out.slice(0,80),3600)}catch(e){toast(e.message,5000)}};
 $('#runAI').onclick=async()=>{const text=$('#aiInput').value.trim();if(!text)return toast('Önce ders metnini yaz veya yapıştır.');const out=$('#aiOutput');out.textContent='AI çalışıyor...';$('#runAI').disabled=true;try{out.textContent=await callAI(selectedAIInstruction+'\n\nDERS METNİ:\n'+text)}catch(e){out.textContent='Hata: '+e.message;toast(e.message,5000)}finally{$('#runAI').disabled=false}};
 $('#copyAI').onclick=async()=>{try{await navigator.clipboard.writeText($('#aiOutput').textContent);toast('AI sonucu kopyalandı')}catch{toast('Kopyalama başarısız')}};$('#aiToNote').onclick=()=>{$('#planNote').value=$('#aiOutput').textContent;showView('prepare');toast('AI sonucu öğretmen açıklamasına aktarıldı')};$('#aiToQuestion').onclick=()=>{const first=$('#aiOutput').textContent.split('\n').find(x=>x.trim())||'';openQuestionEditor('AI',{q:first.replace(/^\d+[.)-]?\s*/,''),choices:['','','',''],correct:0,time:45});toast('AI sonucu soru düzenleyicisine aktarıldı')};
@@ -1452,7 +1363,7 @@ simoInit=function(){SIMO_BASE_INIT_V2();const svg=$('#simoInkLayer'),ed=$('#simo
  const tb=$('#simoTextSelectionTools');tb?.querySelectorAll('[data-text-style]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();const k=b.dataset.textStyle;o[k]=!o[k];simoSave()});tb?.querySelectorAll('[data-text-align]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();o.align=b.dataset.textAlign;simoSave()});tb?.querySelectorAll('[data-text-size]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();o.fontSize=Math.max(14,Math.min(120,(o.fontSize||30)+(b.dataset.textSize==='up'?4:-4)));simoSave()});const tc=$('#simoSelectedTextColor');if(tc)tc.oninput=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;o.color=tc.value;simoSave()};document.addEventListener('pointerup',e=>{if(simoDrawing)simoEnd(e)});
 };
 
-(async function init(){applyBrand();boardLoad();if(!STUDENT_PORTAL){const ended=getRoom().endedAt,lastCleared=localStorage.getItem(BOARD_LAST_CLEARED_END_KEY)||'';if(ended&&String(ended)!==lastCleared&&boardHasMeaningfulContent()){resetBoardLocal('Yeni Konu');localStorage.setItem(BOARD_LAST_CLEARED_END_KEY,String(ended))}}simoNormalizeBoardBlocks();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt');if(rtParam)localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:normalizedEndpoint(rtParam)}));const autoBackend=okulSimoBackendDefault();if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');const restored=restoreStudentSession(roomParam);if(restored)$('#studentStatusText').textContent='Odaya bağlanılıyor • tahta eşitleniyor'}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=20260817-firstlive1',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})})();
+(async function init(){applyBrand();boardLoad();if(!STUDENT_PORTAL){const ended=getRoom().endedAt,lastCleared=localStorage.getItem(BOARD_LAST_CLEARED_END_KEY)||'';if(ended&&String(ended)!==lastCleared&&boardHasMeaningfulContent()){resetBoardLocal('Yeni Konu');localStorage.setItem(BOARD_LAST_CLEARED_END_KEY,String(ended))}}simoNormalizeBoardBlocks();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt'),autoBackend=okulSimoBackendDefault();if(rtParam){try{const clean=new URL(location.href);clean.searchParams.delete('rt');history.replaceState(null,'',clean.toString())}catch{}}if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');const restored=restoreStudentSession(roomParam);if(restored)$('#studentStatusText').textContent='Odaya bağlanılıyor • tahta eşitleniyor'}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=20260817-livev2clean',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})})();
 
 
 </script>

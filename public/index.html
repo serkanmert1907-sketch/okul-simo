@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="theme-color" content="#0f172a" />
-<meta name="simo-build" content="2026-08-17-LIVE-V2-CLEAN">
+<meta name="simo-build" content="2026-08-17-LIVE-V4-MEMORY">
 <meta name="simo-build" content="SIMOBOARD_STUDIO_3_20260817" />
 <meta name="simo-board-version" content="studio-2.0" />
 <title>Okul Simo • SimoBoard Studio 3 — Canlı Ders</title>
@@ -844,7 +844,21 @@ function queueRealtimePush(r=getRoom(),confusions=null){realtimePendingPush={r:J
 
 async function realtimePollOnce(){
   if(!realtimeWanted||realtimePollBusy)return;realtimePollBusy=true;
-  try{const r=getRoom(),extra={role:realtimeRole};if(STUDENT_PORTAL){if(studentSession?.id){extra.studentId=studentSession.id;extra.name=studentSession.name}}else extra.token=r.teacherToken||'';const res=await fetch(liveV2URL('/api/live/state',extra),{cache:'no-store'});const data=await res.json().catch(()=>({}));if(!res.ok||data?.ok===false)throw new Error(data?.error||('Canlı durum '+res.status));realtimeLastSyncAt=Date.now();setRealtimeUI('online');if(data.room)applyInternetRoom(data.room)}catch(e){console.warn('live poll',e);setRealtimeUI('error',e.message||'Canlı oda tekrar deneniyor')}finally{realtimePollBusy=false;clearTimeout(realtimeTimer);if(realtimeWanted){const delay=document.visibilityState==='visible'?1000:3500;realtimeTimer=setTimeout(realtimePollOnce,delay)}}
+  try{
+    if(STUDENT_PORTAL){
+      if(studentSession)await liveV2StudentPush(getRoom());
+      else{
+        const r=getRoom(),res=await fetch(liveV2URL('/api/live/state',{role:'student'}),{cache:'no-store'}),data=await res.json().catch(()=>({}));
+        if(!res.ok||data?.ok===false)throw new Error(data?.error||('Canlı durum '+res.status));
+        realtimeLastSyncAt=Date.now();setRealtimeUI('online');if(data.room)applyInternetRoom(data.room);
+      }
+    }else{
+      const r=getRoom();
+      if(r.startedAt&&!r.endedAt)r.board=liveBoardSnapshot();
+      await liveV2TeacherPush(r);
+    }
+  }catch(e){console.warn('live heartbeat',e);setRealtimeUI('error',e.message||'Canlı oda tekrar deneniyor')}
+  finally{realtimePollBusy=false;clearTimeout(realtimeTimer);if(realtimeWanted){const delay=document.visibilityState==='visible'?1500:5000;realtimeTimer=setTimeout(realtimePollOnce,delay)}}
 }
 function realtimeStopPolling(){clearTimeout(realtimeTimer);realtimeTimer=null;realtimePollBusy=false}
 function realtimeStartPolling(){realtimeStopPolling();realtimeWanted=true;realtimePollOnce()}

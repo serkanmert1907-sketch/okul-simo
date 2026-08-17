@@ -205,6 +205,15 @@ export class LiveRoom extends DurableObject {
       return;
     }
 
+    // Telefon, ilk broadcast oturum kimliği oluşmadan geldiyse güncel oda/tahtayı tekrar çekebilir.
+    if (msg.type === "request_room") {
+      try {
+        const fresh = await this.state();
+        ws.send(JSON.stringify({ type: "room", room: this.roomFor(att.role, fresh, att.studentId) }));
+      } catch {}
+      return;
+    }
+
     if (msg.type === "teacher_update") {
       if (att.role !== "teacher") return;
       const t = msg.room || {};

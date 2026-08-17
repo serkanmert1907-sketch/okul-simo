@@ -1,49 +1,68 @@
 import { DurableObject } from "cloudflare:workers";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET,PUT,OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type,X-File-Name",
+const JSON_HEADERS = {
+  "Content-Type": "application/json; charset=utf-8",
+  "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
+  "X-Content-Type-Options": "nosniff",
 };
 
 function json(data, status = 200, extra = {}) {
-  return new Response(JSON.stringify(data), {
-    status,
-    headers: { "Content-Type": "application/json; charset=utf-8", ...corsHeaders, ...extra },
-  });
+  return new Response(JSON.stringify(data), { status, headers: { ...JSON_HEADERS, ...extra } });
 }
+
+function cleanRoom(value) {
+  return String(value || "").replace(/[^0-9A-Za-z_-]/g, "").slice(0, 32);
+}
+function cleanId(value, max = 120) {
+  return String(value || "").replace(/[<>]/g, "").trim().slice(0, max);
+}
+function cleanName(value) {
+  return cleanId(value || "Öğrenci", 80) || "Öğrenci";
+}
+function now() { return Date.now(); }
 
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
-    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: corsHeaders });
-    if (url.pathname === "/health") return json({ ok: true, service: "ogretmen-live-realtime" });
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        status: 204,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type,X-File-Name",
+          "Access-Control-Max-Age": "86400",
+        },
+      });
+    }
 
-    const room = (url.searchParams.get("room") || "").replace(/[^0-9A-Za-z_-]/g, "").slice(0, 32);
+    if (url.pathname === "/health" || url.pathname === "/api/live/health") {
+      return json({ ok: true, service: "simo-live-v2", transport: "https-polling", sameOrigin: true });
+    }
+
+    const room = cleanRoom(url.searchParams.get("room"));
     if (!room) return json({ ok: false, error: "room gerekli" }, 400);
 
-    if (url.pathname === "/ws" || url.pathname.startsWith("/media/")) {
+    if (url.pathname.startsWith("/api/live/") || url.pathname.startsWith("/media/")) {
       const stub = env.LIVE_ROOMS.getByName(room);
       return stub.fetch(request);
     }
-    return json({ ok: true, endpoints: ["/health", "/ws?room=...", "/media/:id?room=..."] });
+
+    return json({ ok: false, error: "endpoint yok" }, 404);
   },
 };
 
 export class LiveRoom extends DurableObject {
   constructor(ctx, env) {
     super(ctx, env);
-    this.sessions = new Map();
-    for (const ws of this.ctx.getWebSockets()) {
-      const att = ws.deserializeAttachment();
-      if (att) this.sessions.set(ws, att);
-    }
-    this.ctx.setWebSocketAutoResponse(new WebSocketRequestResponsePair("ping", "pong"));
+    this.onlineStudents = new Map();
+    this.teacherLastSeen = 0;
   }
 
   async state(roomCode = "") {
-    return (await this.ctx.storage.get("roomState")) || {
+    return (await this.ctx.storage.get("roomStateV2")) || {
       code: roomCode,
+      version: 0,
       students: {},
       confusions: [],
       question: null,
@@ -55,263 +74,236 @@ export class LiveRoom extends DurableObject {
       startedAt: null,
       endedAt: null,
       teacherUpdatedAt: 0,
-      updated: Date.now(),
+      updated: now(),
+    };
+  }
+
+  async putState(state) {
+    state.version = Number(state.version || 0) + 1;
+    state.updated = now();
+    const encoded = JSON.stringify(state);
+    if (encoded.length > 1_700_000) {
+      throw new Error("Canlı tahta verisi çok büyüdü. Eski çizimleri veya büyük içerikleri azaltın.");
+    }
+    await this.ctx.storage.put("roomStateV2", state);
+    return state;
+  }
+
+  touchStudent(id, name) {
+    if (!id) return;
+    this.onlineStudents.set(id, { at: now(), name: cleanName(name) });
+  }
+
+  touchTeacher() {
+    this.teacherLastSeen = now();
+  }
+
+  presence() {
+    const cutoff = now() - 15000;
+    for (const [id, x] of this.onlineStudents) if (!x || x.at < cutoff) this.onlineStudents.delete(id);
+    const ids = [...this.onlineStudents.keys()];
+    return {
+      onlineStudents: ids.length,
+      onlineStudentIds: ids,
+      teacherOnline: this.teacherLastSeen >= cutoff,
+      teacherConnections: this.teacherLastSeen >= cutoff ? 1 : 0,
     };
   }
 
   async validTeacher(token, create = false) {
+    token = cleanId(token, 160);
     if (!token) return false;
-    let saved = await this.ctx.storage.get("teacherToken");
+    let saved = await this.ctx.storage.get("teacherTokenV2");
     if (!saved && create) {
-      await this.ctx.storage.put("teacherToken", token);
+      await this.ctx.storage.put("teacherTokenV2", token);
       saved = token;
     }
     if (saved && saved !== token && create) {
-      const state = await this.ctx.storage.get("roomState");
-      const stale = !!state?.endedAt || !state?.updated || (Date.now() - Number(state.updated || 0) > 12 * 60 * 60 * 1000);
+      const state = await this.state();
+      const stale = !!state.endedAt || !state.updated || now() - Number(state.updated || 0) > 6 * 60 * 60 * 1000;
       if (stale) {
-        await this.ctx.storage.put("teacherToken", token);
-        await this.ctx.storage.delete("roomState");
+        await this.ctx.storage.put("teacherTokenV2", token);
+        await this.ctx.storage.delete("roomStateV2");
         saved = token;
       }
     }
     return saved === token;
   }
 
-  async fetch(request) {
-    const url = new URL(request.url);
-    const room = (url.searchParams.get("room") || "").slice(0, 32);
-
-    if (url.pathname === "/ws") {
-      if ((request.headers.get("Upgrade") || "").toLowerCase() !== "websocket") {
-        return new Response("Upgrade: websocket gerekli", { status: 426, headers: corsHeaders });
-      }
-      const role = url.searchParams.get("role") === "teacher" ? "teacher" : "student";
-      if (role === "teacher") {
-        const ok = await this.validTeacher(url.searchParams.get("token") || "", true);
-        if (!ok) return new Response("Öğretmen anahtarı geçersiz", { status: 403, headers: corsHeaders });
-      }
-
-      const pair = new WebSocketPair();
-      const [client, server] = Object.values(pair);
-      this.ctx.acceptWebSocket(server);
-      const attachment = { role, studentId: null, name: null };
-      server.serializeAttachment(attachment);
-      this.sessions.set(server, attachment);
-      const current = await this.state(room);
-      server.send(JSON.stringify({ type: "room", room: this.roomFor(role, current, attachment.studentId) }));
-      return new Response(null, { status: 101, webSocket: client });
-    }
-
-    if (url.pathname.startsWith("/media/")) {
-      const mediaId = decodeURIComponent(url.pathname.slice("/media/".length)).replace(/[^0-9A-Za-z._-]/g, "").slice(0, 160);
-      if (!mediaId) return json({ ok: false, error: "media id gerekli" }, 400);
-      const key = `rooms/${room}/${mediaId}`;
-
-      if (request.method === "PUT") {
-        const ok = await this.validTeacher(url.searchParams.get("token") || "", false);
-        if (!ok) return json({ ok: false, error: "yetkisiz" }, 403);
-        const contentType = request.headers.get("Content-Type") || "application/octet-stream";
-        await this.env.LIVE_MEDIA.put(key, request.body, {
-          httpMetadata: { contentType, cacheControl: "public, max-age=3600" },
-          customMetadata: { room, uploadedAt: new Date().toISOString() },
-        });
-        const publicUrl = `${url.origin}/media/${encodeURIComponent(mediaId)}?room=${encodeURIComponent(room)}`;
-        return json({ ok: true, url: publicUrl });
-      }
-
-      if (request.method === "GET") {
-        const object = await this.env.LIVE_MEDIA.get(key);
-        if (!object) return new Response("Dosya bulunamadı", { status: 404, headers: corsHeaders });
-        const headers = new Headers(corsHeaders);
-        object.writeHttpMetadata(headers);
-        headers.set("etag", object.httpEtag);
-        headers.set("Cache-Control", headers.get("Cache-Control") || "public, max-age=3600");
-        return new Response(object.body, { headers });
-      }
-      return new Response("Method not allowed", { status: 405, headers: corsHeaders });
-    }
-
-    return json({ ok: false, error: "endpoint yok" }, 404);
-  }
-
-  presence() {
-    const ids = new Set();
-    let teacherConnections = 0;
-    for (const ws of this.ctx.getWebSockets()) {
-      try {
-        const att = ws.deserializeAttachment() || this.sessions.get(ws);
-        if (att?.role === "student" && att.studentId) ids.add(String(att.studentId));
-        if (att?.role === "teacher") teacherConnections++;
-      } catch {}
-    }
-    return { onlineStudents: ids.size, onlineStudentIds: [...ids], teacherOnline: teacherConnections > 0, teacherConnections };
-  }
-
-  roomFor(role, state, studentId) {
+  roomFor(role, state, studentId = "") {
     const presence = this.presence();
     if (role === "teacher") return { ...state, presence };
-    const own = studentId && state.students?.[studentId] ? { [studentId]: state.students[studentId] } : {};
+    const sid = cleanId(studentId);
+    const own = sid && state.students?.[sid] ? { [sid]: state.students[sid] } : {};
     const safeQuestion = state.question
       ? { ...state.question, correct: state.question.revealed ? state.question.correct : null }
       : null;
     return {
       code: state.code,
+      version: state.version || 0,
       question: safeQuestion,
       questionCount: state.questionCount || 0,
-      lesson: state.lesson,
-      board: state.board,
+      lesson: state.lesson || null,
+      board: state.board || null,
       zoom: state.zoom || null,
       paused: !!state.paused,
-      startedAt: state.startedAt,
-      endedAt: state.endedAt,
+      startedAt: state.startedAt || null,
+      endedAt: state.endedAt || null,
       teacherUpdatedAt: state.teacherUpdatedAt || 0,
-      updated: state.updated,
+      updated: state.updated || 0,
       presence: { onlineStudents: presence.onlineStudents, teacherOnline: presence.teacherOnline },
       students: own,
-      confusions: (state.confusions || []).filter((x) => x.studentId === studentId),
+      confusions: (state.confusions || []).filter((x) => x.studentId === sid),
     };
   }
 
-  async persistAndBroadcast(state) {
-    state.updated = Date.now();
-    await this.ctx.storage.put("roomState", state);
-    for (const ws of this.ctx.getWebSockets()) {
-      try {
-        const att = ws.deserializeAttachment() || this.sessions.get(ws) || { role: "student", studentId: null };
-        ws.send(JSON.stringify({ type: "room", room: this.roomFor(att.role, state, att.studentId) }));
-      } catch {}
+  async teacherUpdate(request, url, room) {
+    const token = url.searchParams.get("token") || "";
+    if (!(await this.validTeacher(token, true))) return json({ ok: false, error: "Öğretmen anahtarı geçersiz" }, 403);
+    this.touchTeacher();
+
+    const raw = await request.text();
+    if (raw.length > 1_800_000) return json({ ok: false, error: "Canlı tahta paketi çok büyük" }, 413);
+    let body = {};
+    try { body = raw ? JSON.parse(raw) : {}; } catch { return json({ ok: false, error: "Geçersiz JSON" }, 400); }
+
+    const state = await this.state(room);
+    const t = body.room || {};
+    const newLesson = !!t.startedAt && Number(t.startedAt) !== Number(state.startedAt || 0);
+    const newQuestion = !!t.question?.id && String(t.question.id) !== String(state.question?.id || "");
+    const students = { ...(state.students || {}) };
+    if (newLesson) {
+      for (const st of Object.values(students)) {
+        st.answer = null; st.totalAnswered = 0; st.totalCorrect = 0; st.joined = now();
+      }
+    } else if (newQuestion) {
+      for (const st of Object.values(students)) st.answer = null;
     }
+
+    const merged = {
+      ...state,
+      code: room,
+      question: t.question ?? state.question,
+      questionCount: Number.isFinite(t.questionCount) ? t.questionCount : (state.questionCount || 0),
+      lesson: t.lesson ?? state.lesson,
+      board: t.board ?? state.board,
+      zoom: t.zoom ?? state.zoom,
+      paused: typeof t.paused === "boolean" ? t.paused : !!state.paused,
+      startedAt: t.startedAt ?? state.startedAt,
+      endedAt: t.endedAt ?? state.endedAt,
+      teacherUpdatedAt: Number(t.teacherUpdatedAt || now()),
+      students,
+      confusions: Array.isArray(body.confusions) ? body.confusions.slice(-1000) : (state.confusions || []),
+    };
+
+    const saved = await this.putState(merged);
+    return json({ ok: true, room: this.roomFor("teacher", saved) });
   }
 
-  async webSocketMessage(ws, raw) {
-    const rawText = typeof raw === "string" ? raw : new TextDecoder().decode(raw);
-    if (rawText.length > 600000) return ws.send(JSON.stringify({ type: "error", message: "Mesaj çok büyük" }));
-    let msg;
-    try { msg = JSON.parse(rawText); }
-    catch { return ws.send(JSON.stringify({ type: "error", message: "Geçersiz mesaj" })); }
+  async studentUpdate(request, url, room) {
+    const raw = await request.text();
+    if (raw.length > 300_000) return json({ ok: false, error: "Öğrenci paketi çok büyük" }, 413);
+    let body = {};
+    try { body = raw ? JSON.parse(raw) : {}; } catch { return json({ ok: false, error: "Geçersiz JSON" }, 400); }
 
-    const att = ws.deserializeAttachment() || this.sessions.get(ws) || { role: "student", studentId: null, name: null };
-    const state = await this.state();
+    const sid = cleanId(body.studentId || url.searchParams.get("studentId"));
+    if (!sid) return json({ ok: false, error: "studentId gerekli" }, 400);
+    const name = cleanName(body.student?.name || body.name || "Öğrenci");
+    this.touchStudent(sid, name);
 
-    if (msg.type === "hello") {
-      if (att.role === "student" && msg.studentId && !att.studentId) {
-        att.studentId = String(msg.studentId).slice(0, 120);
-        att.name = String(msg.name || "Öğrenci").slice(0, 80);
-        ws.serializeAttachment(att);
-        this.sessions.set(ws, att);
-        await this.persistAndBroadcast(state);
-      }
-      return;
+    const state = await this.state(room);
+    state.students = state.students || {};
+    const prev = state.students[sid] || { id: sid, name, answer: null, joined: now(), totalAnswered: 0, totalCorrect: 0 };
+    let answer = prev.answer ?? null;
+    let totalAnswered = Number(prev.totalAnswered || 0);
+    let totalCorrect = Number(prev.totalCorrect || 0);
+    const incomingAnswer = Number.isInteger(body.student?.answer) && body.student.answer >= 0 && body.student.answer <= 3
+      ? body.student.answer : null;
+    const canAnswer = !!state.question && !state.paused && !state.endedAt;
+    if (canAnswer && answer == null && incomingAnswer != null) {
+      answer = incomingAnswer;
+      totalAnswered += 1;
+      if (incomingAnswer === state.question.correct) totalCorrect += 1;
     }
 
-    // Telefon, ilk broadcast oturum kimliği oluşmadan geldiyse güncel oda/tahtayı tekrar çekebilir.
-    if (msg.type === "request_room") {
-      try {
-        const fresh = await this.state();
-        ws.send(JSON.stringify({ type: "room", room: this.roomFor(att.role, fresh, att.studentId) }));
-      } catch {}
-      return;
-    }
+    state.students[sid] = {
+      id: sid,
+      name,
+      answer,
+      joined: prev.joined || now(),
+      totalAnswered,
+      totalCorrect,
+    };
 
-    if (msg.type === "teacher_update") {
-      if (att.role !== "teacher") return;
-      const t = msg.room || {};
-      const newLesson = !!t.startedAt && Number(t.startedAt) !== Number(state.startedAt || 0);
-      const newQuestion = !!t.question?.id && String(t.question.id) !== String(state.question?.id || "");
-      const students = { ...(state.students || {}) };
-      if (newLesson) {
-        for (const st of Object.values(students)) {
-          st.answer = null; st.totalAnswered = 0; st.totalCorrect = 0; st.joined = Date.now();
-        }
-      } else if (newQuestion) {
-        for (const st of Object.values(students)) st.answer = null;
-      }
-      const merged = {
-        ...state,
-        code: t.code || state.code,
-        question: t.question ?? state.question,
-        questionCount: Number.isFinite(t.questionCount) ? t.questionCount : (state.questionCount || 0),
-        lesson: t.lesson ?? state.lesson,
-        board: t.board ?? state.board,
-        zoom: t.zoom ?? state.zoom,
-        paused: typeof t.paused === "boolean" ? t.paused : !!state.paused,
-        startedAt: t.startedAt ?? state.startedAt,
-        endedAt: t.endedAt ?? state.endedAt,
-        teacherUpdatedAt: Number(t.teacherUpdatedAt || Date.now()),
-        students,
-        confusions: state.confusions || [],
-      };
-      await this.persistAndBroadcast(merged);
-      return;
-    }
-
-    if (msg.type === "teacher_confusions") {
-      if (att.role !== "teacher") return;
-      state.confusions = Array.isArray(msg.confusions) ? msg.confusions.slice(0, 1000) : state.confusions || [];
-      await this.persistAndBroadcast(state);
-      return;
-    }
-
-    if (msg.type === "student_update") {
-      if (att.role !== "student") return;
-      const requestedSid = String(msg.studentId || "").slice(0, 120);
-      const sid = String(att.studentId || requestedSid).slice(0, 120);
-      if (!sid) return;
-      if (att.studentId && requestedSid && requestedSid !== att.studentId) {
-        return ws.send(JSON.stringify({ type: "error", message: "Öğrenci kimliği değiştirilemez" }));
-      }
-      att.studentId = sid;
-      att.name = String(msg.student?.name || att.name || "Öğrenci").slice(0, 80);
-      ws.serializeAttachment(att);
-      this.sessions.set(ws, att);
-
-      state.students = state.students || {};
-      const prev = state.students[sid] || { id: sid, name: att.name, answer: null, joined: Date.now(), totalAnswered: 0, totalCorrect: 0 };
-      let answer = prev.answer ?? null;
-      let totalAnswered = Number(prev.totalAnswered || 0);
-      let totalCorrect = Number(prev.totalCorrect || 0);
-      const incomingAnswer = Number.isInteger(msg.student?.answer) && msg.student.answer >= 0 && msg.student.answer <= 3 ? msg.student.answer : null;
-      const canAnswer = !!state.question && !state.paused && !state.endedAt;
-      if (canAnswer && answer == null && incomingAnswer != null) {
-        answer = incomingAnswer;
-        totalAnswered += 1;
-        if (incomingAnswer === state.question.correct) totalCorrect += 1;
-      }
-      state.students[sid] = {
-        id: sid,
-        name: att.name,
-        answer,
-        joined: prev.joined || Date.now(),
-        totalAnswered,
-        totalCorrect,
-      };
-
+    if (Array.isArray(body.confusions)) {
       const others = (state.confusions || []).filter((x) => x.studentId !== sid);
       const resolvedOwn = (state.confusions || []).filter((x) => x.studentId === sid && x.resolved);
-      const own = Array.isArray(msg.confusions)
-        ? msg.confusions.filter((x) => String(x.studentId) === sid && !x.resolved).slice(0, 200).map((x) => ({
-            id: String(x.id || "").slice(0, 160),
-            studentId: sid,
-            studentName: att.name,
-            target: String(x.target || "").slice(0, 220),
-            label: String(x.label || "").slice(0, 300),
-            note: String(x.note || "").slice(0, 240),
-            at: Number(x.at || Date.now()),
-            resolved: false,
-          }))
-        : [];
+      const own = body.confusions
+        .filter((x) => String(x.studentId) === sid && !x.resolved)
+        .slice(-200)
+        .map((x) => ({
+          id: cleanId(x.id, 160), studentId: sid, studentName: name,
+          target: cleanId(x.target, 220), label: cleanId(x.label, 300), note: cleanId(x.note, 240),
+          at: Number(x.at || now()), resolved: false,
+        }));
       state.confusions = [...others, ...resolvedOwn, ...own].slice(-1000);
-      await this.persistAndBroadcast(state);
     }
+
+    const saved = await this.putState(state);
+    return json({ ok: true, room: this.roomFor("student", saved, sid) });
   }
 
-  async webSocketClose(ws) {
-    this.sessions.delete(ws);
-    try { await this.persistAndBroadcast(await this.state()); } catch {}
+  async stateRead(url, room) {
+    const role = url.searchParams.get("role") === "teacher" ? "teacher" : "student";
+    const sid = cleanId(url.searchParams.get("studentId"));
+    if (role === "teacher") {
+      if (!(await this.validTeacher(url.searchParams.get("token") || "", true))) return json({ ok: false, error: "Öğretmen anahtarı geçersiz" }, 403);
+      this.touchTeacher();
+    } else if (sid) {
+      this.touchStudent(sid, url.searchParams.get("name") || "Öğrenci");
+    }
+    const state = await this.state(room);
+    return json({ ok: true, room: this.roomFor(role, state, sid) });
   }
-  async webSocketError(ws) {
-    this.sessions.delete(ws);
-    try { await this.persistAndBroadcast(await this.state()); } catch {}
+
+  async media(request, url, room) {
+    const mediaId = decodeURIComponent(url.pathname.slice("/media/".length)).replace(/[^0-9A-Za-z._-]/g, "").slice(0, 160);
+    if (!mediaId) return json({ ok: false, error: "media id gerekli" }, 400);
+    const key = `rooms-v2/${room}/${mediaId}`;
+    if (request.method === "PUT") {
+      if (!(await this.validTeacher(url.searchParams.get("token") || "", false))) return json({ ok: false, error: "yetkisiz" }, 403);
+      const contentType = request.headers.get("Content-Type") || "application/octet-stream";
+      await this.env.LIVE_MEDIA.put(key, request.body, {
+        httpMetadata: { contentType, cacheControl: "public, max-age=3600" },
+        customMetadata: { room, uploadedAt: new Date().toISOString() },
+      });
+      const publicUrl = `${url.origin}/media/${encodeURIComponent(mediaId)}?room=${encodeURIComponent(room)}`;
+      return json({ ok: true, url: publicUrl });
+    }
+    if (request.method === "GET") {
+      const object = await this.env.LIVE_MEDIA.get(key);
+      if (!object) return new Response("Dosya bulunamadı", { status: 404 });
+      const headers = new Headers({ "Cache-Control": "public, max-age=3600" });
+      object.writeHttpMetadata(headers);
+      headers.set("etag", object.httpEtag);
+      return new Response(object.body, { headers });
+    }
+    return new Response("Method not allowed", { status: 405 });
+  }
+
+  async fetch(request) {
+    const url = new URL(request.url);
+    const room = cleanRoom(url.searchParams.get("room"));
+    if (!room) return json({ ok: false, error: "room gerekli" }, 400);
+
+    try {
+      if (url.pathname === "/api/live/state" && request.method === "GET") return await this.stateRead(url, room);
+      if (url.pathname === "/api/live/teacher" && request.method === "POST") return await this.teacherUpdate(request, url, room);
+      if (url.pathname === "/api/live/student" && request.method === "POST") return await this.studentUpdate(request, url, room);
+      if (url.pathname.startsWith("/media/")) return await this.media(request, url, room);
+      return json({ ok: false, error: "endpoint yok" }, 404);
+    } catch (err) {
+      return json({ ok: false, error: String(err?.message || err) }, 500);
+    }
   }
 }

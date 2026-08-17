@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="theme-color" content="#0f172a" />
-<meta name="simo-build" content="2026-08-17-mobile-student-fix1">
+<meta name="simo-build" content="2026-08-17-https-sync-fallback1">
 <meta name="simo-build" content="SIMOBOARD_STUDIO_3_20260817" />
 <meta name="simo-board-version" content="studio-2.0" />
 <title>Okul Simo • SimoBoard Studio 3 — Canlı Ders</title>
@@ -815,6 +815,7 @@ function setStudentJoinedUI(on=true){document.body.classList.toggle('student-joi
 
 let studentSession=null, studentSelected=null, studentQuestionId=null, studentQuestionRevealed=false;
 let realtimeSocket=null,realtimeTimer=null,realtimeWanted=true,realtimeRole=STUDENT_PORTAL?'student':'teacher',realtimeLastState='local';
+let realtimePollTimer=null,realtimePolling=false,realtimePollBusy=false,realtimeWsRetryTimer=null,realtimeTransport='none';
 let realtimeLastSyncAt=0,realtimeHealthOkAt=0,realtimeReconnectAttempt=0,realtimeInitialRoomSeen=false,realtimeInitialSyncTimer=null;
 function randomSecret(){const a=new Uint8Array(24);crypto.getRandomValues(a);return [...a].map(x=>x.toString(16).padStart(2,'0')).join('')}
 function realtimeCfg(){try{return JSON.parse(localStorage.getItem(REALTIME_KEY)||'{}')}catch{return{}}}
@@ -843,7 +844,53 @@ function getRoom(){try{const r=JSON.parse(localStorage.getItem(LOCAL_ROOM_KEY)||
 function createRoom(save=true){const room={code:String(Math.floor(1000+Math.random()*9000)),teacherToken:STUDENT_PORTAL?'':randomSecret(),students:{},question:null,questionCount:0,lesson:null,board:null,zoom:null,paused:false,confusions:[],startedAt:null,endedAt:null,teacherUpdatedAt:STUDENT_PORTAL?0:Date.now(),updated:Date.now()};if(save)localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(room));return room}
 function teacherCloudRoom(r){return{code:r.code,question:r.question||null,questionCount:r.questionCount||0,lesson:r.lesson||null,board:r.board||null,zoom:r.zoom||null,paused:!!r.paused,startedAt:r.startedAt||null,endedAt:r.endedAt||null,teacherUpdatedAt:r.teacherUpdatedAt||r.updated||Date.now(),updated:r.updated||Date.now()}}
 function studentCloudPayload(r){if(!studentSession)return null;return{studentId:studentSession.id,student:r.students?.[studentSession.id]||{id:studentSession.id,name:studentSession.name},confusions:(r.confusions||[]).filter(x=>x.studentId===studentSession.id)}}
-function realtimeSend(obj){try{if(realtimeSocket?.readyState===WebSocket.OPEN)realtimeSocket.send(JSON.stringify(obj))}catch(e){console.warn('realtime send',e)}}
+
+function realtimeStopPolling(){
+  realtimePolling=false;realtimePollBusy=false;clearTimeout(realtimePollTimer);realtimePollTimer=null;
+}
+function realtimeSyncURL(base){
+  const r=getRoom(),q=new URLSearchParams({room:r.code,role:realtimeRole});
+  if(realtimeRole==='teacher')q.set('token',r.teacherToken||'');
+  else if(studentSession?.id)q.set('studentId',studentSession.id);
+  return normalizedEndpoint(base)+'/sync?'+q.toString();
+}
+async function realtimePollOnce(payload=null){
+  if(!realtimePolling||realtimePollBusy||!realtimeWanted)return;
+  const base=normalizedEndpoint(okulSimoBackendDefault()||realtimeCfg().endpoint);if(!base)return;
+  realtimePollBusy=true;
+  try{
+    let body=null;
+    if(payload)body=payload;
+    else if(realtimeRole==='teacher')body={type:'teacher_update',room:teacherCloudRoom(getRoom())};
+    else if(studentSession){const x=studentCloudPayload(getRoom());if(x)body={type:'student_update',...x}}
+    const opt=body?{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),cache:'no-store'}:{method:'GET',cache:'no-store'};
+    const res=await fetch(realtimeSyncURL(base),opt);
+    if(!res.ok)throw new Error('HTTPS canlı senkron '+res.status);
+    const data=await res.json();
+    if(data?.room){realtimeLastSyncAt=Date.now();applyInternetRoom(data.room)}
+    realtimeTransport='https';setRealtimeUI('online','HTTPS canlı yedek bağlantı • tahta ve sorular senkronize');
+  }catch(e){
+    console.warn('HTTPS canlı senkron',e);
+    if(!realtimeSocket||realtimeSocket.readyState!==WebSocket.OPEN)setRealtimeUI('error','Canlı bağlantı yeniden deneniyor…');
+  }finally{
+    realtimePollBusy=false;
+    if(realtimePolling)realtimePollTimer=setTimeout(()=>realtimePollOnce(),850);
+  }
+}
+function realtimeStartPolling(base){
+  if(!realtimeWanted)return;
+  if(base)localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:normalizedEndpoint(base)}));
+  if(realtimePolling)return;
+  realtimePolling=true;clearTimeout(realtimePollTimer);
+  setRealtimeUI('connecting','WebSocket yerine HTTPS canlı bağlantı hazırlanıyor…');
+  realtimePollOnce();
+}
+async function realtimeSendFallback(obj){
+  if(!realtimePolling)return false;
+  try{await realtimePollOnce(obj);return true}catch{return false}
+}
+
+function realtimeSend(obj){try{if(realtimeSocket?.readyState===WebSocket.OPEN){realtimeSocket.send(JSON.stringify(obj));return}if(realtimePolling)realtimeSendFallback(obj)}catch(e){console.warn('realtime send',e)}}
 function sendRoomToInternet(r){if(realtimeLastState!=='online')return;if(STUDENT_PORTAL){const x=studentCloudPayload(r);if(x)realtimeSend({type:'student_update',...x})}else realtimeSend({type:'teacher_update',room:teacherCloudRoom(r)})}
 function saveRoom(r){r.updated=Date.now();if(!STUDENT_PORTAL)r.teacherUpdatedAt=r.updated;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r));renderRoomState(r);emitLive({type:'room',room:r,role:STUDENT_PORTAL?'student':'teacher'});sendRoomToInternet(r)}
 function emitLive(data){data._t=Date.now();try{localStorage.setItem(LIVE_EVENT,JSON.stringify(data))}catch{};try{liveChannel?.postMessage(data)}catch{}}
@@ -863,20 +910,29 @@ function applyInternetRoom(room){
   if(localTeacherWins&&realtimeLastState==='online')setTimeout(()=>realtimeSend({type:'teacher_update',room:teacherCloudRoom(merged)}),0);
 }
 function realtimeConnect(force=false){
-  clearTimeout(realtimeTimer);clearTimeout(realtimeInitialSyncTimer);const cfg=realtimeCfg(),base=normalizedEndpoint(okulSimoBackendDefault()||cfg.endpoint);if(!base||!realtimeWanted){setRealtimeUI('local');return}
-  if(!navigator.onLine){setRealtimeUI('error','Cihaz internete bağlı değil • son tahta yerel olarak korunuyor.');return}
-  try{realtimeSocket?.close()}catch{};const r=getRoom();if(STUDENT_PORTAL){const rp=new URLSearchParams(location.search).get('room');if(rp&&r.code!==rp){r.code=rp;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r))}}
-  const q=new URLSearchParams({room:r.code,role:realtimeRole});if(realtimeRole==='teacher')q.set('token',r.teacherToken||'');const url=wsEndpoint(base)+'/ws?'+q.toString();setRealtimeUI('connecting','Canlı odaya yeniden bağlanılıyor…');realtimeInitialRoomSeen=false;
+  clearTimeout(realtimeTimer);clearTimeout(realtimeInitialSyncTimer);clearTimeout(realtimeWsRetryTimer);
+  const cfg=realtimeCfg(),base=normalizedEndpoint(okulSimoBackendDefault()||cfg.endpoint);
+  if(!base||!realtimeWanted){realtimeStopPolling();setRealtimeUI('local');return}
+  if(!navigator.onLine){setRealtimeUI('error','Cihaz internete bağlı değil • son tahta korunuyor.');return}
+  try{realtimeSocket?.close()}catch{}
+  const r=getRoom();
+  if(STUDENT_PORTAL){const rp=new URLSearchParams(location.search).get('room');if(rp&&r.code!==rp){r.code=rp;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r))}}
+  const q=new URLSearchParams({room:r.code,role:realtimeRole});if(realtimeRole==='teacher')q.set('token',r.teacherToken||'');
+  const url=wsEndpoint(base)+'/ws?'+q.toString();
+  setRealtimeUI('connecting','Canlı odaya bağlanılıyor…');realtimeInitialRoomSeen=false;
+  let openGuard=null;
   try{
     const ws=new WebSocket(url);realtimeSocket=ws;let opened=false;
-    ws.onopen=()=>{opened=true;realtimeReconnectAttempt=0;realtimeLastSyncAt=Date.now();setRealtimeUI('online');realtimeSend({type:'hello',studentId:studentSession?.id||null,name:studentSession?.name||null});
+    openGuard=setTimeout(()=>{if(!opened&&realtimeSocket===ws){try{ws.close()}catch{};realtimeStartPolling(base)}},4500);
+    ws.onopen=()=>{opened=true;clearTimeout(openGuard);realtimeStopPolling();realtimeTransport='websocket';realtimeReconnectAttempt=0;realtimeLastSyncAt=Date.now();setRealtimeUI('online','WebSocket canlı bağlantı');
+      realtimeSend({type:'hello',studentId:studentSession?.id||null,name:studentSession?.name||null});
       if(STUDENT_PORTAL&&studentSession){const x=studentCloudPayload(getRoom());if(x)realtimeSend({type:'student_update',...x})}
       if(!STUDENT_PORTAL){realtimeInitialSyncTimer=setTimeout(()=>{if(!realtimeInitialRoomSeen&&realtimeSocket===ws&&ws.readyState===WebSocket.OPEN)realtimeSend({type:'teacher_update',room:teacherCloudRoom(getRoom())})},900);setTimeout(()=>syncPendingBoardMedia(),180);setTimeout(()=>recoverZoomAfterNetwork(),450)}
     };
     ws.onmessage=e=>{try{realtimeLastSyncAt=Date.now();refreshLiveConnectionStrip();const m=JSON.parse(e.data);if(m.type==='room'&&m.room){realtimeInitialRoomSeen=true;clearTimeout(realtimeInitialSyncTimer);applyInternetRoom(m.room)}if(m.type==='error')toast('Canlı bağlantı: '+m.message,4200)}catch(err){console.warn('realtime message',err)}};
-    ws.onerror=()=>{if(!opened)setRealtimeUI('error','Canlı odaya ulaşılamadı • yerel tahta korunuyor.')};
-    ws.onclose=()=>{if(realtimeSocket!==ws)return;realtimeSocket=null;clearTimeout(realtimeInitialSyncTimer);if(realtimeWanted&&normalizedEndpoint(realtimeCfg().endpoint)){realtimeReconnectAttempt=Math.min(realtimeReconnectAttempt+1,6);const delay=Math.min(12000,1400*Math.pow(1.55,realtimeReconnectAttempt));setRealtimeUI('error','Bağlantı koptu • ders kapanmadı, yeniden bağlanılıyor…');realtimeTimer=setTimeout(()=>realtimeConnect(),delay)}else setRealtimeUI('local')}
-  }catch(e){setRealtimeUI('error',e.message)}
+    ws.onerror=()=>{clearTimeout(openGuard);if(!opened)realtimeStartPolling(base)};
+    ws.onclose=()=>{clearTimeout(openGuard);if(realtimeSocket!==ws)return;realtimeSocket=null;clearTimeout(realtimeInitialSyncTimer);if(realtimeWanted){realtimeStartPolling(base);realtimeWsRetryTimer=setTimeout(()=>{if(realtimeWanted)realtimeConnect(true)},20000)}else{realtimeStopPolling();setRealtimeUI('local')}};
+  }catch(e){clearTimeout(openGuard);realtimeStartPolling(base)}
 }
 async function realtimeHealth(endpoint){
   const base=normalizedEndpoint(endpoint);if(!base)throw new Error('Canlı bağlantı adresi boş.');
@@ -1276,7 +1332,7 @@ $('#settingsZoomOpen').onclick=zoomOpenDock;$('#zoomQuickBtn').onclick=zoomOpenD
 $('#saveZoomSettings').onclick=()=>{zoomSaveCfg();zoomRefreshStatus(true);toast('Zoom ayarları kaydedildi')};$('#testZoomConnector').onclick=zoomTestConnector;$('#connectZoomAccount').onclick=zoomConnectAccount;$('#disconnectZoomAccount').onclick=zoomDisconnect;$('#createZoomMeeting').onclick=()=>zoomCreateMeeting().catch(()=>{});
 
 window.addEventListener('offline',()=>{if(normalizedEndpoint(realtimeCfg().endpoint))setRealtimeUI('error','İnternet kesildi • ders ve son tahta korunuyor.');if(!STUDENT_PORTAL&&getRoom().startedAt&&!getRoom().endedAt)zoomSetLine('zoomSdkState','warn','İnternet kesildi • bağlantının geri gelmesi bekleniyor')});
-window.addEventListener('online',()=>{const ep=normalizedEndpoint(realtimeCfg().endpoint);if(ep){realtimeWanted=true;setTimeout(()=>realtimePrepareAndConnect(ep,false),120)}setTimeout(()=>recoverZoomAfterNetwork(),650)});
+window.addEventListener('online',()=>{const ep=normalizedEndpoint(okulSimoBackendDefault()||realtimeCfg().endpoint);if(ep){realtimeWanted=true;setTimeout(()=>realtimePrepareAndConnect(ep,false),120)}setTimeout(()=>recoverZoomAfterNetwork(),650)});
 window.addEventListener('pagehide',()=>{try{if(realtimeSocket?.readyState===WebSocket.OPEN)realtimeSocket.close(1000,'pagehide')}catch{}});
 window.addEventListener('pageshow',e=>{if(!e.persisted)return;const roomParam=new URLSearchParams(location.search).get('room');if(STUDENT_PORTAL&&roomParam)restoreStudentSession(roomParam);const ep=normalizedEndpoint(realtimeCfg().endpoint);if(ep){realtimeWanted=true;setTimeout(()=>realtimeConnect(true),120)}});
 /* === SIMOBOARD PRO ENGINE === */
@@ -1402,7 +1458,7 @@ simoInit=function(){SIMO_BASE_INIT_V2();const svg=$('#simoInkLayer'),ed=$('#simo
  const tb=$('#simoTextSelectionTools');tb?.querySelectorAll('[data-text-style]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();const k=b.dataset.textStyle;o[k]=!o[k];simoSave()});tb?.querySelectorAll('[data-text-align]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();o.align=b.dataset.textAlign;simoSave()});tb?.querySelectorAll('[data-text-size]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();o.fontSize=Math.max(14,Math.min(120,(o.fontSize||30)+(b.dataset.textSize==='up'?4:-4)));simoSave()});const tc=$('#simoSelectedTextColor');if(tc)tc.oninput=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;o.color=tc.value;simoSave()};document.addEventListener('pointerup',e=>{if(simoDrawing)simoEnd(e)});
 };
 
-(async function init(){if(ensureStudentAppOrigin())return;applyBrand();boardLoad();simoNormalizeBoardBlocks();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt'),autoBackend=okulSimoBackendDefault();if(rtParam)localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:normalizedEndpoint(rtParam)}));if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');const restored=restoreStudentSession(roomParam);if(restored)$('#studentStatusText').textContent='Odaya bağlanılıyor • tahta eşitleniyor'}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=20260817-mobilefix1',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})})();
+(async function init(){applyBrand();boardLoad();simoNormalizeBoardBlocks();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt'),autoBackend=okulSimoBackendDefault();if(rtParam)localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:normalizedEndpoint(rtParam)}));if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');const restored=restoreStudentSession(roomParam);if(restored)$('#studentStatusText').textContent='Odaya bağlanılıyor • tahta eşitleniyor'}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=20260817-mobilefix1',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})})();
 
 
 </script>

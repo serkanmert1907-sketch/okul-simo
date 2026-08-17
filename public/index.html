@@ -155,7 +155,7 @@ body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.p
 @media(max-width:760px){
  .simo-board-badge{display:none}.simo-canvas-toolbar{left:8px;right:8px;top:auto;bottom:8px;width:auto;flex-direction:row;overflow-x:auto;padding:5px;border-radius:13px}.simo-tool{flex:0 0 37px}.simo-tool.sep{margin-top:0;margin-left:5px}.simo-tool.sep:before{top:4px;bottom:4px;left:-5px;right:auto;border-top:0;border-left:1px solid #e2e8f0}.simo-tool[data-tip]:hover:after{display:none}.simo-tool-panel{position:fixed;left:8px;right:8px;top:auto;bottom:58px;justify-content:center;overflow:auto}.simo-zoom-controls{right:8px;bottom:64px}.simo-mini-pages{right:8px;top:8px}.simo-selection-bar{position:fixed!important;left:8px!important;right:8px!important;bottom:58px!important;top:auto!important;justify-content:center}.lesson-screen.board-canvas{padding-bottom:62px}.presenting .simo-canvas-toolbar{left:8px;right:8px;bottom:8px;top:auto}.presenting .simo-tool-panel{left:8px;right:8px;bottom:58px;top:auto}.presenting .simo-zoom-controls{right:8px;bottom:64px}.presenting .simo-mini-pages{right:8px;top:8px}.presenting .lesson-screen.board-canvas{padding:12px 12px 76px!important}
 }
-.student-board-content{position:relative}.student-simo-ink{position:absolute;z-index:8;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}.student-board-block{z-index:2}
+.student-board-content{position:relative}.student-simo-canvas-base{grid-column:1/-1;min-height:520px;border:1px solid #edf1f5;border-radius:14px;background:#fff}.student-simo-ink{position:absolute;z-index:8;inset:0;width:100%;height:100%;min-height:520px;pointer-events:none;overflow:visible}.student-board-block{z-index:2}@media(max-width:760px){.student-simo-canvas-base,.student-simo-ink{min-height:58vh}}
 
 
 
@@ -234,37 +234,6 @@ body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.p
  #teacherBoard.simo-pdf-focus .pdf-focus-active{inset:8px 6px 68px 6px!important}
 }
 
-/* ============================================================ */
-/* SIMOBOARD PRO v3 — PROFESSIONAL WHITEBOARD ENGINE (görsel + araçlar) */
-/* ============================================================ */
-:root{--simo-accent:#0f9f8f;--simo-accent-ink:#087f73;--simo-accent-soft:#e7f7f4;--simo-laser:#ef4444}
-.simo-canvas-toolbar{padding:7px;border-radius:16px;gap:4px}
-.simo-tool{border-radius:10px;transition:background .12s ease,color .12s ease,transform .08s ease}
-.simo-tool:active{transform:scale(.9)}
-.simo-tool svg{width:19px;height:19px;display:block;pointer-events:none}
-.simo-tool.active{background:var(--simo-accent-soft);color:var(--simo-accent-ink);box-shadow:inset 0 0 0 1px #a9e6dd}
-.simo-tool[data-simo-tool="laser"].active{background:#fee2e2;color:#b91c1c;box-shadow:inset 0 0 0 1px #fca5a5}
-.simo-tool-panel{border-radius:13px;padding:8px;gap:6px;flex-wrap:wrap;max-width:236px}
-.simo-color{width:23px;height:23px;transition:transform .1s ease;flex:0 0 auto}
-.simo-color:hover{transform:scale(1.14)}
-.simo-color.active{box-shadow:0 0 0 2px #fff,0 0 0 4px var(--simo-accent)}
-.simo-size{border-radius:8px;font-size:11.5px;padding:0 9px}
-.simo-toggle{height:30px;min-width:34px;padding:0 10px;border:1px solid #dbe3ea;background:#fff;border-radius:8px;font-weight:850;font-size:12px;color:#475569;flex:0 0 auto}
-.simo-toggle:hover{background:#f8fafc}
-.simo-toggle.active{background:var(--simo-accent-soft);border-color:#8dd9ce;color:var(--simo-accent-ink)}
-.simo-file-status{font-size:11.5px;color:#64748b;padding:2px 3px;max-width:196px;line-height:1.4}
-.simo-tool-panel .simo-shape-choice{width:33px;height:30px;font-size:15px}
-.simo-handle{fill:#fff;stroke:var(--simo-accent);stroke-width:1.6;pointer-events:visiblePainted!important;cursor:nwse-resize}
-.simo-handle-outline{fill:none;stroke:var(--simo-accent);stroke-width:1;stroke-dasharray:5 4;pointer-events:none}
-#simoLaserLayer{position:absolute;inset:0;z-index:38;pointer-events:none;width:100%;height:100%;min-height:610px;overflow:visible}
-.simo-zoom-controls,.simo-mini-pages,.simo-selection-bar,.simo-help-toast{border-radius:12px}
-.simo-ink-object.selected{cursor:move}
-#teacherBoard.simo-grid-lines:before{background-image:linear-gradient(#dbe3ee 1px,transparent 1px),linear-gradient(90deg,#dbe3ee 1px,transparent 1px)!important;background-size:26px 26px!important;opacity:.5!important}
-#teacherBoard.simo-grid-off:before{display:none!important}
-@media(max-width:760px){
- .simo-tool svg{width:20px;height:20px}
- .simo-tool-panel{max-width:calc(100vw - 20px)}
-}
 </style>
 </head>
 <body>
@@ -338,27 +307,23 @@ body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.p
 
           <div class="simo-board-badge" aria-hidden="true"><i></i>SimoBoard</div>
           <div class="simo-canvas-toolbar non-present-safe" id="simoCanvasToolbar" aria-label="Tahta araçları">
-            <button class="simo-tool active" data-simo-tool="pointer" data-tip="Seç / taşı (V)"><svg viewBox="0 0 20 20" fill="currentColor"><path d="M4 3l12.2 5-5.1 1.7L9.6 15z"/></svg></button>
-            <button class="simo-tool" data-simo-tool="hand" data-tip="Tahtayı kaydır (H / Boşluk)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.2 9.6V4.4a1.3 1.3 0 0 1 2.6 0v4.4M8.8 8.6V3.3a1.3 1.3 0 0 1 2.6 0v5.5M11.4 9V4.6a1.3 1.3 0 0 1 2.6 0V10M14 10.2V7a1.3 1.3 0 0 1 2.6 0v5.8c0 3-2.1 5.9-6 5.9-3.6 0-5-1.6-6.4-3.9l-1.6-2.6a1.35 1.35 0 0 1 2.2-1.5l1.4 1.7"/></svg></button>
-            <button class="simo-tool sep" data-simo-tool="pen" data-tip="Kalem (P)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16l.5-3.3L13.1 4.1a1.6 1.6 0 0 1 2.3 0l.5.5a1.6 1.6 0 0 1 0 2.3L7.3 15.5z"/><path d="M11.6 5.6l2.8 2.8"/></svg></button>
-            <button class="simo-tool" data-simo-tool="highlighter" data-tip="Fosforlu kalem (M)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.3 13.7l1.6-4.6L13.2 4l2.8 2.8-5.1 5.3z"/><path d="M4 16.2h4.4"/></svg></button>
-            <button class="simo-tool" data-simo-tool="eraser" data-tip="Silgi (E)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9.2 4.2l6.6 6.6-5.2 5.2H7.4l-4-4z"/><path d="M8 16H3.6"/></svg></button>
-            <button class="simo-tool sep" data-simo-tool="text" data-tip="Metin (T)">T</button>
-            <button class="simo-tool" data-simo-tool="note" data-tip="Yapışkan not (N)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M4 4.2h9.4l3 3V16H4z"/><path d="M13.4 4.2v3h3"/></svg></button>
-            <button class="simo-tool" data-simo-tool="shape" data-tip="Şekil (S)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.3" y="3.3" width="7.6" height="7.6" rx="1.4"/><circle cx="13.8" cy="13.8" r="3"/></svg></button>
-            <button class="simo-tool" data-simo-tool="arrow" data-tip="Ok / bağlantı (A)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 15.8L15.8 4.2"/><path d="M8.4 4.2h7.4v7.4"/></svg></button>
-            <button class="simo-tool" data-simo-tool="laser" data-tip="Lazer işaretçi (L)"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="10" cy="10" r="2.3" fill="currentColor" stroke="none"/><path d="M10 2.2v2.2M10 15.6v2.2M2.2 10h2.2M15.6 10h2.2M4.8 4.8l1.5 1.5M13.7 13.7l1.5 1.5M4.8 15.2l1.5-1.5M13.7 6.3l1.5-1.5"/></svg></button>
-            <button class="simo-tool sep" data-simo-action="image" data-tip="Görsel ekle"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="2.8" y="3.8" width="14.4" height="12.4" rx="1.6"/><circle cx="7" cy="8" r="1.15" fill="currentColor" stroke="none"/><path d="M4 15l4.3-4.3 2.4 2.4 2.4-2.4 3.7 3.7"/></svg></button>
+            <button class="simo-tool active" data-simo-tool="pointer" data-tip="Seç / taşı">⌁</button>
+            <button class="simo-tool" data-simo-tool="hand" data-tip="Tahtayı hareket ettir">✋</button>
+            <button class="simo-tool sep" data-simo-tool="pen" data-tip="Kalem">✎</button>
+            <button class="simo-tool" data-simo-tool="highlighter" data-tip="Fosforlu kalem">▰</button>
+            <button class="simo-tool" data-simo-tool="eraser" data-tip="Silgi">⌫</button>
+            <button class="simo-tool sep" data-simo-tool="text" data-tip="Metin">T</button>
+            <button class="simo-tool" data-simo-tool="note" data-tip="Not kartı">▣</button>
+            <button class="simo-tool" data-simo-tool="shape" data-tip="Şekil">◇</button>
+            <button class="simo-tool" data-simo-tool="arrow" data-tip="Ok / bağlantı">↗</button>
+            <button class="simo-tool sep" data-simo-action="image" data-tip="Görsel ekle">▧</button>
             <button class="simo-tool simo-pdf-tool" data-simo-action="pdf" data-tip="PDF ekle">PDF</button>
             <button class="simo-tool" data-simo-action="upload" data-tip="Daha fazla içerik">＋</button>
-            <button class="simo-tool sep" data-simo-action="undo" data-tip="Geri al (Ctrl+Z)">↶</button>
-            <button class="simo-tool" data-simo-action="redo" data-tip="İleri al (Ctrl+Shift+Z)">↷</button>
-            <button class="simo-tool sep" data-simo-action="grid" data-tip="Zemin: nokta / çizgi / düz"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M3 7.3h14M3 12.7h14M7.3 3v14M12.7 3v14"/></svg></button>
-            <button class="simo-tool" data-simo-action="export" data-tip="Sayfayı PNG indir"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 3v9M6.3 8.4L10 12.2l3.7-3.8"/><path d="M4 15.6h12"/></svg></button>
-            <button class="simo-tool" data-simo-action="clear" data-tip="Çizimleri temizle"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.2 6h11.6M7.8 6V4.6A1.4 1.4 0 0 1 9.2 3.2h1.6a1.4 1.4 0 0 1 1.4 1.4V6M6.2 6l.7 9.1A1.5 1.5 0 0 0 8.4 16.5h3.2a1.5 1.5 0 0 0 1.5-1.4L13.8 6"/></svg></button>
+            <button class="simo-tool" data-simo-action="undo" data-tip="Geri al">↶</button>
+            <button class="simo-tool" data-simo-action="redo" data-tip="İleri al">↷</button>
+            <button class="simo-tool" data-simo-action="clear" data-tip="Çizimleri temizle">⋯</button>
           </div>
           <div class="simo-tool-panel" id="simoToolPanel"></div>
-          <svg class="simo-ink-layer" id="simoLaserLayer" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true" style="pointer-events:none"></svg>
           <div class="simo-selection-bar" id="simoSelectionBar">
             <span class="simo-text-selection-tools" id="simoTextSelectionTools">
               <button data-text-style="bold" title="Kalın"><b>B</b></button>
@@ -717,7 +682,7 @@ function applyInternetRoom(room){
   if(STUDENT_PORTAL){
     const ownId=studentSession?.id;const ownLocal=ownId?local.students?.[ownId]:null;const remoteOwn=ownId?room.students?.[ownId]:null;
     const merged={...local,...room,teacherToken:'',students:(remoteOwn||ownLocal)&&ownId?{[ownId]:{...(ownLocal||{}),...(remoteOwn||{})}}:{},confusions:room.confusions||local.confusions||[]};
-    localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(merged));renderRoomState(merged);syncStudentQuestion(merged);if(merged.board&&studentSession)renderStudentBoard(merged);return;
+    localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(merged));renderRoomState(merged);syncStudentQuestion(merged);if(merged.board&&studentSession)renderStudentLesson(merged);return;
   }
   const remoteBlank=!room.startedAt&&!room.endedAt&&!room.board&&!room.lesson&&!room.question&&!Object.keys(room.students||{}).length;
   const localTeacherTs=Number(local.teacherUpdatedAt||0),remoteTeacherTs=Number(room.teacherUpdatedAt||0);
@@ -815,7 +780,7 @@ function updateStudentTeacherPresence(r=getRoom()){
 function renderStudentLesson(r=getRoom()){
   if(!studentSession)return;const snap=r.board||null;const content=$('#studentBoardContent'),stage=$('#studentBoardStage'),banner=$('#studentSessionBanner');if(stage){stage.classList.toggle('session-paused',!!r.paused&&!r.endedAt);stage.classList.toggle('session-ended',!!r.endedAt)}const teacherAway=!!normalizedEndpoint(realtimeCfg().endpoint)&&realtimeLastState==='online'&&r.presence?.teacherOnline===false&&!!r.startedAt&&!r.endedAt;if(banner){if(r.endedAt){banner.textContent='Ders sona erdi • Son tahta ekranda kalıyor';banner.className='student-session-banner ended'}else if(r.paused){banner.textContent='⏸ Ders kısa süre duraklatıldı • Öğretmen devam edince ekran otomatik güncellenecek';banner.className='student-session-banner'}else if(teacherAway){banner.textContent='↻ Öğretmenin bağlantısı kısa süre kesildi • Tahta açık kalıyor, yeniden bağlanması bekleniyor';banner.className='student-session-banner'}else banner.className='student-session-banner hidden'};updateStudentTeacherPresence(r);
   if(!snap?.pages?.length){$('#studentBoardTopic').textContent='Ders bekleniyor';$('#studentBoardPageName').textContent='—';$('#studentPageStatus').textContent='Sayfa —';content.className='student-board-content';content.innerHTML='<div class="student-board-wait"><div><b>Tahta henüz açılmadı</b><span>Öğretmen derse başladığında içerik burada canlı görünecek.</span></div></div>';return}
-  const pi=Math.max(0,Math.min(Number(snap.activePage)||0,snap.pages.length-1));const p=snap.pages[pi];if(snap.brandName)$('#studentBrandName').textContent=snap.brandName+' Canlı Ders';$('#studentBoardTopic').textContent=snap.topic||'Canlı Ders';$('#studentBoardPageName').textContent=p.name||`${pi+1}. Sayfa`;$('#studentPageStatus').textContent=`${pi+1} / ${snap.pages.length}`;content.className='student-board-content layout-'+(p.layout||'one')+' student-page-change';content.style.setProperty('--student-split',(p.split||50)+'%');content.innerHTML=((p.blocks||[]).length?p.blocks.map(b=>studentBoardBlockHTML(b,pi)).join(''):'<div class="student-board-wait"><div><b>Bu sayfa boş</b><span>Öğretmen içerik eklediğinde burada görünecek.</span></div></div>')+(typeof simoStudentInkSVG==='function'?simoStudentInkSVG(p):'');$$('#studentBoardContent [data-confuse]').forEach(btn=>btn.onclick=()=>openConfusion(btn.dataset.confuse));setTimeout(()=>content.classList.remove('student-page-change'),260)
+  const pi=Math.max(0,Math.min(Number(snap.activePage)||0,snap.pages.length-1));const p=snap.pages[pi];if(snap.brandName)$('#studentBrandName').textContent=snap.brandName+' Canlı Ders';$('#studentBoardTopic').textContent=snap.topic||'Canlı Ders';$('#studentBoardPageName').textContent=p.name||`${pi+1}. Sayfa`;$('#studentPageStatus').textContent=`${pi+1} / ${snap.pages.length}`;content.className='student-board-content layout-'+(p.layout||'one')+' student-page-change';content.style.setProperty('--student-split',(p.split||50)+'%');const hasBlocks=!!(p.blocks||[]).length,hasInk=!!(p.inkObjects||[]).length;const base=hasBlocks?p.blocks.map(b=>studentBoardBlockHTML(b,pi)).join(''):(hasInk?'<div class="student-simo-canvas-base" aria-label="Canlı tahta"></div>':'<div class="student-board-wait"><div><b>Bu sayfa boş</b><span>Öğretmen içerik eklediğinde burada görünecek.</span></div></div>');content.innerHTML=base+(typeof simoStudentInkSVG==='function'?simoStudentInkSVG(p):'');$$('#studentBoardContent [data-confuse]').forEach(btn=>btn.onclick=()=>openConfusion(btn.dataset.confuse));setTimeout(()=>content.classList.remove('student-page-change'),260)
 }
 function renderLiveResultChart(r=getRoom()){const box=$('#liveResultChart');if(!box)return;if(!r.question){box.innerHTML='<div class="result-empty">Cevaplar geldiğinde dağılım burada görünecek.</div>';return}const answers=Object.values(r.students||{}).filter(x=>x.answer!=null);const counts=[0,0,0,0];answers.forEach(x=>{if(Number.isInteger(x.answer)&&x.answer>=0&&x.answer<4)counts[x.answer]++});const max=Math.max(1,...counts);box.innerHTML=`<div class="result-chart-head"><b>Cevap dağılımı</b><span>${answers.length} cevap</span></div><div class="result-bars">${counts.map((n,i)=>`<div class="result-row ${i===r.question.correct?'correct':''}"><span class="result-letter">${'ABCD'[i]}</span><div class="result-track"><div class="result-fill" style="width:${Math.round(n/max*100)}%"></div></div><span class="result-count">${n}</span></div>`).join('')}</div>`}
 function renderRoomState(r=getRoom()){
@@ -829,7 +794,7 @@ function renderRoomState(r=getRoom()){
 function publishQuestion(q){const r=getRoom();if(!r.startedAt||r.endedAt){toast('Önce canlı dersi başlat.');return false}if(r.paused){toast('Ders duraklatıldı. Önce “Devam et” de.');return false}r.lesson=getPlan();r.question={...q,id:Date.now(),revealed:false};r.questionCount=(r.questionCount||0)+1;Object.values(r.students||{}).forEach(st=>{st.answer=null});saveRoom(r);syncStudentQuestion(r);return true}
 function syncStudentQuestion(r=getRoom()){if(!studentSession||studentSession.code!==r.code)return;renderStudentLesson(r);const locked=!!r.paused||!!r.endedAt;if(!r.question){studentQuestionRevealed=false;$('#studentStatusText').textContent=r.endedAt?'Ders sona erdi':r.paused?'Ders duraklatıldı':r.startedAt?'Derse bağlısın • soru bekleniyor':'Derse bağlandın';$('#studentSend').disabled=true;return}const st=r.students?.[studentSession.id];const isNew=studentQuestionId!==r.question.id;const revealNow=!!r.question.revealed&&Number.isInteger(r.question.correct);const revealChanged=studentQuestionRevealed!==revealNow;if(isNew||revealChanged){studentQuestionId=r.question.id;studentQuestionRevealed=revealNow;renderQuestion(r.question.q,r.question.choices,r.question.correct,revealNow);if(isNew){studentSelected=null;$$('.phoneChoice').forEach(x=>x.classList.remove('selected'));$('#studentAnswerResult').className='student-result hidden';$('#studentAnswerResult').textContent='';$('#studentStatusText').textContent='Öğretmen yeni soru gönderdi'}}if(st?.answer!=null){studentSelected=st.answer;$$('.phoneChoice').forEach((x,i)=>x.classList.toggle('selected',i===st.answer));$('#studentSend').disabled=true;$('#studentSend').textContent='✓ Cevap gönderildi';if(revealNow){const res=$('#studentAnswerResult');res.className='student-result '+(st.answer===r.question.correct?'good':'bad');res.textContent=st.answer===r.question.correct?'✓ Doğru cevap':'Doğru cevap: '+String.fromCharCode(65+r.question.correct);$('#studentStatusText').textContent='Cevap açıklandı'}else $('#studentStatusText').textContent='Cevabın öğretmene ulaştı'}else if(isNew){$('#studentSend').disabled=true;$('#studentSend').textContent='Cevabımı gönder'}if(locked||revealNow){$$('.phoneChoice').forEach(x=>x.disabled=true);$('#studentSend').disabled=true;if(locked)$('#studentStatusText').textContent=r.endedAt?'Ders sona erdi':'Ders duraklatıldı'}else{$$('.phoneChoice').forEach(x=>x.disabled=false)}}
 function restoreStudentSession(code){try{const x=JSON.parse(sessionStorage.getItem(STUDENT_SESSION_KEY)||'null');if(!x?.id||!x?.name||String(x.code)!==String(code))return false;studentSession={id:x.id,name:x.name,code:String(code)};$('#studentJoinName').value=x.name;$('#studentJoinCode').value=String(code);$('#studentRoomCode').textContent='ODA '+code;$('#studentJoinBtn').textContent='✓ Bağlı';const r=getRoom();r.students=r.students||{};const old=r.students[x.id]||{};r.students[x.id]={id:x.id,name:x.name,answer:old.answer??null,joined:old.joined||Date.now(),totalAnswered:old.totalAnswered||0,totalCorrect:old.totalCorrect||0};localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r));renderRoomState(r);syncStudentQuestion(r);return true}catch{return false}}
-function joinStudent(){const name=$('#studentJoinName').value.trim();const code=$('#studentJoinCode').value.trim();const r=getRoom();if(!name)return toast('Öğrenci adını yaz.');if(code!==r.code)return toast('Oda kodu yanlış.');const id=sessionStorage.getItem('ogretmen.student.id')||(crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()));sessionStorage.setItem('ogretmen.student.id',id);studentSession={id,name,code};sessionStorage.setItem(STUDENT_SESSION_KEY,JSON.stringify(studentSession));r.students=r.students||{};const old=r.students[id]||{};r.students[id]={id,name,answer:old.answer??null,joined:old.joined||Date.now(),totalAnswered:old.totalAnswered||0,totalCorrect:old.totalCorrect||0};r.lesson=r.lesson||getPlan();r.confusions=r.confusions||[];saveRoom(r);$('#studentRoomCode').textContent='ODA '+code;$('#studentStatusText').textContent='Derse bağlandın';$('#studentJoinBtn').textContent='✓ Katıldın';syncStudentQuestion(r);toast('Derse katıldın')}
+function joinStudent(){const name=$('#studentJoinName').value.trim();const code=$('#studentJoinCode').value.trim();if(!name)return toast('Öğrenci adını yaz.');if(!/^[0-9A-Za-z_-]{4,32}$/.test(code))return toast('Geçerli oda kodunu yaz.');const id=sessionStorage.getItem('ogretmen.student.id')||(crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()));sessionStorage.setItem('ogretmen.student.id',id);studentSession={id,name,code};sessionStorage.setItem(STUDENT_SESSION_KEY,JSON.stringify(studentSession));if(!STUDENT_PORTAL){const u=new URL(location.href);u.hash='';u.search='';u.searchParams.set('room',code);const ep=normalizedEndpoint(realtimeCfg().endpoint)||okulSimoBackendDefault();if(ep)u.searchParams.set('rt',ep);location.assign(u.toString());return}const r=getRoom();if(String(r.code)!==String(code)){r.code=code;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r))}r.students=r.students||{};const old=r.students[id]||{};r.students[id]={id,name,answer:old.answer??null,joined:old.joined||Date.now(),totalAnswered:old.totalAnswered||0,totalCorrect:old.totalCorrect||0};r.confusions=r.confusions||[];saveRoom(r);$('#studentRoomCode').textContent='ODA '+code;$('#studentStatusText').textContent=realtimeLastState==='online'?'Derse bağlandın • tahta eşitleniyor':'Derse bağlandın • bağlantı bekleniyor';$('#studentJoinBtn').textContent='✓ Katıldın';syncStudentQuestion(r);if(realtimeLastState==='online'){realtimeSend({type:'hello',studentId:id,name});const x=studentCloudPayload(r);if(x)realtimeSend({type:'student_update',...x})}else{const ep=normalizedEndpoint(realtimeCfg().endpoint)||okulSimoBackendDefault();if(ep)realtimePrepareAndConnect(ep,false)}toast('Derse katıldın')}
 function sendStudentAnswer(){if(!studentSession||studentSelected==null)return;const r=getRoom();if(r.endedAt)return toast('Ders sona erdi.');if(r.paused)return toast('Ders şu an duraklatıldı.');const st=r.students?.[studentSession.id];if(!st)return toast('Önce derse tekrar katıl.');if(st.answer==null){if(realtimeLastState!=='online'){st.totalAnswered=(st.totalAnswered||0)+1;if(studentSelected===r.question?.correct)st.totalCorrect=(st.totalCorrect||0)+1}st.answer=studentSelected}saveRoom(r);$('#studentSend').textContent='✓ Cevap gönderildi';$('#studentSend').disabled=true;const res=$('#studentAnswerResult');res.className='student-result';res.textContent='Cevabın öğretmene gönderildi.';toast('Cevap öğretmene gönderildi')}
 function startLesson(){const r=getRoom();if(r.endedAt){r.startedAt=Date.now();r.question=null;r.questionCount=0;r.confusions=[];Object.values(r.students||{}).forEach(st=>{st.answer=null;st.totalAnswered=0;st.totalCorrect=0;st.joined=Date.now()})}else r.startedAt=r.startedAt||Date.now();r.endedAt=null;r.paused=false;r.lesson=getPlan();r.board=liveBoardSnapshot();r.confusions=r.confusions||[];try{const z=typeof zoomCfg==='function'?zoomCfg():{};const zu=typeof zoomMeetingUrl==='function'?zoomMeetingUrl(z):'';r.zoom={meetingNumber:z.meetingNumber||'',joinUrl:zu||'',enabled:!!zu}}catch{}saveRoom(r);toast('Ders başladı — oda ve öğrenci tahtası açık')}
 async function startLessonUnified(){
@@ -1194,7 +1159,7 @@ function simoCaretEnd(el){const r=document.createRange(),sel=getSelection();r.se
 function simoOpenTextEditor(p,obj=null,kind='text'){
  const ed=$('#simoInlineTextEditor');if(!ed)return;simoTextEditingId=obj?.id||null;simoTextEditingKind=kind;const fs=obj?.fontSize||Math.max(24,simoSize*7);ed.dataset.kind=kind;ed.dataset.simoX=String(obj?.x??p.x);ed.dataset.simoY=String(obj?.y??p.y);ed.textContent=obj?.text||'';ed.style.fontSize=fs+'px';ed.style.fontWeight=obj?.bold?'800':'600';ed.style.fontStyle=obj?.italic?'italic':'normal';ed.style.textDecoration=obj?.underline?'underline':'none';ed.style.color=obj?.color||simoColor;ed.style.textAlign=obj?.align==='middle'?'center':obj?.align==='end'?'right':'left';ed.style.background=kind==='note'?'#fff7d6':'rgba(255,255,255,.93)';ed.style.padding=kind==='note'?'12px 14px':'2px 4px';ed.style.minWidth=kind==='note'?'220px':'110px';ed.style.minHeight=kind==='note'?'90px':'34px';simoEditorPosition((obj?.x??p.x)+(obj?.tx||0),(obj?.y??p.y)+(obj?.ty||0),fs);ed.classList.add('show');requestAnimationFrame(()=>{ed.focus();if(obj)simoCaretEnd(ed)})
 }
-function simoCommitTextEditor(){const ed=$('#simoInlineTextEditor');if(!ed?.classList.contains('show'))return;const txt=ed.innerText.replace(/\n+$/,'');const kind=simoTextEditingKind;let o=simoTextEditingId?simoFind(simoTextEditingId):null;if(o){o.text=txt||o.text||''}else if(txt.trim()){const x=Number(ed.dataset.simoX);const y=Number(ed.dataset.simoY);if(kind==='note')o={id:simoId(),type:'note',x:Number.isFinite(x)?x:120,y:Number.isFinite(y)?y:120,w:270,h:145,color:'#c9a83d',fill:(typeof simoNoteFill!=='undefined'?simoNoteFill:'#fff3b8'),text:txt};else o={id:simoId(),type:'text',x:Number.isFinite(x)?x:120,y:Number.isFinite(y)?y:120,color:simoColor,fontSize:parseFloat(ed.style.fontSize)||Math.max(24,simoSize*7),text:txt,bold:!!simoTextDefaults.bold,italic:!!simoTextDefaults.italic,underline:!!simoTextDefaults.underline,align:simoTextDefaults.align||'start'};simoObjects().push(o);simoSelected=o.id}
+function simoCommitTextEditor(){const ed=$('#simoInlineTextEditor');if(!ed?.classList.contains('show'))return;const txt=ed.innerText.replace(/\n+$/,'');const kind=simoTextEditingKind;let o=simoTextEditingId?simoFind(simoTextEditingId):null;if(o){o.text=txt||o.text||''}else if(txt.trim()){const x=Number(ed.dataset.simoX);const y=Number(ed.dataset.simoY);if(kind==='note')o={id:simoId(),type:'note',x:Number.isFinite(x)?x:120,y:Number.isFinite(y)?y:120,w:260,h:125,color:'#c9a83d',fill:'#fff7d6',text:txt};else o={id:simoId(),type:'text',x:Number.isFinite(x)?x:120,y:Number.isFinite(y)?y:120,color:simoColor,fontSize:parseFloat(ed.style.fontSize)||Math.max(24,simoSize*7),text:txt,bold:!!simoTextDefaults.bold,italic:!!simoTextDefaults.italic,underline:!!simoTextDefaults.underline,align:simoTextDefaults.align||'start'};simoObjects().push(o);simoSelected=o.id}
  ed.classList.remove('show');ed.textContent='';simoTextEditingId=null;simoSave();simoSetTool('pointer');if(o){simoSelected=o.id;simoRenderInk()}
 }
 
@@ -1234,528 +1199,7 @@ simoInit=function(){SIMO_BASE_INIT_V2();const svg=$('#simoInkLayer'),ed=$('#simo
  const tb=$('#simoTextSelectionTools');tb?.querySelectorAll('[data-text-style]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();const k=b.dataset.textStyle;o[k]=!o[k];simoSave()});tb?.querySelectorAll('[data-text-align]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();o.align=b.dataset.textAlign;simoSave()});tb?.querySelectorAll('[data-text-size]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();o.fontSize=Math.max(14,Math.min(120,(o.fontSize||30)+(b.dataset.textSize==='up'?4:-4)));simoSave()});const tc=$('#simoSelectedTextColor');if(tc)tc.oninput=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;o.color=tc.value;simoSave()};document.addEventListener('pointerup',e=>{if(simoDrawing)simoEnd(e)});
 };
 
-/* ================================================================== */
-/* SIMOBOARD PRO v3 — PROFESSIONAL WHITEBOARD ENGINE (çizim/araç motoru) */
-/* Akıcı basınç-duyarlı kalem, gerçek fosforlu kalem, boyutlandırılabilir  */
-/* şekiller, çoklu seçim, kesme/nokta silgisi, lazer işaretçi, PNG çıktısı */
-/* ================================================================== */
-let simoFillOn=false, simoDashOn=false, simoArrowHeads='end', simoNoteFill='#fff3b8',
-    simoEraserMode='stroke', simoEraserSize=26, simoMultiSelected=[],
-    simoSpaceHeldPrevTool=null, simoLaserPts=[];
-
-function simoAlphaFill(hex){
-  const m=/^#([0-9a-f]{6})$/i.exec(hex||''); if(!m) return 'rgba(20,103,245,.16)';
-  const n=parseInt(m[1],16); const r=(n>>16)&255,g=(n>>8)&255,b=n&255;
-  return `rgba(${r},${g},${b},.16)`;
-}
-
-function simoSmoothCenterline(pts){
-  if(!pts||!pts.length) return '';
-  if(pts.length===1){const [x,y]=pts[0];return `M ${x.toFixed(1)},${y.toFixed(1)} l 0.1,0`}
-  let d=`M ${pts[0][0].toFixed(1)},${pts[0][1].toFixed(1)}`;
-  for(let i=1;i<pts.length-1;i++){
-    const mx=(pts[i][0]+pts[i+1][0])/2, my=(pts[i][1]+pts[i+1][1])/2;
-    d+=` Q ${pts[i][0].toFixed(1)},${pts[i][1].toFixed(1)} ${mx.toFixed(1)},${my.toFixed(1)}`;
-  }
-  const last=pts[pts.length-1]; d+=` L ${last[0].toFixed(1)},${last[1].toFixed(1)}`;
-  return d;
-}
-function simoRibbonSide(arr){
-  let d=`${arr[0][0].toFixed(1)},${arr[0][1].toFixed(1)} `;
-  for(let i=1;i<arr.length-1;i++){
-    const mx=(arr[i][0]+arr[i+1][0])/2, my=(arr[i][1]+arr[i+1][1])/2;
-    d+=`Q ${arr[i][0].toFixed(1)},${arr[i][1].toFixed(1)} ${mx.toFixed(1)},${my.toFixed(1)} `;
-  }
-  const last=arr[arr.length-1]; d+=`L ${last[0].toFixed(1)},${last[1].toFixed(1)} `;
-  return d;
-}
-function simoStrokeOutline(pts, baseW){
-  if(!pts||!pts.length) return '';
-  if(pts.length===1){
-    const [x,y,w]=pts[0]; const r=Math.max(1,(w||baseW||4)/2);
-    return `M ${(x-r).toFixed(1)},${y.toFixed(1)} a ${r},${r} 0 1,0 ${(r*2).toFixed(1)},0 a ${r},${r} 0 1,0 ${(-r*2).toFixed(1)},0 Z`;
-  }
-  const left=[],right=[];
-  for(let i=0;i<pts.length;i++){
-    const p0=pts[Math.max(0,i-1)], p2=pts[Math.min(pts.length-1,i+1)], p1=pts[i];
-    let dx=p2[0]-p0[0], dy=p2[1]-p0[1];
-    const len=Math.hypot(dx,dy)||1; dx/=len; dy/=len;
-    const nx=-dy, ny=dx, w=Math.max(0.6,(p1[2]||baseW||4)/2);
-    left.push([p1[0]+nx*w, p1[1]+ny*w]);
-    right.push([p1[0]-nx*w, p1[1]-ny*w]);
-  }
-  const rightRev=right.slice().reverse();
-  return `M ${simoRibbonSide(left)}L ${simoRibbonSide(rightRev)}Z`;
-}
-function simoStrokeWidthFor(e, baseSize, dist, dt){
-  if(e && e.pointerType==='pen' && typeof e.pressure==='number' && e.pressure>0 && e.pressure!==0.5){
-    return Math.max(baseSize*0.45, Math.min(baseSize*1.7, baseSize*(0.35+1.3*e.pressure)));
-  }
-  if(dist==null||dt==null) return baseSize*0.9;
-  const speed=dist/dt, t=Math.max(0,Math.min(1,1-speed/1.7));
-  return Math.max(baseSize*0.5, Math.min(baseSize*1.5, baseSize*(0.55+0.85*t)));
-}
-
-function simoBBox(o){
-  if(o.type==='rect'||o.type==='note'||o.type==='diamond') return {x:o.x,y:o.y,w:o.w,h:o.h};
-  if(o.type==='ellipse') return {x:o.cx-o.rx,y:o.cy-o.ry,w:o.rx*2,h:o.ry*2};
-  if(o.type==='line'||o.type==='arrow') return {x:Math.min(o.x1,o.x2),y:Math.min(o.y1,o.y2),w:Math.abs(o.x2-o.x1)||1,h:Math.abs(o.y2-o.y1)||1};
-  if(o.type==='ink'||o.type==='path'){
-    const pts=o.pts||o.points||[]; if(!pts.length) return {x:0,y:0,w:0,h:0};
-    let minx=1e9,miny=1e9,maxx=-1e9,maxy=-1e9;
-    pts.forEach(p=>{minx=Math.min(minx,p[0]);miny=Math.min(miny,p[1]);maxx=Math.max(maxx,p[0]);maxy=Math.max(maxy,p[1])});
-    return {x:minx,y:miny,w:maxx-minx,h:maxy-miny};
-  }
-  return {x:o.x||0,y:o.y||0,w:1,h:1};
-}
-function simoHandlesHTML(){
-  if(simoTool!=='pointer'||!simoSelected||(simoMultiSelected&&simoMultiSelected.length)) return '';
-  const o=simoFind(simoSelected); if(!o) return '';
-  const tx=o.tx||0, ty=o.ty||0;
-  if(o.type==='line'||o.type==='arrow'){
-    return `<g class="simo-handles" transform="translate(${tx} ${ty})">`+
-      `<circle class="simo-handle" data-handle="p1" cx="${o.x1}" cy="${o.y1}" r="7"/>`+
-      `<circle class="simo-handle" data-handle="p2" cx="${o.x2}" cy="${o.y2}" r="7"/></g>`;
-  }
-  if(['rect','ellipse','diamond','note'].includes(o.type)){
-    const b=simoBBox(o);
-    const pts=[['nw',b.x,b.y],['ne',b.x+b.w,b.y],['sw',b.x,b.y+b.h],['se',b.x+b.w,b.y+b.h]];
-    return `<g class="simo-handles" transform="translate(${tx} ${ty})">`+
-      `<rect class="simo-handle-outline" x="${b.x}" y="${b.y}" width="${b.w}" height="${b.h}"/>`+
-      pts.map(([k,x,y])=>`<rect class="simo-handle" data-handle="${k}" x="${x-7}" y="${y-7}" width="14" height="14"/>`).join('')+
-      `</g>`;
-  }
-  return '';
-}
-
-function simoNoteTextSVG(o){
-  const lines=String(o.text||'Not').split(/\n/); const fs=17;
-  return `<text class="simo-note-text" x="${o.x+16}" y="${o.y+30}" font-size="${fs}">${lines.map((l,i)=>`<tspan x="${o.x+16}" dy="${i?fs*1.3:0}">${simoEsc(l||' ')}</tspan>`).join('')}</text>`;
-}
-
-function simoDefs(){
-  return `<defs><marker id="simoArrow" markerWidth="10" markerHeight="10" refX="8" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M0,0 L0,8 L9,4 z" fill="context-stroke"/></marker><marker id="simoArrowStart" markerWidth="10" markerHeight="10" refX="2" refY="4" orient="auto" markerUnits="strokeWidth"><path d="M9,0 L9,8 L0,4 z" fill="context-stroke"/></marker></defs>`;
-}
-
-simoObjHTML=function(o, student=false){
-  const isSel=!student&&(simoSelected===o.id||(simoMultiSelected&&simoMultiSelected.includes(o.id)));
-  const cls='simo-ink-object'+(isSel?' selected':'');
-  const tr=(o.tx||o.ty)?` transform="translate(${o.tx||0} ${o.ty||0})"`:'';
-  const common=`class="${cls}" data-ink-id="${simoEsc(o.id)}"${tr}`;
-  if(o.type==='ink'){
-    if(o.kind==='highlighter') return `<path ${common} d="${simoEsc(o.d)}" fill="none" stroke="${simoEsc(o.color)}" stroke-width="${o.baseSize}" stroke-linecap="round" stroke-linejoin="round" opacity="${o.opacity??.32}" style="mix-blend-mode:multiply"/>`;
-    return `<path ${common} d="${simoEsc(o.d)}" fill="${simoEsc(o.color)}" stroke="none" opacity="${o.opacity??1}"/>`;
-  }
-  if(o.type==='path') return `<path ${common} d="${simoEsc(o.d)}" fill="none" stroke="${simoEsc(o.color)}" stroke-width="${o.size||4}" stroke-linecap="round" stroke-linejoin="round" opacity="${o.opacity??1}"/>`;
-  if(o.type==='line'||o.type==='arrow'){
-    const heads=o.heads||(o.type==='arrow'?'end':'none');
-    const markerStart=heads==='both'?' marker-start="url(#simoArrowStart)"':'';
-    const markerEnd=(heads==='end'||heads==='both')?' marker-end="url(#simoArrow)"':'';
-    const dash=o.dash?' stroke-dasharray="11 8"':'';
-    return `<line ${common} x1="${o.x1}" y1="${o.y1}" x2="${o.x2}" y2="${o.y2}" stroke="${simoEsc(o.color)}" stroke-width="${o.size||4}" stroke-linecap="round"${dash}${markerStart}${markerEnd}/>`;
-  }
-  if(o.type==='rect'||o.type==='note'){
-    const rx=o.type==='note'?18:(o.rounded?14:4);
-    const fill=o.type==='note'?(o.fill||'#fff3b8'):(o.fill?simoAlphaFill(o.color):'transparent');
-    const dash=(o.type!=='note'&&o.dash)?' stroke-dasharray="11 8"':'';
-    return `<g ${common}>${o.type==='note'?`<rect x="${o.x+3}" y="${o.y+5}" width="${o.w}" height="${o.h}" rx="${rx}" fill="rgba(15,23,42,.12)"/>`:''}<rect x="${o.x}" y="${o.y}" width="${o.w}" height="${o.h}" rx="${rx}" fill="${fill}" stroke="${o.type==='note'?'rgba(0,0,0,.08)':simoEsc(o.color)}" stroke-width="${o.type==='note'?1:(o.size||4)}"${dash}/>${o.type==='note'?simoNoteTextSVG(o):''}</g>`;
-  }
-  if(o.type==='diamond'){
-    const cx=o.x+o.w/2, cy=o.y+o.h/2;
-    const pts=`${cx},${o.y} ${o.x+o.w},${cy} ${cx},${o.y+o.h} ${o.x},${cy}`;
-    const fill=o.fill?simoAlphaFill(o.color):'transparent';
-    const dash=o.dash?' stroke-dasharray="11 8"':'';
-    return `<polygon ${common} points="${pts}" fill="${fill}" stroke="${simoEsc(o.color)}" stroke-width="${o.size||4}"${dash}/>`;
-  }
-  if(o.type==='ellipse'){
-    const fill=o.fill?simoAlphaFill(o.color):'transparent';
-    const dash=o.dash?' stroke-dasharray="11 8"':'';
-    return `<ellipse ${common} cx="${o.cx}" cy="${o.cy}" rx="${o.rx}" ry="${o.ry}" fill="${fill}" stroke="${simoEsc(o.color)}" stroke-width="${o.size||4}"${dash}/>`;
-  }
-  if(o.type==='text') return simoTextSVG(o,common);
-  return '';
-};
-
-simoToolPanel=function(){
-  const p=$('#simoToolPanel'); if(!p) return;
-  const colors=['#1f2937','#c0262d','#1769aa','#0f8a5f','#7c3aed','#d97706'];
-  const colorHTML=['pen','highlighter','shape','arrow','text'].includes(simoTool)
-    ? colors.map(c=>`<button class="simo-color ${c===simoColor?'active':''}" style="background:${c}" data-simo-color="${c}" title="Renk"></button>`).join('') : '';
-  let sizeHTML='';
-  if(['pen','highlighter','shape','arrow'].includes(simoTool)) sizeHTML=[2,4,7].map(n=>`<button class="simo-size ${n===simoSize?'active':''}" data-simo-size="${n}">${n===2?'İnce':n===4?'Orta':'Kalın'}</button>`).join('');
-  if(simoTool==='text') sizeHTML=[24,32,44,60].map(n=>`<button class="simo-size ${Math.max(24,simoSize*7)===n?'active':''}" data-simo-fontsize="${n}">${n}</button>`).join('');
-  if(simoTool==='eraser') sizeHTML=[16,26,40].map((n,i)=>`<button class="simo-size ${simoEraserSize===n?'active':''}" data-simo-erase-size="${n}">${['Küçük','Orta','Büyük'][i]}</button>`).join('');
-  let extra='';
-  if(simoTool==='shape') extra=['rect','ellipse','diamond'].map(x=>`<button class="simo-shape-choice ${x===simoShape?'active':''}" data-simo-shape="${x}">${x==='rect'?'▭':x==='ellipse'?'○':'◇'}</button>`).join('')
-    +`<button class="simo-toggle ${simoFillOn?'active':''}" data-simo-toggle="fill">Dolgu</button><button class="simo-toggle ${simoDashOn?'active':''}" data-simo-toggle="dash">┄</button>`;
-  if(simoTool==='arrow') extra=[['none','—'],['end','→'],['both','↔']].map(([v,ic])=>`<button class="simo-shape-choice ${simoArrowHeads===v?'active':''}" data-simo-heads="${v}">${ic}</button>`).join('')
-    +`<button class="simo-toggle ${simoDashOn?'active':''}" data-simo-toggle="dash">┄</button>`;
-  if(simoTool==='text') extra='<span class="simo-file-status">Tahtada istediğin yere tıkla ve yaz.</span>';
-  if(simoTool==='note') extra=['#fff3b8','#ffd6e0','#c9e8ff','#d4f4dd'].map(c=>`<button class="simo-color ${simoNoteFill===c?'active':''}" style="background:${c}" data-simo-note-color="${c}" title="Not rengi"></button>`).join('');
-  if(simoTool==='eraser') extra=`<button class="simo-toggle ${simoEraserMode==='stroke'?'active':''}" data-simo-erasemode="stroke">Nokta sil</button><button class="simo-toggle ${simoEraserMode==='object'?'active':''}" data-simo-erasemode="object">Şekli sil</button>`;
-  p.innerHTML=colorHTML+sizeHTML+extra;
-  p.classList.toggle('show', ['pen','highlighter','shape','arrow','text','note','eraser'].includes(simoTool));
-  p.querySelectorAll('[data-simo-color]').forEach(b=>b.onclick=()=>{simoColor=b.dataset.simoColor;simoToolPanel()});
-  p.querySelectorAll('[data-simo-size]').forEach(b=>b.onclick=()=>{simoSize=+b.dataset.simoSize;simoToolPanel()});
-  p.querySelectorAll('[data-simo-fontsize]').forEach(b=>b.onclick=()=>{simoSize=Math.max(2,Math.round(+b.dataset.simoFontsize/7));simoToolPanel()});
-  p.querySelectorAll('[data-simo-shape]').forEach(b=>b.onclick=()=>{simoShape=b.dataset.simoShape;simoToolPanel()});
-  p.querySelectorAll('[data-simo-heads]').forEach(b=>b.onclick=()=>{simoArrowHeads=b.dataset.simoHeads;simoToolPanel()});
-  p.querySelectorAll('[data-simo-toggle]').forEach(b=>b.onclick=()=>{const k=b.dataset.simoToggle;if(k==='fill')simoFillOn=!simoFillOn;if(k==='dash')simoDashOn=!simoDashOn;simoToolPanel()});
-  p.querySelectorAll('[data-simo-note-color]').forEach(b=>b.onclick=()=>{simoNoteFill=b.dataset.simoNoteColor;simoToolPanel()});
-  p.querySelectorAll('[data-simo-erase-size]').forEach(b=>b.onclick=()=>{simoEraserSize=+b.dataset.simoEraseSize;simoToolPanel()});
-  p.querySelectorAll('[data-simo-erasemode]').forEach(b=>b.onclick=()=>{simoEraserMode=b.dataset.simoErasemode;simoToolPanel()});
-};
-
-simoSetTool=function(t){
-  simoTool=t; simoSelected=null; simoMultiSelected=[];
-  $$('[data-simo-tool]').forEach(b=>b.classList.toggle('active', b.dataset.simoTool===t));
-  simoToolPanel(); simoRenderInk();
-  const names={pointer:'Seçim',hand:'Taşıma',pen:'Kalem',highlighter:'Fosforlu Kalem',eraser:'Silgi',text:'Metin',note:'Yapışkan Not',shape:'Şekil',arrow:'Ok',laser:'Lazer İşaretçi'};
-  simoToast(names[t]||t);
-};
-
-simoUpdateMode=function(){
-  const svg=$('#simoInkLayer'); if(!svg) return;
-  const drawTools=['pen','highlighter','shape','arrow','text','note','eraser','laser'];
-  svg.classList.toggle('capture', drawTools.includes(simoTool));
-  svg.classList.toggle('selecting', simoTool==='pointer');
-  const board=$('#teacherBoard');
-  if(board) board.style.cursor = simoTool==='hand' ? 'grab' : '';
-  const cursorMap={pen:'crosshair',highlighter:'crosshair',eraser:'cell',text:'text',shape:'crosshair',arrow:'crosshair',note:'copy',laser:'crosshair'};
-  svg.style.cursor = cursorMap[simoTool] || '';
-};
-
-function simoEraseAt(pt, radius){
-  const objs=simoObjects();
-  for(let idx=objs.length-1; idx>=0; idx--){
-    const o=objs[idx];
-    if(o.type!=='ink' && o.type!=='path') continue;
-    const tx=o.tx||0, ty=o.ty||0;
-    const rawPts = o.pts ? o.pts : (o.points ? o.points.map(q=>[q[0],q[1],o.size||4]) : null);
-    if(!rawPts || rawPts.length<2) continue;
-    let changed=false; const runs=[]; let cur=[];
-    for(const pnt of rawPts){
-      const dx=(pnt[0]+tx)-pt.x, dy=(pnt[1]+ty)-pt.y;
-      if(Math.hypot(dx,dy)<=radius){ changed=true; if(cur.length>1) runs.push(cur); cur=[]; }
-      else cur.push(pnt);
-    }
-    if(cur.length>1) runs.push(cur);
-    if(!changed) continue;
-    objs.splice(idx,1);
-    runs.forEach(run=>{
-      if(run.length<2) return;
-      const n=JSON.parse(JSON.stringify(o));
-      n.id=simoId(); n.pts=run.map(q=>[q[0],q[1],q[2]]); delete n.points;
-      n.type='ink'; n.kind=n.kind||'pen'; n.baseSize=n.baseSize||n.size||4;
-      n.d = n.kind==='highlighter' ? simoSmoothCenterline(n.pts) : simoStrokeOutline(n.pts, n.baseSize);
-      objs.push(n);
-    });
-  }
-}
-
-function simoRenderInkLive(o){
-  const svg=$('#simoInkLayer'); if(!svg) return;
-  const el=svg.querySelector(`[data-ink-id="${CSS.escape(String(o.id))}"]`);
-  if(el) el.setAttribute('d', o.d); else simoRenderInk();
-}
-
-function simoDeleteSelection(){
-  const ids=simoMultiSelected.length?simoMultiSelected.slice():(simoSelected?[simoSelected]:[]);
-  if(!ids.length) return;
-  simoPushUndo();
-  const a=simoObjects();
-  for(let i=a.length-1;i>=0;i--) if(ids.includes(a[i].id)) a.splice(i,1);
-  simoSelected=null; simoMultiSelected=[]; simoSave();
-}
-function simoDuplicateSelection(){
-  const ids=simoMultiSelected.length?simoMultiSelected.slice():(simoSelected?[simoSelected]:[]);
-  if(!ids.length) return;
-  simoPushUndo();
-  const a=simoObjects(); const newIds=[];
-  ids.forEach(id=>{ const o=simoFind(id); if(!o) return; const n=JSON.parse(JSON.stringify(o)); n.id=simoId(); n.tx=(o.tx||0)+26; n.ty=(o.ty||0)+26; a.push(n); newIds.push(n.id); });
-  if(newIds.length===1){ simoSelected=newIds[0]; simoMultiSelected=[]; } else { simoSelected=null; simoMultiSelected=newIds; }
-  simoSave();
-}
-
-function simoLaserLoop(){
-  const layer=$('#simoLaserLayer');
-  if(layer){
-    const now=Date.now();
-    simoLaserPts = simoLaserPts.filter(pt=>now-pt.t<650);
-    layer.innerHTML = simoLaserPts.map(pt=>{
-      const age=(now-pt.t)/650, op=Math.max(0,1-age), r=7*(1-age*0.45);
-      return `<circle cx="${pt.x.toFixed(1)}" cy="${pt.y.toFixed(1)}" r="${r.toFixed(1)}" fill="#ef4444" opacity="${(op*0.85).toFixed(2)}"/>`;
-    }).join('');
-  }
-  requestAnimationFrame(simoLaserLoop);
-}
-
-async function simoExportPNG(){
-  const objs=simoObjects();
-  if(!objs.length) return toast('Bu sayfada dışa aktarılacak çizim yok.');
-  const svgStr=`<svg xmlns="http://www.w3.org/2000/svg" width="${SIMO_VIEW_W}" height="${SIMO_VIEW_H}" viewBox="0 0 ${SIMO_VIEW_W} ${SIMO_VIEW_H}"><rect width="100%" height="100%" fill="#ffffff"/>${simoDefs()}${objs.map(o=>simoObjHTML(o,true)).join('')}</svg>`;
-  const blob=new Blob([svgStr],{type:'image/svg+xml;charset=utf-8'});
-  const url=URL.createObjectURL(blob);
-  const img=new Image();
-  img.onload=()=>{
-    const scale=2, canvas=document.createElement('canvas');
-    canvas.width=SIMO_VIEW_W*scale; canvas.height=SIMO_VIEW_H*scale;
-    const ctx=canvas.getContext('2d'); ctx.fillStyle='#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
-    ctx.drawImage(img,0,0,canvas.width,canvas.height);
-    URL.revokeObjectURL(url);
-    canvas.toBlob(b=>{
-      const a=document.createElement('a');
-      a.href=URL.createObjectURL(b);
-      a.download=((boardState.topic||'tahta').replace(/[^\p{L}\p{N}_ -]/gu,'').trim()||'tahta')+'-sayfa'+(boardState.activePage+1)+'.png';
-      document.body.appendChild(a); a.click(); a.remove();
-      setTimeout(()=>URL.revokeObjectURL(a.href),4000);
-    });
-  };
-  img.onerror=()=>toast('PNG oluşturulamadı.');
-  img.src=url;
-}
-
-simoApplyZoom=function(){
-  simoZoom=Math.max(.4,Math.min(3,simoZoom));
-  const lbl=$('#simoZoomLabel'); if(lbl) lbl.textContent=Math.round(simoZoom*100)+'%';
-  const c=$('#boardContent'), svg=$('#simoInkLayer'), laser=$('#simoLaserLayer');
-  if(c){ c.style.transform=`scale(${simoZoom})`; c.style.width=(100/simoZoom)+'%'; c.classList.add('simo-zoomed'); }
-  if(svg){ svg.style.transform=`scale(${simoZoom})`; svg.style.transformOrigin='0 0'; svg.style.width=(100/simoZoom)+'%'; svg.style.height=(100/simoZoom)+'%'; }
-  if(laser){ laser.style.transform=`scale(${simoZoom})`; laser.style.transformOrigin='0 0'; laser.style.width=(100/simoZoom)+'%'; laser.style.height=(100/simoZoom)+'%'; }
-};
-
-function simoWheelZoom(e){
-  if(!(e.ctrlKey||e.metaKey)) return;
-  e.preventDefault();
-  const board=$('#teacherBoard'); if(!board) return;
-  const r=board.getBoundingClientRect();
-  const cx=e.clientX-r.left+board.scrollLeft, cy=e.clientY-r.top+board.scrollTop;
-  const oldZoom=simoZoom;
-  simoZoom += (e.deltaY<0?1:-1)*0.08;
-  simoZoom = Math.max(.4, Math.min(3, simoZoom));
-  simoApplyZoom();
-  const ratio=simoZoom/oldZoom;
-  board.scrollLeft = cx*ratio-(e.clientX-r.left);
-  board.scrollTop = cy*ratio-(e.clientY-r.top);
-}
-
-/* ---- pointer/çizim döngüsü: seçim, taşıma, boyutlandırma, şekiller, silgi, lazer ---- */
-simoStart=function(e){
-  if(e.button!=null && e.button!==0 && e.pointerType==='mouse') return;
-  const svg=e.currentTarget;
-  const handleTarget=e.target.closest?.('[data-handle]');
-  const target=e.target.closest?.('[data-ink-id]');
-  const p=simoPoint(e);
-
-  if(simoTool==='pointer'){
-    if(handleTarget && simoSelected){
-      const o=simoFind(simoSelected);
-      if(o){ simoPushUndo(); simoDrawing={kind:'resize', id:o.id, handle:handleTarget.dataset.handle, orig:JSON.parse(JSON.stringify(o))}; svg.setPointerCapture?.(e.pointerId); e.preventDefault(); e.stopPropagation(); }
-      return;
-    }
-    if(target){
-      const id=target.dataset.inkId, obj=simoFind(id);
-      if(e.shiftKey){
-        simoSelected=null;
-        const idx=simoMultiSelected.indexOf(id);
-        if(idx>=0) simoMultiSelected.splice(idx,1); else simoMultiSelected.push(id);
-        simoRenderInk(); e.preventDefault(); return;
-      }
-      if(simoMultiSelected.length>1 && simoMultiSelected.includes(id)){
-        simoPushUndo();
-        simoDrawing={kind:'groupmove', start:p, bases:simoMultiSelected.map(gid=>{const go=simoFind(gid); return{id:gid,tx:go?.tx||0,ty:go?.ty||0}})};
-        svg.setPointerCapture?.(e.pointerId); e.preventDefault(); return;
-      }
-      simoMultiSelected=[];
-      const now=Date.now();
-      if(obj?.type==='text' && (e.detail>=2 || (simoLastTextTapId===id && now-simoLastTextTapAt<500))){
-        simoLastTextTapId=null; simoLastTextTapAt=0; simoDrawing=null; simoSelected=id;
-        simoOpenTextEditor({x:obj.x,y:obj.y},obj,'text'); e.preventDefault(); e.stopPropagation(); return;
-      }
-      simoLastTextTapId=id; simoLastTextTapAt=now; simoSelected=id;
-      simoPushUndo();
-      simoDrawing={kind:'move', id:simoSelected, start:p, base:{tx:obj?.tx||0,ty:obj?.ty||0}, moved:false};
-      svg.querySelectorAll('.simo-ink-object.selected').forEach(x=>x.classList.remove('selected'));
-      target.classList.add('selected');
-      simoRenderInk();
-      svg.setPointerCapture?.(e.pointerId);
-      e.preventDefault();
-    } else {
-      simoSelected=null; simoMultiSelected=[]; simoLastTextTapId=null; simoRenderInk();
-    }
-    return;
-  }
-
-  if(simoTool==='eraser'){
-    if(simoEraserMode==='object'){
-      if(target){ simoPushUndo(); const a=simoObjects(); const i=a.findIndex(o=>o.id===target.dataset.inkId); if(i>=0){a.splice(i,1); simoRenderInk();} }
-      simoDrawing={kind:'eraseobj'};
-    } else {
-      simoPushUndo(); simoEraseAt(p, simoEraserSize/2+8); simoRenderInk();
-      simoDrawing={kind:'erase'};
-    }
-    svg.setPointerCapture?.(e.pointerId);
-    return;
-  }
-
-  if(simoTool==='laser'){ simoDrawing={kind:'laser'}; simoLaserPts.push({x:p.x,y:p.y,t:Date.now()}); svg.setPointerCapture?.(e.pointerId); return; }
-
-  if(!['pen','highlighter','shape','arrow','text','note'].includes(simoTool)) return;
-
-  if(simoTool==='text'){ simoPushUndo(); simoOpenTextEditor(p,null,'text'); e.preventDefault(); return; }
-  if(simoTool==='note'){ simoPushUndo(); simoOpenTextEditor(p,null,'note'); e.preventDefault(); return; }
-
-  simoPushUndo();
-  if(simoTool==='pen'||simoTool==='highlighter'){
-    const baseSize = simoTool==='highlighter' ? Math.max(14, simoSize*4) : simoSize;
-    const w0=simoStrokeWidthFor(e, baseSize);
-    const o={id:simoId(), type:'ink', kind:simoTool, color:simoColor, baseSize, opacity: simoTool==='highlighter'?.32:1, pts:[[p.x,p.y,w0]], _last:{x:p.x,y:p.y,t:performance.now()}};
-    o.d = simoTool==='highlighter' ? simoSmoothCenterline(o.pts) : simoStrokeOutline(o.pts, baseSize);
-    simoObjects().push(o); simoDrawing={kind:'ink', id:o.id};
-  } else if(simoTool==='shape'){
-    const o={id:simoId(), type:simoShape, color:simoColor, size:simoSize, fill:simoFillOn, dash:simoDashOn, rounded:true};
-    if(simoShape==='ellipse') Object.assign(o,{cx:p.x,cy:p.y,rx:1,ry:1});
-    else Object.assign(o,{x:p.x,y:p.y,w:1,h:1});
-    simoObjects().push(o); simoDrawing={kind:'draw', id:o.id, start:p};
-  } else if(simoTool==='arrow'){
-    const o={id:simoId(), type:'arrow', color:simoColor, size:simoSize, heads:simoArrowHeads, dash:simoDashOn, x1:p.x,y1:p.y,x2:p.x,y2:p.y};
-    simoObjects().push(o); simoDrawing={kind:'draw', id:o.id, start:p};
-  }
-  svg.setPointerCapture?.(e.pointerId); e.preventDefault(); simoRenderInk();
-};
-
-simoMove=function(e){
-  if(!simoDrawing) return;
-  const p=simoPoint(e);
-  if(simoDrawing.kind==='laser'){ simoLaserPts.push({x:p.x,y:p.y,t:Date.now()}); return; }
-  if(simoDrawing.kind==='erase'){ simoEraseAt(p, simoEraserSize/2+8); simoRenderInk(); return; }
-  if(simoDrawing.kind==='eraseobj'){
-    const target=e.target.closest?.('[data-ink-id]');
-    if(target){ const a=simoObjects(); const i=a.findIndex(o=>o.id===target.dataset.inkId); if(i>=0){a.splice(i,1); simoRenderInk();} }
-    return;
-  }
-  if(simoDrawing.kind==='resize'){
-    const o=simoFind(simoDrawing.id); if(!o) return;
-    const tx=o.tx||0, ty=o.ty||0; const lp={x:p.x-tx,y:p.y-ty}; const h=simoDrawing.handle;
-    if(o.type==='line'||o.type==='arrow'){ if(h==='p1'){o.x1=lp.x;o.y1=lp.y} else {o.x2=lp.x;o.y2=lp.y} }
-    else {
-      const ob=simoBBox(simoDrawing.orig); let ax,ay;
-      if(h==='nw'){ax=ob.x+ob.w;ay=ob.y+ob.h} else if(h==='ne'){ax=ob.x;ay=ob.y+ob.h} else if(h==='sw'){ax=ob.x+ob.w;ay=ob.y} else {ax=ob.x;ay=ob.y}
-      const nx=Math.min(ax,lp.x), ny=Math.min(ay,lp.y), nw=Math.max(10,Math.abs(lp.x-ax)), nh=Math.max(10,Math.abs(lp.y-ay));
-      if(o.type==='ellipse'){ o.cx=nx+nw/2; o.cy=ny+nh/2; o.rx=nw/2; o.ry=nh/2; }
-      else { o.x=nx; o.y=ny; o.w=nw; o.h=nh; }
-    }
-    simoRenderInk(); return;
-  }
-  if(simoDrawing.kind==='groupmove'){
-    const dx=p.x-simoDrawing.start.x, dy=p.y-simoDrawing.start.y;
-    simoDrawing.bases.forEach(b=>{ const o=simoFind(b.id); if(o){ o.tx=b.tx+dx; o.ty=b.ty+dy; } });
-    simoRenderInk(); return;
-  }
-  const o=simoFind(simoDrawing.id); if(!o) return;
-  if(simoDrawing.kind==='move'){
-    const dx=p.x-simoDrawing.start.x, dy=p.y-simoDrawing.start.y;
-    if(Math.abs(dx)>1||Math.abs(dy)>1) simoDrawing.moved=true;
-    o.tx=simoDrawing.base.tx+dx; o.ty=simoDrawing.base.ty+dy; simoRenderInk(); return;
-  }
-  if(simoDrawing.kind==='ink'){
-    const now=performance.now();
-    const last=o._last||{x:o.pts[o.pts.length-1][0], y:o.pts[o.pts.length-1][1], t:now-16};
-    const dist=Math.hypot(p.x-last.x,p.y-last.y);
-    if(dist<1.1) return;
-    const dt=Math.max(now-last.t,4);
-    const w=simoStrokeWidthFor(e,o.baseSize,dist,dt);
-    o.pts.push([p.x,p.y,w]); o._last={x:p.x,y:p.y,t:now};
-    if(o.pts.length>800) o.pts.splice(0,o.pts.length-800);
-    o.d = o.kind==='highlighter' ? simoSmoothCenterline(o.pts) : simoStrokeOutline(o.pts,o.baseSize);
-    simoRenderInkLive(o); return;
-  }
-  if(o.type==='rect'||o.type==='diamond'){ o.x=Math.min(simoDrawing.start.x,p.x); o.y=Math.min(simoDrawing.start.y,p.y); o.w=Math.abs(p.x-simoDrawing.start.x); o.h=Math.abs(p.y-simoDrawing.start.y); }
-  else if(o.type==='ellipse'){ o.cx=(simoDrawing.start.x+p.x)/2; o.cy=(simoDrawing.start.y+p.y)/2; o.rx=Math.abs(p.x-simoDrawing.start.x)/2; o.ry=Math.abs(p.y-simoDrawing.start.y)/2; }
-  else if(o.type==='arrow'){ o.x2=p.x; o.y2=p.y; }
-  simoRenderInk();
-};
-
-simoEnd=function(e){
-  if(!simoDrawing) return;
-  const d=simoDrawing; simoDrawing=null;
-  if(d.kind==='laser') return;
-  if(d.kind==='move' && !d.moved){ if(simoInkUndo.length) simoInkUndo.pop(); simoPositionSelection(); return; }
-  if(d.kind==='ink'){
-    const o=simoFind(d.id);
-    if(o){
-      const n=o.pts.length;
-      for(let i=0;i<n;i++){
-        const st=Math.min(1,i/4), en=Math.min(1,(n-1-i)/4), f=Math.min(st,en,1);
-        o.pts[i][2]=Math.max(o.baseSize*0.4, o.pts[i][2]*(0.55+0.45*f));
-      }
-      o.d = o.kind==='highlighter' ? simoSmoothCenterline(o.pts) : simoStrokeOutline(o.pts,o.baseSize);
-      delete o._last;
-    }
-  }
-  simoSave();
-};
-
-const SIMO_BASE_RENDER_INK_V3=simoRenderInk;
-simoRenderInk=function(){
-  SIMO_BASE_RENDER_INK_V3();
-  const svg=$('#simoInkLayer'); if(!svg) return;
-  svg.insertAdjacentHTML('beforeend', simoHandlesHTML());
-};
-
-const SIMO_BASE_POSITION_SELECTION_V3=simoPositionSelection;
-simoPositionSelection=function(){
-  if(simoMultiSelected && simoMultiSelected.length>1){ $('#simoSelectionBar')?.classList.remove('show'); return; }
-  SIMO_BASE_POSITION_SELECTION_V3();
-};
-
-function simoKeyHandler(e){
-  if(STUDENT_PORTAL) return;
-  const liveEl=$('#view-live'); if(!liveEl || liveEl.classList.contains('hidden')) return;
-  const ae=document.activeElement;
-  const typing = ae && (ae.tagName==='INPUT'||ae.tagName==='TEXTAREA'||ae.isContentEditable);
-  if(typing){ if(e.key==='Escape' && ae.id==='simoInlineTextEditor') ae.blur(); return; }
-  const k=e.key.toLowerCase();
-  if((e.ctrlKey||e.metaKey) && k==='z' && !e.shiftKey){ e.preventDefault(); simoUndo(); return; }
-  if((e.ctrlKey||e.metaKey) && (k==='y' || (k==='z'&&e.shiftKey))){ e.preventDefault(); simoRedo(); return; }
-  if((e.ctrlKey||e.metaKey) && k==='d'){ e.preventDefault(); simoDuplicateSelection(); return; }
-  if(k==='delete' || k==='backspace'){ if(simoSelected||simoMultiSelected.length){ e.preventDefault(); simoDeleteSelection(); } return; }
-  if(k==='escape'){ simoSelected=null; simoMultiSelected=[]; simoRenderInk(); return; }
-  if(e.code==='Space' && simoTool!=='hand'){ simoSpaceHeldPrevTool=simoTool; simoSetTool('hand'); e.preventDefault(); return; }
-  const map={v:'pointer',h:'hand',p:'pen',m:'highlighter',e:'eraser',t:'text',n:'note',s:'shape',a:'arrow',l:'laser'};
-  if(map[k]) simoSetTool(map[k]);
-}
-function simoKeyUpHandler(e){
-  if(e.code==='Space' && simoSpaceHeldPrevTool){ simoSetTool(simoSpaceHeldPrevTool); simoSpaceHeldPrevTool=null; }
-}
-
-const SIMO_BASE_INIT_V3=simoInit;
-simoInit=function(){
-  SIMO_BASE_INIT_V3();
-  const board=$('#teacherBoard');
-  if(board){
-    board.addEventListener('wheel', simoWheelZoom, {passive:false});
-    const savedGrid=localStorage.getItem('simoGridStyle')||'';
-    if(savedGrid) board.classList.add(savedGrid);
-  }
-  $$('[data-simo-action="grid"]').forEach(b=>b.onclick=()=>{
-    const bd=$('#teacherBoard'); if(!bd) return;
-    const order=['','simo-grid-lines','simo-grid-off'];
-    let cur=order.find(c=>c&&bd.classList.contains(c))||'';
-    let idx=order.indexOf(cur);
-    order.forEach(c=>c&&bd.classList.remove(c));
-    const next=order[(idx+1)%order.length];
-    if(next) bd.classList.add(next);
-    localStorage.setItem('simoGridStyle', next);
-    simoToast(next===''?'Noktalı zemin':next==='simo-grid-lines'?'Çizgili zemin':'Düz zemin');
-  });
-  $$('[data-simo-action="export"]').forEach(b=>b.onclick=simoExportPNG);
-  requestAnimationFrame(simoLaserLoop);
-  document.addEventListener('keydown', simoKeyHandler);
-  document.addEventListener('keyup', simoKeyUpHandler);
-};
-
-(async function init(){applyBrand();boardLoad();simoNormalizeBoardBlocks();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt'),autoBackend=okulSimoBackendDefault();if(rtParam)localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:normalizedEndpoint(rtParam)}));if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');restoreStudentSession(roomParam)}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})})();
+(async function init(){applyBrand();boardLoad();simoNormalizeBoardBlocks();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt'),autoBackend=okulSimoBackendDefault();if(rtParam)localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:normalizedEndpoint(rtParam)}));if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');const restored=restoreStudentSession(roomParam);if(restored)$('#studentStatusText').textContent='Odaya bağlanılıyor • tahta eşitleniyor'}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})})();
 
 
 </script>

@@ -2,8 +2,9 @@ import { DurableObject } from "cloudflare:workers";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET,PUT,OPTIONS",
+  "Access-Control-Allow-Methods": "GET,POST,PUT,OPTIONS",
   "Access-Control-Allow-Headers": "Content-Type,X-File-Name",
+  "Access-Control-Max-Age": "86400",
 };
 
 function json(data, status = 200, extra = {}) {

@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
 <meta name="theme-color" content="#0f172a" />
-<meta name="simo-build" content="2026-08-17-livefix4-backend-domain">
+<meta name="simo-build" content="2026-08-17-mobile-student-fix1">
 <meta name="simo-build" content="SIMOBOARD_STUDIO_3_20260817" />
 <meta name="simo-board-version" content="studio-2.0" />
 <title>Okul Simo • SimoBoard Studio 3 — Canlı Ders</title>
@@ -233,6 +233,143 @@ body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.p
  .presenting .simo-tool-panel,.presenting .simo-selection-bar{bottom:60px!important}
  .presenting .simo-zoom-controls{bottom:68px!important}
  #teacherBoard.simo-pdf-focus .pdf-focus-active{inset:8px 6px 68px 6px!important}
+}
+
+
+/* ===== MOBILE STUDENT PRO FIX ===== */
+@media(max-width:760px){
+  body.student-only #view-student.page{
+    padding:8px 8px calc(18px + env(safe-area-inset-bottom))!important;
+  }
+  body.student-only .join-card{
+    margin:0 0 8px!important;
+    border-radius:14px!important;
+    box-shadow:none!important;
+  }
+  body.student-only .join-card .card-body{
+    padding:11px!important;
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 96px!important;
+    gap:8px!important;
+    align-items:end!important;
+  }
+  body.student-only .join-card .field:first-child{grid-column:1/-1!important}
+  body.student-only .join-card .field{gap:4px!important}
+  body.student-only .join-card label{font-size:12px!important}
+  body.student-only .join-card input{
+    min-height:44px!important;
+    padding:9px 10px!important;
+    font-size:16px!important;
+    border-radius:10px!important;
+  }
+  body.student-only .join-card #studentJoinBtn{
+    min-height:44px!important;
+    padding:9px 10px!important;
+    border-radius:10px!important;
+    white-space:nowrap!important;
+  }
+  body.student-only.student-joined .join-card{display:none!important}
+
+  body.student-only .student-live-shell{gap:8px!important}
+  body.student-only .student-live-head{
+    padding:9px 10px!important;
+    border-radius:13px!important;
+    gap:7px!important;
+    position:sticky;
+    top:0;
+    z-index:18;
+  }
+  body.student-only .student-live-brand{gap:8px!important}
+  body.student-only .student-live-brand .student-live-logo{
+    width:32px!important;height:32px!important;border-radius:9px!important;font-size:16px!important;
+  }
+  body.student-only .student-live-brand b{font-size:14px!important}
+  body.student-only .student-live-brand small{
+    font-size:10.5px!important;
+    max-width:250px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  body.student-only .student-live-meta{
+    width:100%!important;
+    display:flex!important;
+    flex-wrap:nowrap!important;
+    gap:5px!important;
+    overflow-x:auto!important;
+    scrollbar-width:none;
+    padding-bottom:1px;
+  }
+  body.student-only .student-live-meta::-webkit-scrollbar{display:none}
+  body.student-only .student-live-meta > span{
+    flex:0 0 auto!important;
+    font-size:10px!important;
+    padding:4px 7px!important;
+  }
+  body.student-only .student-board-stage{
+    padding:7px!important;
+    border-radius:13px!important;
+    min-height:0!important;
+  }
+  body.student-only .student-board-topic{
+    margin:0 0 6px!important;
+    padding:2px 2px 0!important;
+  }
+  body.student-only .student-board-topic h2{font-size:20px!important;line-height:1.2!important}
+  body.student-only .student-board-topic small{font-size:11px!important}
+  body.student-only .student-board-content{gap:8px!important}
+  body.student-only .student-board-block{
+    padding:11px 10px!important;
+    min-height:74px!important;
+    border-radius:11px!important;
+    box-shadow:none!important;
+  }
+  body.student-only .student-board-block .block-kicker{
+    font-size:9px!important;
+    margin-bottom:6px!important;
+    padding-right:82px!important;
+  }
+  body.student-only .student-board-confuse{
+    top:6px!important;right:6px!important;
+    padding:4px 6px!important;
+    font-size:9px!important;
+    border-radius:8px!important;
+  }
+  body.student-only .student-board-block .board-test-question{
+    font-size:20px!important;
+    line-height:1.27!important;
+    margin-bottom:10px!important;
+  }
+  body.student-only .student-board-block .board-test-options{
+    grid-template-columns:1fr!important;
+    gap:7px!important;
+  }
+  body.student-only .student-board-block .board-test-option{
+    padding:9px 10px!important;
+    font-size:16px!important;
+    line-height:1.3!important;
+    border-radius:10px!important;
+  }
+  body.student-only .student-board-block .board-test-option b{
+    width:26px!important;height:26px!important;border-radius:7px!important;margin-right:6px!important;
+  }
+  body.student-only .student-live-question{
+    padding:10px!important;border-radius:13px!important;
+  }
+  body.student-only .student-live-question .qbox h3{
+    font-size:20px!important;
+    line-height:1.28!important;
+    margin:6px 0 10px!important;
+  }
+  body.student-only .student-live-question .phoneChoice{
+    padding:10px!important;
+    font-size:15px!important;
+    border-radius:10px!important;
+    margin:4px 0!important;
+  }
+  body.student-only .student-board-pdf{height:52vh!important}
+  body.student-only .student-simo-canvas-base,
+  body.student-only .student-simo-ink{min-height:48vh!important}
 }
 
 </style>
@@ -578,7 +715,7 @@ $$('[data-manual-question]').forEach(b=>b.addEventListener('click',()=>openQuest
 $$('[data-close]').forEach(b=>b.addEventListener('click',()=>b.closest('.modal')?.classList.add('hidden')));
 $$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.add('hidden')}));
 
-$('#copyRoom').onclick=async()=>{const r=getRoom();try{const u=new URL(location.href);u.hash='';u.search='';u.searchParams.set('room',r.code);const ep=normalizedEndpoint(realtimeCfg().endpoint);if(ep)u.searchParams.set('rt',ep);await navigator.clipboard.writeText(u.toString());toast(ep?'İnternet oda linki kopyalandı':'Oda linki kopyalandı • farklı cihazlarda canlı çalışması için internet bağlantı adresini bağla',4600)}catch{toast('Oda kodu: '+r.code)}};
+$('#copyRoom').onclick=async()=>{const r=getRoom();try{const u=studentAppURL();u.hash='';u.search='';u.searchParams.set('room',r.code);const ep=normalizedEndpoint(okulSimoBackendDefault()||realtimeCfg().endpoint);if(ep)u.searchParams.set('rt',ep);await navigator.clipboard.writeText(u.toString());toast('İnternet oda linki kopyalandı',3200)}catch{toast('Oda kodu: '+r.code)}};
 function present(force){const app=$('.app'), on=typeof force==='boolean'?force:!app.classList.contains('presenting');showView('live');app.classList.toggle('presenting',on);app.classList.remove('present-control-open');$('#exitPresent').classList.add('hidden');renderPresentNav();if(on&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen().catch(()=>{});toast(on?'Sunum modu açık — sayfa değiştirmek için alttaki kumandayı kullan':'Sunum modu kapatıldı')}
 $('#presentBtn').onclick=()=>present(true);$('#settingsPresent').onclick=()=>present(true);$('#exitPresent').onclick=()=>present(false);$('#presentExit2').onclick=()=>present(false);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('.app').classList.contains('presenting'))present(false)});
 $('#prevSlide').onclick=()=>toast('Önceki içerik');$('#nextSlide').onclick=()=>toast('Sonraki içerik');$('#showExamples').onclick=()=>document.querySelector('.examples-title').scrollIntoView({behavior:'smooth',block:'center'});$('#toggleTranslation').onclick=()=>{const box=$('.lesson-screen');const hide=box.classList.toggle('hide-translations');$('#toggleTranslation').textContent=hide?'Türkçeyi göster':'Türkçeyi gizle'};$('#quickPoll').onclick=()=>toast('Hızlı anket açıldı');
@@ -652,6 +789,30 @@ const liveChannel=('BroadcastChannel' in window)?new BroadcastChannel('ogretmen-
 const STUDENT_PORTAL=new URLSearchParams(location.search).has('room');
 const LOCAL_ROOM_KEY=STUDENT_PORTAL?'ogretmen.student.room.v1':ROOM_KEY;
 const STUDENT_SESSION_KEY='ogretmen.student.session.v1';
+
+const STUDENT_APP_ORIGIN='https://simookul.simoegitim.com';
+function studentAppURL(){
+  try{
+    const h=String(location.hostname||'').toLowerCase();
+    if(h==='simookul.simoegitim.com'||h==='okul.simoegitim.com')return new URL(STUDENT_APP_ORIGIN+'/');
+    return new URL(location.origin+'/');
+  }catch{return new URL(STUDENT_APP_ORIGIN+'/')}
+}
+function ensureStudentAppOrigin(){
+  try{
+    if(!STUDENT_PORTAL)return false;
+    const h=String(location.hostname||'').toLowerCase();
+    if(h!=='okul.simoegitim.com')return false;
+    const u=new URL(location.href);
+    const target=new URL(STUDENT_APP_ORIGIN+'/');
+    target.search=u.search;
+    target.hash=u.hash;
+    location.replace(target.toString());
+    return true;
+  }catch{return false}
+}
+function setStudentJoinedUI(on=true){document.body.classList.toggle('student-joined',!!on)}
+
 let studentSession=null, studentSelected=null, studentQuestionId=null, studentQuestionRevealed=false;
 let realtimeSocket=null,realtimeTimer=null,realtimeWanted=true,realtimeRole=STUDENT_PORTAL?'student':'teacher',realtimeLastState='local';
 let realtimeLastSyncAt=0,realtimeHealthOkAt=0,realtimeReconnectAttempt=0,realtimeInitialRoomSeen=false,realtimeInitialSyncTimer=null;
@@ -835,8 +996,8 @@ function renderRoomState(r=getRoom()){
 }
 function publishQuestion(q){const r=getRoom();if(!r.startedAt||r.endedAt){toast('Önce canlı dersi başlat.');return false}if(r.paused){toast('Ders duraklatıldı. Önce “Devam et” de.');return false}r.lesson=getPlan();r.question={...q,id:Date.now(),revealed:false};r.questionCount=(r.questionCount||0)+1;Object.values(r.students||{}).forEach(st=>{st.answer=null});saveRoom(r);syncStudentQuestion(r);return true}
 function syncStudentQuestion(r=getRoom()){if(!studentSession||studentSession.code!==r.code)return;renderStudentLesson(r);const locked=!!r.paused||!!r.endedAt;if(!r.question){studentQuestionRevealed=false;$('#studentStatusText').textContent=r.endedAt?'Ders sona erdi':r.paused?'Ders duraklatıldı':r.startedAt?'Derse bağlısın • soru bekleniyor':'Derse bağlandın';$('#studentSend').disabled=true;return}const st=r.students?.[studentSession.id];const isNew=studentQuestionId!==r.question.id;const revealNow=!!r.question.revealed&&Number.isInteger(r.question.correct);const revealChanged=studentQuestionRevealed!==revealNow;if(isNew||revealChanged){studentQuestionId=r.question.id;studentQuestionRevealed=revealNow;renderQuestion(r.question.q,r.question.choices,r.question.correct,revealNow);if(isNew){studentSelected=null;$$('.phoneChoice').forEach(x=>x.classList.remove('selected'));$('#studentAnswerResult').className='student-result hidden';$('#studentAnswerResult').textContent='';$('#studentStatusText').textContent='Öğretmen yeni soru gönderdi'}}if(st?.answer!=null){studentSelected=st.answer;$$('.phoneChoice').forEach((x,i)=>x.classList.toggle('selected',i===st.answer));$('#studentSend').disabled=true;$('#studentSend').textContent='✓ Cevap gönderildi';if(revealNow){const res=$('#studentAnswerResult');res.className='student-result '+(st.answer===r.question.correct?'good':'bad');res.textContent=st.answer===r.question.correct?'✓ Doğru cevap':'Doğru cevap: '+String.fromCharCode(65+r.question.correct);$('#studentStatusText').textContent='Cevap açıklandı'}else $('#studentStatusText').textContent='Cevabın öğretmene ulaştı'}else if(isNew){$('#studentSend').disabled=true;$('#studentSend').textContent='Cevabımı gönder'}if(locked||revealNow){$$('.phoneChoice').forEach(x=>x.disabled=true);$('#studentSend').disabled=true;if(locked)$('#studentStatusText').textContent=r.endedAt?'Ders sona erdi':'Ders duraklatıldı'}else{$$('.phoneChoice').forEach(x=>x.disabled=false)}}
-function restoreStudentSession(code){try{const x=JSON.parse(sessionStorage.getItem(STUDENT_SESSION_KEY)||'null');if(!x?.id||!x?.name||String(x.code)!==String(code))return false;studentSession={id:x.id,name:x.name,code:String(code)};$('#studentJoinName').value=x.name;$('#studentJoinCode').value=String(code);$('#studentRoomCode').textContent='ODA '+code;$('#studentJoinBtn').textContent='✓ Bağlı';const r=getRoom();r.students=r.students||{};const old=r.students[x.id]||{};r.students[x.id]={id:x.id,name:x.name,answer:old.answer??null,joined:old.joined||Date.now(),totalAnswered:old.totalAnswered||0,totalCorrect:old.totalCorrect||0};localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r));renderRoomState(r);syncStudentQuestion(r);return true}catch{return false}}
-function joinStudent(){const name=$('#studentJoinName').value.trim();const code=$('#studentJoinCode').value.trim();if(!name)return toast('Öğrenci adını yaz.');if(!/^[0-9A-Za-z_-]{4,32}$/.test(code))return toast('Geçerli oda kodunu yaz.');const id=sessionStorage.getItem('ogretmen.student.id')||(crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()));sessionStorage.setItem('ogretmen.student.id',id);studentSession={id,name,code};sessionStorage.setItem(STUDENT_SESSION_KEY,JSON.stringify(studentSession));if(!STUDENT_PORTAL){const u=new URL(location.href);u.hash='';u.search='';u.searchParams.set('room',code);const ep=normalizedEndpoint(realtimeCfg().endpoint)||okulSimoBackendDefault();if(ep)u.searchParams.set('rt',ep);location.assign(u.toString());return}const r=getRoom();if(String(r.code)!==String(code)){r.code=code;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r))}r.students=r.students||{};const old=r.students[id]||{};r.students[id]={id,name,answer:old.answer??null,joined:old.joined||Date.now(),totalAnswered:old.totalAnswered||0,totalCorrect:old.totalCorrect||0};r.confusions=r.confusions||[];saveRoom(r);$('#studentRoomCode').textContent='ODA '+code;$('#studentStatusText').textContent=realtimeLastState==='online'?'Derse bağlandın • tahta eşitleniyor':'Derse bağlandın • bağlantı bekleniyor';$('#studentJoinBtn').textContent='✓ Katıldın';syncStudentQuestion(r);if(realtimeLastState==='online'){realtimeSend({type:'hello',studentId:id,name});const x=studentCloudPayload(r);if(x)realtimeSend({type:'student_update',...x})}else{const ep=normalizedEndpoint(realtimeCfg().endpoint)||okulSimoBackendDefault();if(ep)realtimePrepareAndConnect(ep,false)}toast('Derse katıldın')}
+function restoreStudentSession(code){try{const x=JSON.parse(sessionStorage.getItem(STUDENT_SESSION_KEY)||'null');if(!x?.id||!x?.name||String(x.code)!==String(code))return false;studentSession={id:x.id,name:x.name,code:String(code)};setStudentJoinedUI(true);$('#studentJoinName').value=x.name;$('#studentJoinCode').value=String(code);$('#studentRoomCode').textContent='ODA '+code;$('#studentJoinBtn').textContent='✓ Bağlı';const r=getRoom();r.students=r.students||{};const old=r.students[x.id]||{};r.students[x.id]={id:x.id,name:x.name,answer:old.answer??null,joined:old.joined||Date.now(),totalAnswered:old.totalAnswered||0,totalCorrect:old.totalCorrect||0};localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r));renderRoomState(r);syncStudentQuestion(r);return true}catch{return false}}
+function joinStudent(){const name=$('#studentJoinName').value.trim();const code=$('#studentJoinCode').value.trim();if(!name)return toast('Öğrenci adını yaz.');if(!/^[0-9A-Za-z_-]{4,32}$/.test(code))return toast('Geçerli oda kodunu yaz.');const id=sessionStorage.getItem('ogretmen.student.id')||(crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random()));sessionStorage.setItem('ogretmen.student.id',id);studentSession={id,name,code};sessionStorage.setItem(STUDENT_SESSION_KEY,JSON.stringify(studentSession));setStudentJoinedUI(true);if(!STUDENT_PORTAL){const u=studentAppURL();u.hash='';u.search='';u.searchParams.set('room',code);const ep=normalizedEndpoint(okulSimoBackendDefault()||realtimeCfg().endpoint);if(ep)u.searchParams.set('rt',ep);location.assign(u.toString());return}const r=getRoom();if(String(r.code)!==String(code)){r.code=code;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(r))}r.students=r.students||{};const old=r.students[id]||{};r.students[id]={id,name,answer:old.answer??null,joined:old.joined||Date.now(),totalAnswered:old.totalAnswered||0,totalCorrect:old.totalCorrect||0};r.confusions=r.confusions||[];saveRoom(r);$('#studentRoomCode').textContent='ODA '+code;$('#studentStatusText').textContent=realtimeLastState==='online'?'Derse bağlandın • tahta eşitleniyor':'Derse bağlandın • bağlantı bekleniyor';$('#studentJoinBtn').textContent='✓ Katıldın';syncStudentQuestion(r);if(realtimeLastState==='online'){realtimeSend({type:'hello',studentId:id,name});const x=studentCloudPayload(r);if(x)realtimeSend({type:'student_update',...x})}else{const ep=normalizedEndpoint(realtimeCfg().endpoint)||okulSimoBackendDefault();if(ep)realtimePrepareAndConnect(ep,false)}toast('Derse katıldın')}
 function sendStudentAnswer(){if(!studentSession||studentSelected==null)return;const r=getRoom();if(r.endedAt)return toast('Ders sona erdi.');if(r.paused)return toast('Ders şu an duraklatıldı.');const st=r.students?.[studentSession.id];if(!st)return toast('Önce derse tekrar katıl.');if(st.answer==null){if(realtimeLastState!=='online'){st.totalAnswered=(st.totalAnswered||0)+1;if(studentSelected===r.question?.correct)st.totalCorrect=(st.totalCorrect||0)+1}st.answer=studentSelected}saveRoom(r);$('#studentSend').textContent='✓ Cevap gönderildi';$('#studentSend').disabled=true;const res=$('#studentAnswerResult');res.className='student-result';res.textContent='Cevabın öğretmene gönderildi.';toast('Cevap öğretmene gönderildi')}
 function startLesson(){const r=getRoom();if(r.endedAt){r.startedAt=Date.now();r.question=null;r.questionCount=0;r.confusions=[];Object.values(r.students||{}).forEach(st=>{st.answer=null;st.totalAnswered=0;st.totalCorrect=0;st.joined=Date.now()})}else r.startedAt=r.startedAt||Date.now();r.endedAt=null;r.paused=false;r.lesson=getPlan();r.board=liveBoardSnapshot();r.confusions=r.confusions||[];try{const z=typeof zoomCfg==='function'?zoomCfg():{};const zu=typeof zoomMeetingUrl==='function'?zoomMeetingUrl(z):'';r.zoom={meetingNumber:z.meetingNumber||'',joinUrl:zu||'',enabled:!!zu}}catch{}saveRoom(r);toast('Ders başladı — oda ve öğrenci tahtası açık')}
 async function startLessonUnified(){
@@ -1241,7 +1402,7 @@ simoInit=function(){SIMO_BASE_INIT_V2();const svg=$('#simoInkLayer'),ed=$('#simo
  const tb=$('#simoTextSelectionTools');tb?.querySelectorAll('[data-text-style]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();const k=b.dataset.textStyle;o[k]=!o[k];simoSave()});tb?.querySelectorAll('[data-text-align]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();o.align=b.dataset.textAlign;simoSave()});tb?.querySelectorAll('[data-text-size]').forEach(b=>b.onclick=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;simoPushUndo();o.fontSize=Math.max(14,Math.min(120,(o.fontSize||30)+(b.dataset.textSize==='up'?4:-4)));simoSave()});const tc=$('#simoSelectedTextColor');if(tc)tc.oninput=()=>{const o=simoFind(simoSelected);if(!o||o.type!=='text')return;o.color=tc.value;simoSave()};document.addEventListener('pointerup',e=>{if(simoDrawing)simoEnd(e)});
 };
 
-(async function init(){applyBrand();boardLoad();simoNormalizeBoardBlocks();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt'),autoBackend=okulSimoBackendDefault();if(rtParam)localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:normalizedEndpoint(rtParam)}));if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');const restored=restoreStudentSession(roomParam);if(restored)$('#studentStatusText').textContent='Odaya bağlanılıyor • tahta eşitleniyor'}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{})})();
+(async function init(){if(ensureStudentAppOrigin())return;applyBrand();boardLoad();simoNormalizeBoardBlocks();if(typeof simoInit==='function')simoInit();await hydrateBoardMedia();loadPrivateNote();const qs=new URLSearchParams(location.search),roomParam=qs.get('room'),rtParam=qs.get('rt'),autoBackend=okulSimoBackendDefault();if(rtParam)localStorage.setItem(REALTIME_KEY,JSON.stringify({endpoint:normalizedEndpoint(rtParam)}));if(autoBackend){const z=zoomCfg();if(!z.connector){z.connector=autoBackend;localStorage.setItem(ZOOM_KEY,JSON.stringify(z))}}if(roomParam){document.body.classList.add('student-only');$('#studentJoinCode').value=roomParam;const sr=getRoom();sr.code=roomParam;localStorage.setItem(LOCAL_ROOM_KEY,JSON.stringify(sr));showView('student');const restored=restoreStudentSession(roomParam);if(restored)$('#studentStatusText').textContent='Odaya bağlanılıyor • tahta eşitleniyor'}realtimeLoad();zoomRenderCfg();zoomRefreshStatus(true);renderFolderControls(false);renderRoomState(getRoom());renderHistory();renderLessonLibrary();renderQuestionBank();const p=JSON.parse(localStorage.getItem('ogretmen.plan')||'null');if(p){$('#planTopic').value=p.topic||'';$('#planSource').value=p.source||'';$('#planMain').value=p.main||'';$('#planTr').value=p.tr||'';$('#planExplain').value=p.explain||'';$('#planNote').value=p.note||'';$('#planBody').value=p.body||'';$('#planExamples').value=p.examples||'';oldApplyPlan(p)}await renderFiles();await loadDirHandle();loadAISettings();if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js?v=20260817-mobilefix1',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{})})();
 
 
 </script>

@@ -70,7 +70,7 @@
 .present-nav button:hover,.present-nav button.active{background:#334155;color:#fff}
 .present-nav .present-page-btn{min-width:38px}
 .present-nav .present-exit{background:#fff;color:#0f172a}
-.presenting .present-nav{display:flex}
+.presenting .present-nav,.app.presenting ~ .present-nav,body.okul-presenting .present-nav{display:flex}
 .presenting.present-control-open .studio-drawer{display:block!important;position:fixed;right:12px;top:12px;bottom:74px;width:min(360px,calc(100vw - 24px));z-index:92;max-height:none;border-radius:18px}
 .presenting.present-control-open .studio-drawer .drawer-body{max-height:calc(100vh - 170px)}
 .presenting.present-control-open .lesson-screen.board-canvas{padding-right:32px}
@@ -115,7 +115,7 @@ body.student-only{background:#f5f7fb}body.student-only .app{display:block;min-he
 .zoom-quick-status{display:inline-flex;align-items:center;gap:7px}.zoom-dot{width:8px;height:8px;border-radius:50%;background:#94a3b8}.zoom-dot.ready{background:#22c55e}.zoom-dot.busy{background:#f59e0b}.zoom-dot.error{background:#ef4444}
 .zoom-settings{margin-top:16px}.zoom-settings-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:16px}.zoom-state-card{border:1px solid var(--line);border-radius:14px;padding:14px;background:#f8fafc}.zoom-state-card h3{margin:0 0 8px;font-size:15px}.zoom-state-line{display:flex;align-items:center;gap:9px;margin:7px 0}.zoom-state-line .lamp{width:10px;height:10px;border-radius:50%;background:#94a3b8;flex:0 0 auto}.zoom-state-line.ok .lamp{background:#22c55e}.zoom-state-line.warn .lamp{background:#f59e0b}.zoom-state-line.bad .lamp{background:#ef4444}.zoom-actions{display:flex;gap:8px;flex-wrap:wrap}.zoom-note{font-size:12px;color:#475569;border:1px solid #dbeafe;background:#f8fbff;border-radius:11px;padding:10px;margin-top:10px}
 .zoom-dock{position:fixed;z-index:75;right:12px;top:82px;width:min(440px,calc(100vw - 24px));height:calc(100vh - 96px);background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 24px 70px rgba(15,23,42,.24);display:flex;flex-direction:column;overflow:hidden}.zoom-dock.hidden{display:none}.zoom-dock-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:11px 12px;border-bottom:1px solid var(--line);background:#fff}.zoom-dock-title{display:flex;align-items:center;gap:8px;min-width:0}.zoom-dock-title b{font-size:14px}.zoom-dock-title small{display:block;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:260px}.zoom-dock-actions{display:flex;gap:5px}.zoom-dock-actions button{border:1px solid var(--line);background:#fff;border-radius:8px;padding:6px 8px}.zoom-frame-wrap{position:relative;flex:1;min-height:0;background:#0f172a}.zoom-frame{width:100%;height:100%;border:0;background:#0f172a}.zoom-placeholder{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:28px;color:#e2e8f0;background:linear-gradient(145deg,#0f172a,#1e293b)}.zoom-placeholder .zicon{width:70px;height:70px;border-radius:22px;background:#2d8cff;display:grid;place-items:center;font-size:34px;margin:0 auto 13px}.zoom-placeholder h3{margin:0 0 6px;color:white}.zoom-placeholder p{margin:0 auto 16px;color:#cbd5e1;max-width:330px}.zoom-placeholder .btn{border-color:#334155}.zoom-mobile-actions{display:none}
-body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.presenting .zoom-dock{display:none!important}
+body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.presenting .zoom-dock,.app.presenting ~ .zoom-dock,body.okul-presenting .zoom-dock{display:none!important}
 .zoom-integration-banner{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid #bfdbfe;background:#eff6ff;border-radius:14px;padding:10px 12px;margin-bottom:10px}.zoom-integration-banner b{color:#1d4ed8}.zoom-integration-banner small{display:block;color:#475569}
 .student-zoom-card{border:1px solid #bfdbfe;background:#eff6ff;border-radius:14px;padding:12px}.student-zoom-card b{display:block;color:#1d4ed8;margin-bottom:4px}.student-zoom-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
 .student-teacher-pill{display:inline-flex;align-items:center;gap:5px;border:1px solid #bbf7d0;background:#ecfdf5;color:#047857;border-radius:999px;padding:5px 8px;font-size:11px;font-weight:850}.student-teacher-pill.wait{border-color:#fed7aa;background:#fff7ed;color:#9a3412}.student-teacher-pill.offline{border-color:#fecaca;background:#fef2f2;color:#b91c1c}
@@ -153,17 +153,31 @@ body.zoom-open:not(.student-only) #view-live:not(.hidden){padding-right:470px}.p
 .ink-laser-dot{position:absolute;width:18px;height:18px;border-radius:50%;background:#ef4444;box-shadow:0 0 0 7px rgba(239,68,68,.18),0 0 24px rgba(239,68,68,.55);z-index:14;pointer-events:none;transform:translate(-50%,-50%);display:none}
 .ink-laser-dot.show{display:block}
 .ink-toolbar{display:none;position:fixed;left:14px;top:14px;z-index:115;align-items:center;gap:6px;flex-wrap:wrap;max-width:min(720px,calc(100vw - 28px));padding:8px 9px;border-radius:16px;background:rgba(15,23,42,.92);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.16);box-shadow:0 18px 55px rgba(15,23,42,.28)}
-.presenting .ink-toolbar,.app.ink-toolbar-open .ink-toolbar{display:flex}
+.presenting .ink-toolbar,.app.presenting ~ .ink-toolbar,.app.ink-toolbar-open ~ .ink-toolbar,body.okul-presenting .ink-toolbar{display:flex}
 .ink-toolbar.collapsed>*:not(.ink-collapse):not(.ink-tool-label){display:none!important}
 .ink-toolbar button{border:0;background:transparent;color:#e2e8f0;border-radius:9px;padding:7px 9px;font-weight:850;white-space:nowrap}
 .ink-toolbar button:hover,.ink-toolbar button.active{background:#334155;color:#fff}.ink-toolbar .ink-tool-label{color:#fff;font-size:12px;font-weight:900;padding:0 4px}
 .ink-colors{display:flex;gap:5px;align-items:center}.ink-color{width:28px!important;height:28px!important;padding:0!important;border-radius:50%!important;border:2px solid rgba(255,255,255,.48)!important;box-shadow:0 0 0 2px transparent}.ink-color.active{box-shadow:0 0 0 3px #fff}.ink-sep{width:1px;height:27px;background:rgba(255,255,255,.17)}
 .present-quick-add{display:none;position:fixed;left:50%;bottom:72px;transform:translateX(-50%);z-index:112;width:min(660px,calc(100vw - 20px));padding:10px;border-radius:16px;background:rgba(255,255,255,.97);border:1px solid var(--line);box-shadow:0 20px 65px rgba(15,23,42,.3);grid-template-columns:repeat(4,1fr);gap:7px}
-.presenting.present-add-open .present-quick-add{display:grid}.present-quick-add button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px 8px;font-weight:850;color:#334155}.present-quick-add button:hover{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8}.present-quick-add .danger{color:#b91c1c}
+.presenting.present-add-open .present-quick-add,.app.presenting.present-add-open ~ .present-quick-add,body.okul-presenting.present-add-open .present-quick-add{display:grid}.present-quick-add button{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px 8px;font-weight:850;color:#334155}.present-quick-add button:hover{background:#eff6ff;border-color:#93c5fd;color:#1d4ed8}.present-quick-add .danger{color:#b91c1c}
 .student-board-stage{position:relative}.student-ink-layer{z-index:9}.student-board-topic,.student-board-content,.student-session-banner{position:relative;z-index:2}
 .presenting .lesson-screen.board-canvas{overflow:hidden}
 .presenting .board-content{z-index:1}.presenting .board-ink-layer{z-index:20}.presenting .ink-laser-dot{z-index:21}
 @media(max-width:760px){.ink-toolbar{left:7px;right:7px;top:7px;max-width:none;padding:6px;border-radius:13px;gap:4px}.ink-toolbar button{padding:7px;font-size:11px}.ink-color{width:25px!important;height:25px!important}.ink-sep{display:none}.present-quick-add{bottom:64px;grid-template-columns:repeat(2,1fr)}.present-nav{padding-top:6px}.present-nav button{font-size:11px}.ink-tool-label{display:none}}
+
+/* ===== V12 TAM EKRAN ARAÇLARI GÖRÜNÜRLÜK DÜZELTMESİ ===== */
+body.okul-presenting .mobilebar{display:none!important}
+body.okul-presenting .ink-toolbar{display:flex!important;opacity:1;visibility:visible;pointer-events:auto}
+body.okul-presenting .present-nav{display:flex!important;opacity:1;visibility:visible;pointer-events:auto}
+body.okul-presenting .ink-toolbar{top:max(10px,env(safe-area-inset-top));left:max(10px,env(safe-area-inset-left));z-index:2147483000}
+body.okul-presenting .present-nav{bottom:max(10px,env(safe-area-inset-bottom));z-index:2147482999}
+body.okul-presenting .present-quick-add{z-index:2147482998}
+body.okul-presenting .lesson-screen.board-canvas{padding-top:72px!important;padding-bottom:78px!important}
+body.okul-presenting .board-content{min-height:calc(100vh - 150px)!important}
+body.okul-presenting .ink-toolbar.collapsed{min-width:118px}
+body.okul-presenting .ink-toolbar.collapsed .ink-tool-label{display:inline-block!important}
+body.okul-presenting .ink-toolbar.collapsed .ink-collapse{display:inline-block!important}
+@media(max-width:760px){body.okul-presenting .lesson-screen.board-canvas{padding-top:62px!important;padding-bottom:68px!important}body.okul-presenting .present-nav{max-width:calc(100vw - 16px)}body.okul-presenting .ink-toolbar{max-height:112px;overflow-x:auto;overflow-y:hidden;flex-wrap:nowrap}body.okul-presenting .ink-toolbar .ink-tool-label{display:none!important}}
 
 </style>
 </head>
@@ -480,7 +494,7 @@ D seçeneği"></textarea></div><div class="form-grid"><div class="field"><label>
   <span class="ink-sep"></span>
   <button id="inkUndo" title="Son çizgiyi geri al">↶ Geri</button>
   <button id="inkClear" title="Bu sayfadaki çizimleri temizle">🧽 Temizle</button>
-  <button id="inkHand" title="Çizimi kapat, tahtayı normal kullan">☝ El</button>
+  <button id="inkHand" title="Çizimi kapat, yazı ve kutuları düzenle">☝ Düzenle</button>
   <button class="ink-collapse" id="inkCollapse" title="Kalem çubuğunu küçült">−</button>
 </div>
 <div class="present-quick-add" id="presentQuickAdd">
@@ -502,7 +516,7 @@ $$('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classLi
 function studentRoomUrl(r=getRoom()){const u=new URL(location.href);u.hash='';u.search='';u.searchParams.set('room',r.code);const ep=normalizedEndpoint(realtimeCfg().endpoint);if(ep)u.searchParams.set('rt',ep);return u.toString()}
 async function copyStudentRoomLink(r=getRoom(),notify=true){const link=studentRoomUrl(r);try{await navigator.clipboard.writeText(link);if(notify)toast('Öğrenci linki kopyalandı • Oda '+r.code,3600);return true}catch{if(notify)toast('Oda '+r.code+' • Linki üstteki “Oda linkini kopyala” butonundan tekrar deneyebilirsin',4600);return false}}
 $('#copyRoom').onclick=()=>copyStudentRoomLink(getRoom(),true);
-function present(force){const app=$('.app'), on=typeof force==='boolean'?force:!app.classList.contains('presenting');showView('live');app.classList.toggle('presenting',on);app.classList.remove('present-control-open');$('#exitPresent').classList.add('hidden');renderPresentNav();if(on&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen().catch(()=>{});toast(on?'Sunum modu açık — sayfa değiştirmek için alttaki kumandayı kullan':'Sunum modu kapatıldı')}
+function present(force){const app=$('.app'), on=typeof force==='boolean'?force:!app.classList.contains('presenting');showView('live');app.classList.toggle('presenting',on);document.body.classList.toggle('okul-presenting',on);document.body.classList.toggle('present-add-open',on&&app.classList.contains('present-add-open'));app.classList.remove('present-control-open');$('#exitPresent').classList.add('hidden');renderPresentNav();if(on&&document.documentElement.requestFullscreen)document.documentElement.requestFullscreen().catch(()=>{});else if(!on&&document.fullscreenElement)document.exitFullscreen().catch(()=>{});toast(on?'Sunum modu açık — üstte çizim araçları, altta ders kumandası hazır':'Sunum modu kapatıldı')}
 $('#presentBtn').onclick=()=>present(true);$('#settingsPresent').onclick=()=>present(true);$('#exitPresent').onclick=()=>present(false);$('#presentExit2').onclick=()=>present(false);document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('.app').classList.contains('presenting'))present(false)});
 $('#prevSlide').onclick=()=>toast('Önceki içerik');$('#nextSlide').onclick=()=>toast('Sonraki içerik');$('#showExamples').onclick=()=>document.querySelector('.examples-title').scrollIntoView({behavior:'smooth',block:'center'});$('#toggleTranslation').onclick=()=>{const box=$('.lesson-screen');const hide=box.classList.toggle('hide-translations');$('#toggleTranslation').textContent=hide?'Türkçeyi göster':'Türkçeyi gizle'};$('#quickPoll').onclick=()=>toast('Hızlı anket açıldı');
 
@@ -994,14 +1008,16 @@ $$('[data-ink-color]').forEach(b=>b.onclick=()=>{inkColor=b.dataset.inkColor;ref
 $('#inkCollapse').onclick=()=>{const bar=$('#inkToolbar');bar.classList.toggle('collapsed');$('#inkCollapse').textContent=bar.classList.contains('collapsed')?'+':'−'};
 $('#boardInkOpen').onclick=()=>{const app=$('.app');app.classList.toggle('ink-toolbar-open');if(app.classList.contains('ink-toolbar-open'))setInkTool('pen');else setInkTool('hand')};
 $('#presentInkToggle').onclick=()=>{const bar=$('#inkToolbar');bar.classList.toggle('collapsed');$('#inkCollapse').textContent=bar.classList.contains('collapsed')?'+':'−';if(inkTool==='hand')setInkTool('pen')};
-$('#presentAddToggle').onclick=()=>{$('.app').classList.toggle('present-add-open')};$('#presentAddClose').onclick=()=>$('.app').classList.remove('present-add-open');
-$$('[data-present-add]').forEach(b=>b.onclick=()=>{$('.app').classList.remove('present-add-open');boardAdd(b.dataset.presentAdd)});
-$('#presentAddPage').onclick=()=>{$('.app').classList.remove('present-add-open');boardState.pages.push({name:(boardState.pages.length+1)+'. Sayfa',layout:'one',split:50,ink:[],blocks:[]});boardState.activePage=boardState.pages.length-1;boardSave();renderBoardPages();renderBoard();toast('Yeni boş sayfa açıldı')};
+$('#presentAddToggle').onclick=()=>{const app=$('.app');app.classList.toggle('present-add-open');document.body.classList.toggle('present-add-open',app.classList.contains('present-add-open'))};$('#presentAddClose').onclick=()=>{$('.app').classList.remove('present-add-open');document.body.classList.remove('present-add-open')};
+$$('[data-present-add]').forEach(b=>b.onclick=()=>{$('.app').classList.remove('present-add-open');document.body.classList.remove('present-add-open');boardAdd(b.dataset.presentAdd)});
+$('#presentAddPage').onclick=()=>{$('.app').classList.remove('present-add-open');document.body.classList.remove('present-add-open');boardState.pages.push({name:(boardState.pages.length+1)+'. Sayfa',layout:'one',split:50,ink:[],blocks:[]});boardState.activePage=boardState.pages.length-1;boardSave();renderBoardPages();renderBoard();toast('Yeni boş sayfa açıldı')};
 // Sunum açılıp kapanırken araç durumunu temiz tut.
-const _presentWithInk=present;present=function(force){const on=typeof force==='boolean'?force:!$('.app').classList.contains('presenting');_presentWithInk(force);$('.app').classList.remove('present-add-open');if(on){$('#inkToolbar')?.classList.remove('collapsed');setInkTool('pen')}else{$('.app').classList.remove('ink-toolbar-open');setInkTool('hand')}};
+const _presentWithInk=present;present=function(force){const on=typeof force==='boolean'?force:!$('.app').classList.contains('presenting');_presentWithInk(force);$('.app').classList.remove('present-add-open');document.body.classList.remove('present-add-open');document.body.classList.toggle('okul-presenting',on);if(on){$('#inkToolbar')?.classList.remove('collapsed');setInkTool('pen');setTimeout(()=>{refreshInkUI();renderPresentNav();$('#inkToolbar')?.classList.remove('collapsed')},180)}else{$('.app').classList.remove('ink-toolbar-open');setInkTool('hand')}};
 // Yeniden atanmış present fonksiyonunu kullanan düğmeleri güncelle.
 $('#presentBtn').onclick=()=>present(true);$('#settingsPresent').onclick=()=>present(true);$('#exitPresent').onclick=()=>present(false);$('#presentExit2').onclick=()=>present(false);$('#mobilePresent').onclick=()=>present(true);
 document.addEventListener('keydown',e=>{if(!$('.app').classList.contains('presenting')||/INPUT|TEXTAREA|SELECT/.test(e.target?.tagName||''))return;if(e.key.toLowerCase()==='p')setInkTool(inkTool==='pen'?'hand':'pen');if(e.key.toLowerCase()==='e')setInkTool('eraser');if(e.key.toLowerCase()==='l')setInkTool('laser')});
+document.addEventListener('fullscreenchange',()=>{const on=$('.app')?.classList.contains('presenting');document.body.classList.toggle('okul-presenting',!!on);if(on){setTimeout(()=>{refreshInkUI();renderPresentNav()},80)}});
+
 renderTeacherInk();
 
 /* ===== Zoom Meeting SDK integration V1 ===== */

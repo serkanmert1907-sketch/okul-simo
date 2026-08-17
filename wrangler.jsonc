@@ -1,8 +1,8 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "okul-simo",
+  "name": "simo-classroom-assistant",
   "main": "./src/index.js",
-  "compatibility_date": "2026-08-16",
+  "compatibility_date": "2026-08-17",
   "assets": {
     "directory": "./public",
     "binding": "ASSETS",
@@ -10,24 +10,10 @@
   },
   "durable_objects": {
     "bindings": [
-      { "name": "LIVE_ROOMS", "class_name": "LiveRoom" },
-      { "name": "ZOOM_SESSIONS", "class_name": "ZoomSessionDO" }
+      { "name": "CLASSROOMS", "class_name": "ClassroomRoom" }
     ]
   },
   "exports": {
-    "LiveRoom": {
-      "type": "durable-object",
-      "storage": "sqlite"
-    },
-    "ZoomSessionDO": {
-      "type": "durable-object",
-      "storage": "sqlite"
-    }
-  },
-  "r2_buckets": [
-    { "binding": "LIVE_MEDIA", "bucket_name": "okul-simo-live-media" }
-  ],
-  "vars": {
-    "ZOOM_SDK_VERSION": "6.2.0"
+    "ClassroomRoom": { "type": "durable-object", "storage": "sqlite" }
   }
 }

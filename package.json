@@ -1,13 +1,12 @@
 {
-  "name": "okul-simo",
+  "name": "simo-classroom-assistant",
   "private": true,
+  "type": "module",
   "scripts": {
-    "cf:whoami": "wrangler whoami",
-    "cf:check": "wrangler check",
-    "cf:dev": "wrangler dev",
-    "cf:deploy": "wrangler deploy"
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy"
   },
   "devDependencies": {
-    "wrangler": "latest"
+    "wrangler": "^4.30.0"
   }
 }
